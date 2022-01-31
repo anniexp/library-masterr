@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/shards.min.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        <link rel="stylesheet" href="../css/shards.min.css">
+        <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+         <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <h2>Search for reports</h2>
+            <form action="#" th:action="@{/reports}" method="get">
+                <input type="text" name="search" id="searchReport"/>
+                <input type="submit" value="Search"/>
+            </form>
+        </div>
+        <div th:switch="${reports}" class="container my-5" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 th:case="null">No borrowed books yet!</h2>
+ 
+                    <div th:case="*">
+                        <h2 class="my-5">Borrow Reports</h2>
+                        <div class="table-responsive">
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                                <tr>
+                                    <th scope="col">report id</th>
+                                    <th scope="col">borrower</th>
+                                    <th scope="col">book</th>
+                                    <th scope="col">created at</td>
+                                    <th scope="col">last updated</td>
+                                    <th scope="col">Edit</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="repor : ${reports}">
+                                    <td th:text="${repor.reportId}"></td>
+                                    <td th:text="${repor.borrower}"></td>
+                                    <td th:text="${repor.book.title}"></td>
+                                    <td th:text="${repor.dateCreated}"></td>
+                                    <td th:text="${repor.lastUpdated}"></td>
+                                    <td><a th:href="@{/reports/edit/{reportId}(reportId=${repor.reportId})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                            </div>
+                    </div>      
+                    <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="container" sec:authorize="hasRole('ROLE_USER')" >
+            <h2>Error 403 Forbidden!</h2>
+            <div class="mainbox"><div class="err">4</div> <i class="far fa-question-circle fa-spin" aria-hidden="true"></i>
+                <div class="err2">3</div><div class="msg">Sadly, you do not have permission to access this page T_T
+                    <p>Let's go <a th:href="@{/}">home</a> and explore something else.</p></div></div>
+            
+        </div>
+        
+    </body>
+</html>
