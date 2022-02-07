@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/shards.min.css">
@@ -27,7 +27,7 @@ and open the template in the editor.
             <div class="row">
                 <div class="col-md-6">
                     <h2 th:case="null">No authors yet!</h2>
- 
+
                     <div th:case="*">
                         <h2 class="my-5">Authors</h2>
                         <table class="table table-striped table-responsive-md">
@@ -36,10 +36,10 @@ and open the template in the editor.
                                     <th>Author</th>
                                     <th>Books</th>
                                     <th>Nationality</th>
-                                   
+
                                     <th>Edit</th>
                                     <th>Delete</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,20 +47,20 @@ and open the template in the editor.
                                     <td th:text="${author.authorName}"></td>
                                     <td><ul th:each="bok : ${author.books}" >
                                             <li th:text="${bok.title}"></li></ul></td>
-                                 <!--  <td th:text="${author.books.title}"></td>-->
+                                    <!--  <td th:text="${author.books.title}"></td>-->
                                     <td th:text="${author.nationality}"></td>
 
-                                   
-                                     <td > <a th:href="@{/authors/edit/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-edit ml-2"></i>Edit</a></td> 
-                            
-                                     <td><a th:href="@{/authors/delete/{authorId}(authorId=${author.authorId})}" ><i class="fas fa-user-times ml-2"></i>Delete</a></td>
+
+                                    <td > <a th:href="@{/authors/edit/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-edit ml-2"></i>Edit</a></td> 
+
+                                    <td><a th:href="@{/authors/delete/{authorId}(authorId=${author.authorId})}" onclick="return confirm('Are you sure you want to delete this game?');"><i class="fas fa-user-times ml-2"></i>Delete</a></td>
 
                                 </tr>
                             </tbody>
                         </table>
                     </div>      
                     <p class="my-5"><a href="/authors/new" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a></p>
-                                        <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
+                    <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
 
 
                 </div>

@@ -38,8 +38,8 @@ public class Report
     private long reportId;
     
    // @OnDelete(action = OnDeleteAction.CASCADE)
-   @OneToOne(mappedBy = "report",targetEntity = Book.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = false)
-   @JoinColumn(name = "book_id" , referencedColumnName = "book_id")
+   @OneToOne(targetEntity = Book.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = false)
+   @JoinColumn(name = "book_id" , referencedColumnName = "id")
     private Book book;
 
     

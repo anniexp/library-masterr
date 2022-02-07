@@ -16,7 +16,7 @@ and open the template in the editor.
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-         <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
+        <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
             <h2>Search for reports</h2>
             <form action="#" th:action="@{/reports}" method="get">
                 <input type="text" name="search" id="searchReport"/>
@@ -27,35 +27,33 @@ and open the template in the editor.
             <div class="row">
                 <div class="col-md-6">
                     <h2 th:case="null">No borrowed books yet!</h2>
- 
+
                     <div th:case="*">
                         <h2 class="my-5">Borrow Reports</h2>
                         <div class="table-responsive">
-                        <table class="table table-striped table-responsive-md">
-                            <thead>
-                                <tr>
-                                    <th scope="col">report id</th>
-                                    <th scope="col">borrower</th>
-                                    <th scope="col">book</th>
-                                    <th scope="col">created at</td>
-                                    <th scope="col">last updated</td>
-                                    <th scope="col">Edit</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="repor : ${reports}">
-                                    <td th:text="${repor.reportId}"></td>
-                                    <td th:text="${repor.borrower}"></td>
-                                    <td th:text="${repor.book.title}"></td>
-                                    <td th:text="${repor.dateCreated}"></td>
-                                    <td th:text="${repor.lastUpdated}"></td>
-                                    <td><a th:href="@{/reports/edit/{reportId}(reportId=${repor.reportId})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                            <table class="table table-striped table-responsive-md">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">report id</th>
+                                        <th scope="col">borrower</th>
+                                        <th scope="col">book</th> 
+                                        <th scope="col">created at</td>
+                                        <th scope="col">last updated</td>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                            </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="repor : ${reports}">
+                                        <td th:text="${repor.reportId}"></td>
+                                        <td th:text="${repor.borrower}"></td>
+                                        <td th:text="${repor.book.title}"></td>
+                                        <td th:text="${repor.dateCreated}"></td>
+                                        <td th:text="${repor.lastUpdated}"></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>      
                     <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
                 </div>
@@ -66,8 +64,8 @@ and open the template in the editor.
             <div class="mainbox"><div class="err">4</div> <i class="far fa-question-circle fa-spin" aria-hidden="true"></i>
                 <div class="err2">3</div><div class="msg">Sadly, you do not have permission to access this page T_T
                     <p>Let's go <a th:href="@{/}">home</a> and explore something else.</p></div></div>
-            
+
         </div>
-        
+
     </body>
 </html>

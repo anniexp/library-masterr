@@ -9,30 +9,31 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/shards.min.css">
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+
     </head>
     <body>
-        
-         <h3 th:inline="text">Welcome  <span sec:authentication="name"></span></h3>
-   
-    <div sec:authorize="isAuthenticated()">
-        This content is only shown to authenticated users.
-        <div class="container">
-            <a href="/books" class="btn btn-info" role="button">Books</a>
-            <a href="/authors" class="btn btn-info" role="button">Authors</a>
+
+        <h3 th:inline="text">Welcome  <span sec:authentication="name"></span></h3>
+
+        <div sec:authorize="isAuthenticated()">
+            This content is only shown to authenticated users.
+            <div class="container">
+                <a href="/books" class="btn btn-info" role="button">Books</a>
+                <a href="/authors" class="btn btn-info" role="button">Authors</a>
+            </div>
         </div>
-    </div>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        This content is only shown to administrators.
-        <a href="reports" class="btn btn-info" role="button">Rented Books Reports</a>
-    </div>
-    <div sec:authorize="hasRole('ROLE_USER')">
-        This content is only shown to users.
-    </div>
-    Logged user: <span sec:authentication="name">Bob</span>
-    Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
-   
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Logout" />
-    </form>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            This content is only shown to administrators.
+            <a href="reports" class="btn btn-info" role="button">Rented Books Reports</a>
+        </div>
+        <div sec:authorize="hasRole('ROLE_USER')">
+            This content is only shown to users.
+        </div>
+        Logged user: <span sec:authentication="name">Bob</span>
+        Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" />
+        </form>
     </body>
 </html>

@@ -29,6 +29,7 @@ public class Book implements Serializable {
     @NotNull(groups = OnUpdate.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private long bookId;
 
     // @NotBlank(message = "Author name is mandatory")
@@ -120,9 +121,10 @@ public class Book implements Serializable {
     }
 
     
-    @OnDelete(action = OnDeleteAction.CASCADE)
+   /* @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "reportId")
+    @JoinColumn(name = "report_id")*/
+        @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "book")
     private Report report;
 
     public Report getReport() {

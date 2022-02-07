@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
 /**
  *
@@ -21,13 +22,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ReportController {
     @Autowired
     ReportsRepository reportRepository;
+            @Autowired
 BookService bookService;
 
     @GetMapping("/reports")
     public String index(Model model) {
-        model.addAttribute("reports", reportRepository.findAll());
+                List<Report> reports = null;
+ if (reports != null) {
+            //reports = bookService.findByKeyword(bookName);
+        }
+        else
+        {
+            reports = reportRepository.findAll();
+        }
+        model.addAttribute("reports", reports);
+      //  model.addAttribute("reports", reportRepository.findAll());
         return "reports";
     } 
+    /*
      @GetMapping("/reports/new")
     public String showNewBookForm(Model model, @Valid Book book, String name, @Valid User user) {
        
@@ -47,7 +59,7 @@ BookService bookService;
         
         bookService.save(book);
         return "redirect:/";
-    }
+    }*/
 
     
 }

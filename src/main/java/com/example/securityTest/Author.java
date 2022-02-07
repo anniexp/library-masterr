@@ -53,10 +53,6 @@ public class Author implements Serializable {
     @Column(name = "nationality")
     private String nationality;
 
-   
-    
-    
-
     public long getAuthorId() {
         return authorId;
     }
@@ -81,14 +77,13 @@ public class Author implements Serializable {
         this.authorName = authorName;
     }
 
-    
     @OneToMany(targetEntity = Book.class, mappedBy = "author", cascade = CascadeType.ALL)
     private Set<Book> books;
-    
+
     public Set<Book> getBooks() {
         return books;
     }
-  
+
     public Author() {
 
     }

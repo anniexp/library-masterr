@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-      
+
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Borrow Book</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,14 +25,14 @@ and open the template in the editor.
                                 <label for="author" class="col-form-label">Borrower</label>
                                 <span sec:authentication="name">Bob</span>                           
                             </div>
-                            
+
                         </div>
-                         <div class="row">
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="title" class="col-form-label">Book</label>
                                 <span th:object="${book.title}">Book</span>                           
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-md-6 mt-5">

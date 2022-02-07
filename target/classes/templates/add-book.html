@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/shards.min.css">
+        <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+
     </head>
     <body>
         <div class="container my-5">
@@ -16,17 +18,17 @@
                 <div class="col-md-6">
                     <form action="#" th:action="@{/books/addbook}" th:object="${book}" method="post">
                         <div class="row">
-                           
-                             <div class="form-group col-md-6">
+
+                            <div class="form-group col-md-6">
                                 <label for="author" class="col-form-label">Author</label>
                                 <select th:field="*{author}" class="form-control" id="author" placeholder="Author">
-                                   
-                                        <option th:each="auth: ${authors}" th:text="${auth.authorName}" th:value="${auth.authorId}"/>
-                                   
+
+                                    <option th:each="auth: ${authors}" th:text="${auth.authorName}" th:value="${auth.authorId}"/>
+
                                 </select>
                                 <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="text-danger"></span>
                             </div>
-                            
+
                             <div class="form-group col-md-6">
                                 <label for="title" class="col-form-label">Title</label>
                                 <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" required autofocus>
@@ -46,7 +48,7 @@
                                 <input type="checkbox" th:field="*{isRented}" th:value="*{isRented}" class="form-control" id="isRented" placeholder="isRented" >
                                 <label for="isRented" class="col-form-label">Is Rented?</label>
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-md-6 mt-5">

@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="ISO-8859-1">
-    <title>Registration </title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-     <link rel="stylesheet" href="../css/shards.min.css">
+    <head>
+        <meta charset="ISO-8859-1">
+        <title>Registration </title>
+        <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../css/shards.min.css">
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
-</head>
-<body>
-    <div class="container text-center">
-        <div>
-            <h1>User Registration</h1>
-        </div>
-        <form th:action="@{/post_register}" th:object="${user}"
-            method="post" style="max-width: 600px; margin: 0 auto;">
-        <div class="m-3">
-             <div class="form-group row">
-                <label class="col-4 col-form-label">UserName: </label>
-                <div class="col-8">
-                    <input type="text" th:field="*{username}" class="form-control"
-                            required minlength="2" maxlength="20"/>
-                </div>
-            </div>
-             
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Password: </label>
-                <div class="col-8">
-                    <input type="password" th:field="*{password}" class="form-control"
-                            required minlength="8" maxlength="20"/>
-                </div>
-            </div>
-             
-           
-  
-             
+    </head>
+    <body>
+        <div class="container text-center">
             <div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <h1>User Registration</h1>
             </div>
+            <form th:action="@{/post_register}" th:object="${user}"
+                  method="post" style="max-width: 600px; margin: 0 auto;">
+                <div class="m-3">
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">UserName: </label>
+                        <div class="col-8">
+                            <input type="text" th:field="*{username}" class="form-control"
+                                   required minlength="2" maxlength="20"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">Password: </label>
+                        <div class="col-8">
+                            <input type="password" th:field="*{password}" class="form-control"
+                                   required minlength="8" maxlength="20"/>
+                        </div>
+                    </div>
+
+
+
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        </form>
-    </div>
-</body>
+    </body>
 </html>
