@@ -16,13 +16,13 @@ and open the template in the editor.
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
+       <!-- <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
             <h2>Search for reports</h2>
             <form action="#" th:action="@{/reports}" method="get">
                 <input type="text" name="search" id="searchReport"/>
                 <input type="submit" value="Search"/>
             </form>
-        </div>
+        </div>-->
         <div th:switch="${reports}" class="container my-5" sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="row">
                 <div class="col-md-6">

@@ -1,8 +1,17 @@
 package com.example.securityTest;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +26,7 @@ public class BookController {
 
     @Autowired
     BookRepository bookRepository;
-    
+
     @Autowired
     BookService bookService;
 
@@ -27,14 +36,18 @@ public class BookController {
     @Autowired
     AuthorRepository authorRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    private HttpServletRequest request;
+
     @GetMapping("/books")
     public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName) {
         List<Book> books = null;
         if (bookName != null) {
             books = bookService.findByKeyword(bookName);
-        }
-        else
-        {
+        } else {
             books = bookRepository.findAll();
         }
         model.addAttribute("books", books);
@@ -44,40 +57,40 @@ public class BookController {
     @GetMapping("/books/signup")
     public String showSignUpForm(Model model) {
         List<Author> authors = authorRepository.findAll();
-        
 
         model.addAttribute("book", new Book());
-        
+
         model.addAttribute("authors", authors);
         model.addAttribute("report", new Report());
-
 
         return "add-book";
     }
 
     @PostMapping("/books/addbook")
-    public String addBook(@Valid Book book, BindingResult result, Model model ) {
-          System.out.print("book " + book);
-          
-           List<Book> books = bookRepository.findAll();
-        
-long bookLastId= books.get(books.size()-1).getBookId();
-System.out.println( "current last book id is: " + bookLastId);
+    public String addBook(@Valid Book book, BindingResult result, Model model) {
+        System.out.print("book " + book);
 
-        book.setBookId(bookLastId +1);
-                System.out.print("book " + book);
+        List<Book> books = bookRepository.findAll();
 
-        if (result.hasErrors()) {
+        long bookLastId = books.get(books.size() - 1).getBookId();
+        System.out.println("current last book id is: " + bookLastId);
+
+        book.setBookId(bookLastId + 1);
+        System.out.print("book " + book);
+
+        boolean dublicateIsbn = bookService.checkIfIsbnExists(book.getIsbn());
+
+        if (result.hasErrors()||dublicateIsbn) {
             return "add-book";
         }
-        
-       
+
         bookRepository.save(book);
 
-      //  bookService.save(book);
+        //  bookService.save(book);
         model.addAttribute("books", bookRepository.findAll());
-        
+
         return "redirect:/books";
+
     }
 
     @GetMapping("/books/edit/{bookId}")
@@ -122,24 +135,50 @@ System.out.println( "current last book id is: " + bookLastId);
     public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        boolean isBookRented = book.isIsRented();
+        System.out.println(isBookRented);
+        if (isBookRented == false) {
 
-        model.addAttribute("book", book);
-        return "borrow-book";
+            model.addAttribute("book", book);
+            model.addAttribute("report", new Report());
+
+            return "borrow-book";
+        }
+
+        return "redirect:/books";
+
     }
 
-    @PostMapping("/books/borrow/{bookId}")
+    @PostMapping("/books/borrowBook/{bookId}")
     public String borrowBook(@PathVariable("bookId") long bookId, @Valid Book book,
             BindingResult result, Model model, Report report) {
+
+        System.out.println("Is the current book rented - " + book.isIsRented());
+
         if (!book.isIsRented()) {
             book.setIsRented(true);
             bookRepository.save(book);
+
+            Principal currentUser = UserController.getCurrentUser(request);
+            // List<User> users = userRepository.findAll();
+            User borrower = (User) currentUser;
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date dateCreated = new Date();
+            dateFormat.format(dateCreated);
+
+            System.out.println("Current date is " + dateCreated);
+            report.setBook(book);
+            report.setBorrower(borrower.getUsername());
+            report.setDateCreated(dateCreated);
+            report.setLastUpdated(dateCreated);
 
             reportRepository.save(report);
 
             model.addAttribute("books", bookRepository.findAll());
 
         }
-        return "redirect:/";
+
+        return "redirect:/books";
 
     }
 

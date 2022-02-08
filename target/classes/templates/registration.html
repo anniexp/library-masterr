@@ -24,7 +24,7 @@
                     <div class="form-group row">
                         <label class="col-4 col-form-label">UserName: </label>
                         <div class="col-8">
-                            <input type="text" th:field="*{username}" class="form-control"
+                            <input type="text" th:field="*{username}" class=" unique required"
                                    required minlength="2" maxlength="20"/>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                     <div class="form-group row">
                         <label class="col-4 col-form-label">Password: </label>
                         <div class="col-8">
-                            <input type="password" th:field="*{password}" class="form-control"
+                            <input type="password" th:field="*{password}" class="required"
                                    required minlength="8" maxlength="20"/>
                         </div>
                     </div>

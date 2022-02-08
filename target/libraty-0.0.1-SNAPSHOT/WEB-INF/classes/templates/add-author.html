@@ -18,14 +18,14 @@
                     <form action="#" th:action="@{/authors/addauthor}" th:object="${author}" method="post">
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label for="authorName" class="col-form-label">Author Name </label>
+                                <label for="authorName" class="col-form-label">Author Name * </label>
                                 <input type="text" th:field="*{authorName}" class="form-control unique required " id="authorName" placeholder="AuthorName" required  minlength = "2" maxlength="255">
                               <span th:if="${#fields.hasErrors('authorName')}" th:errors="*{authorName}" class="alert alert-danger"></span> 
                                 
                                 
                             </div>
                             <div class="form-group col-md-12">
-                                <label for="nationality" class="col-form-label">Nationality</label>
+                                <label for="nationality" class="col-form-label">Nationality *</label>
                                 <input type="text" th:field="*{nationality}" class="form-control" id="nationality" placeholder="Nationality" required minlength = "2" maxlength="255">
                                <span th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}" class="alert alert-danger"></span>
                             </div>                       

@@ -17,9 +17,9 @@ and open the template in the editor.
     <body>
         <div class="container my-5">
             <h2 class="mb-5">New Borrow</h2>
-            <div class="row">
+      <!--      <div class="row">
                 <div class="col-md-6">
-                    <form action="#" th:action="@{/borrowBook}" th:object="${book}" method="post">
+                    <form action="#" th:action="@{/books/borrowBook/{id}(id=${bok.bookId})}" th:object="${bok}" method="post">
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="author" class="col-form-label">Borrower</label>
@@ -30,13 +30,42 @@ and open the template in the editor.
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="title" class="col-form-label">Book</label>
-                                <span th:object="${book.title}">Book</span>                           
+                                <span th:object="${bok.title}">Book</span>                           
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="col-md-6 mt-5">
-                                <input type="submit" class="btn btn-primary" value="Add Book">
+                                <input type="submit" class="btn btn-primary" value="Add Report">
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>-->
+        <div class="row">
+                <div class="col-md-6">
+                    <form action="#" th:action="@{/books/borrowBook/{id}(id=${bok.bookId})}" th:object="${bok}" method="post">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                               Are you sure you want to borrow book ?
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="title" class="col-form-label">Book</label>
+                                <span th:object="${bok.title}">Book</span>                           
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mt-5">
+                                <input type="submit" class="btn btn-primary" value="Borrow book">
+                            </div>
+                        </div>  
+                         <div class="row">
+                            <div class="col-md-6 mt-5">
+                                  <a th:href="@{/books}" class="btn btn-primary">Go Back</a>
                             </div>
                         </div>    
                     </form>

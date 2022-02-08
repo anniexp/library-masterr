@@ -16,6 +16,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
@@ -35,8 +36,9 @@ public class Book implements Serializable {
     // @NotBlank(message = "Author name is mandatory")
     //private String author;
     @Column(name = "year_of_publishing")
+    @Max(2030)
     private int yearOfPublishing;
-    @Column(name = "is_rented")
+    @Column(name = "is_rented", updatable = true)
     private boolean isRented;
 
     @ManyToOne
@@ -47,10 +49,12 @@ public class Book implements Serializable {
     // private long authorId;
 
     @NotBlank(message = "Title is mandatory")
+    @Column(name = "title")
+    @Size(min = 2, max = 255)
     private String title;
 
     @NotBlank(message = "isbn is mandatory")
-    @Column(unique = true)
+    @Column(unique = true, name="isbn")
     private String isbn;
 
     public Book(long bookId, Author author, long authorId, String title, String isbn, int yearOfPublishing, boolean isRented, Report report) {

@@ -43,5 +43,17 @@ public class BookService {
     public List<Book> findByKeyword(String keyword) {
         return bookRepository.findByKeyword(keyword);
     }
+    
+    public Boolean checkIfIsbnExists(String inputIsbn){
+     List<Book> books = bookRepository.findAll();
+     boolean isDublicate = false;
+     for( Book book:books){
+         if (book.getIsbn().matches(inputIsbn))
+         {
+         isDublicate = true;
+         }
+        }
+     return isDublicate;
+    }
 
 }

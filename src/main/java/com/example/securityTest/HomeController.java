@@ -16,26 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
  *
  *
  */
-@RestController
+@Controller
 public class HomeController {
 
-  /*  @RequestMapping("/")
-    public String viewHomePage() {
-        return "redirect:/";
-    }
-
-    @GetMapping("/index")
+ 
+    @GetMapping("index")
     public String viewHomePageAgain() {
-        return "redirect:/";
+        return "index";
     }
 
     @GetMapping("/home")
     public String viewHomePage3() {
-        return "redirect:/";
-    }*/
+        return "redirect:/index";
+    }
     @GetMapping("/css/newcss.css")
     public String viewHomePage4() {
-        return "redirect:/";
+        return "redirect:/index";
     }
 
 }
