@@ -27,7 +27,17 @@ public class User {
 	private String username;
         
         @Column(name = "role", nullable = false)
-	private Role role;
+	private String rolee;
+
+    public String getRolee() {
+        return rolee;
+    }
+
+    public void setRolee(String rolee) {
+        this.rolee = rolee;
+    }
+
+    
         
         @Column(name = "enabled", nullable = false)
 	private boolean enabled;
@@ -49,15 +59,8 @@ public class User {
         this.user_id = user_id;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-        
-	
+    
+ 	
 
 	public String getPassword() {
 		return password;

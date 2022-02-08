@@ -8,14 +8,18 @@
         <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="../css/shards.min.css">
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/shards.min.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+              crossorigin="anonymous" />
     </head>
-    <body>
-        <div class="container text-center">
+    <body >
+      <center>  <div class="container-fluid text-center" style="width: 400px"  >
             <div>
                 <h1>User Registration</h1>
             </div>
             <form th:action="@{/post_register}" th:object="${user}"
-                  method="post" style="max-width: 600px; margin: 0 auto;">
+                  method="post" class="border border-secondary p-3 rounded" style="margin-top:150px">
                 <div class="m-3">
                     <div class="form-group row">
                         <label class="col-4 col-form-label">UserName: </label>
@@ -42,5 +46,6 @@
                 </div>
             </form>
         </div>
+      </center>
     </body>
 </html>

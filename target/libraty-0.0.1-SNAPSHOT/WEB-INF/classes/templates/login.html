@@ -13,12 +13,11 @@
 
             <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto;">
 
-                <div th:if="${param.error}">
-                    <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
-                </div>
-
+               
                 <div th:if="${param.logout}">
-                    <p class="text-warning" style="margin-top:10px">You have been logged out.</p>
+                      <div class="alert alert-warning">
+
+                    You have been logged out.</div>
                 </div>
 
                 <div class="border border-secondary p-3 rounded" style="margin-top:150px">
@@ -29,13 +28,18 @@
                     <p>
                         <input type="password" name="password" class="form-control" placeholder="Password" required />
                     </p>
+                     <div th:if="${param.error}">
+                    <div class="alert alert-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
+  </div>
+                </div>
                     <p>
-                        <input type="submit" value="Login" class="btn btn-primary" />
+                        <input  type="submit" value="Login" class="btn btn-primary" />
                     </p>
                     <p>
                         <a th:href="@{/register}" class="btn btn-primary">Register</a>
                     </p>
                 </div>
+                
             </form>      
         </div>
     </body>

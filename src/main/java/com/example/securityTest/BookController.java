@@ -44,21 +44,37 @@ public class BookController {
     @GetMapping("/books/signup")
     public String showSignUpForm(Model model) {
         List<Author> authors = authorRepository.findAll();
+        
 
         model.addAttribute("book", new Book());
+        
         model.addAttribute("authors", authors);
+        model.addAttribute("report", new Report());
+
 
         return "add-book";
     }
 
     @PostMapping("/books/addbook")
-    public String addBook(@Valid Book book, BindingResult result, Model model) {
-         
+    public String addBook(@Valid Book book, BindingResult result, Model model ) {
+          System.out.print("book " + book);
+          
+           List<Book> books = bookRepository.findAll();
+        
+long bookLastId= books.get(books.size()-1).getBookId();
+System.out.println( "current last book id is: " + bookLastId);
+
+        book.setBookId(bookLastId +1);
+                System.out.print("book " + book);
+
         if (result.hasErrors()) {
             return "add-book";
         }
+        
+       
+        bookRepository.save(book);
 
-        bookService.save(book);
+      //  bookService.save(book);
         model.addAttribute("books", bookRepository.findAll());
         
         return "redirect:/books";
@@ -84,7 +100,7 @@ public class BookController {
 
         bookRepository.save(book);
         model.addAttribute("books", bookRepository.findAll());
-        return "redirect:/";
+        return "redirect:/books";
     }
 
     @GetMapping("/books/delete/{bookId}")

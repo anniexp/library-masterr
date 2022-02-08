@@ -25,8 +25,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "book")
 public class Book implements Serializable {
 
-    @Null(groups = OnCreate.class)
-    @NotNull(groups = OnUpdate.class)
+    //@Null(groups = OnCreate.class)
+   // @NotNull(groups = OnUpdate.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -53,13 +53,14 @@ public class Book implements Serializable {
     @Column(unique = true)
     private String isbn;
 
-    public Book(long bookId, Author author, long authorId, String title, String isbn, int yearOfPublishing, boolean isRented) {
+    public Book(long bookId, Author author, long authorId, String title, String isbn, int yearOfPublishing, boolean isRented, Report report) {
         this.bookId = bookId;
         this.title = title;
         this.isbn = isbn;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
         this.author = author;
+        this.report = report;
     }
 
     public Author getAuthor() {
@@ -124,6 +125,8 @@ public class Book implements Serializable {
    /* @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "report_id")*/
+    
+    
         @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "book")
     private Report report;
 

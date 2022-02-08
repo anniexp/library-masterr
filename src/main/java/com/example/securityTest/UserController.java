@@ -33,9 +33,12 @@ public class UserController {
 	public String postRegister(User user) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
-                Role userRole = Role.ROLE_USER;
+                String userRole = Rolee.getROLE_USER().name();
+               // String userRoleString = Rolee.valueOf("ROLE_USER");
+                Boolean isEnabled = true;
 		user.setPassword(encodedPassword);
-                user.setRole(userRole);
+                user.setRolee(userRole);
+                user.setEnabled(isEnabled);
 
 		userRepository.save(user);
 
@@ -46,5 +49,11 @@ public class UserController {
 	    public String viewLoginPage() {	         
 	        return "login";
 	    }
+            
+            @PostMapping("/login")
+            public String viewHomePage(){
+            return "redirect:/";
+            }
+            
         
 }
