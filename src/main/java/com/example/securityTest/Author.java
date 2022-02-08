@@ -50,6 +50,7 @@ public class Author implements Serializable {
     private String authorName;
 
     @NotBlank(message = "Nationality is mandatory")
+    
     @Column(name = "nationality")
     private String nationality;
 

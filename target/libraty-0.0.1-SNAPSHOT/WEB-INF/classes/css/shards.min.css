@@ -9,3 +9,1486 @@ input {
     margin: .4rem;
 }
 
+
+
+/*new css*/
+/************************************************/
+/******************** Reset ********************/
+/************************************************/
+
+* {
+   margin: 0;
+   padding: 0;
+   font-size: 100%;
+}
+
+html,
+body {
+   width: 100%;
+   height: 100%;
+   min-width: 1140px;
+}
+
+html {
+   background: #678e9b;
+   /*overflow-x : hidden;*/
+}
+
+img {
+   border: 0;
+}
+
+img a {
+   border: 0;
+}
+
+a {
+   text-decoration: none;
+   color: #d06b02;
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-weight: normal;
+}
+
+a:hover {
+   color: #375c6a;
+}
+
+:focus {
+   outline: 0;
+   -moz-outline-style: none;
+}
+/*** Headings & Text ***/
+
+h1, h2, h3, h4, h5, h6 {
+   font-weight: normal;
+   /*fonts-family:'trebuchet_msbold', sans-serif;*/
+   /*text-shadow: 0 0 10px #000;*/
+   /*text-transform:uppercase;*/
+}
+
+h1 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 18pt;
+   color: #fff;
+   margin: 0;
+}
+
+h2 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 16pt;
+   color: #fff;
+   margin-top: -15px;
+}
+
+h3 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 14pt;
+   color: #032a38;
+   text-transform: uppercase;
+}
+
+h4 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 12pt;
+   color: #375c6a;
+   margin-bottom: 5px;
+   letter-spacing: 1px;
+}
+
+h5 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 11pt;
+   color: #fff;
+   /*letter-spacing : 1px;*/
+}
+
+h6 {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-size: 10pt;
+   color: #c6c6c6;
+}
+
+ul {
+   margin-bottom: 10px;
+}
+
+li {
+   font-size: 8pt;
+   color: #fff;
+   font-family: 'trebuchet_msbold', sans-serif;
+   /*text-transform:uppercase;*/
+   
+   list-style: none;
+   /*text-shadow: 0 0 10px #000;*/
+}
+
+li span {
+   font-weight: bold;
+}
+
+dt {
+   color: #737373;
+   font-family: 'tw_cen_mtregular', sans-serif;
+   /*text-transform:uppercase; */
+   
+   list-style: none;
+   /*text-shadow: 0 0 10px #000;*/
+}
+
+p {
+   font-family: 'tw_cen_mtregular', sans-serif;
+   color: #c7c7c6;
+   font-size: 12pt;
+   line-height: 1.2em;
+   margin: 5px 0;
+   /*text-shadow: 0 0 10px #000;*/
+}
+
+p span {
+   font-family: 'tw_cen_mtbold', sans-serif;
+}
+
+strong {
+   font-family: 'trebuchet_msbold', sans-serif;
+   font-weight: bold;
+}
+
+.snow {
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 999999;
+   width: 100%;
+   height: 100%;
+}
+
+.dropshadow {
+   -moz-box-shadow: 0 0 5px #000;
+   -webkit-box-shadow: 0 0 5px #000;
+   box-shadow: 0 0 5px #000;
+}
+
+.textshadow {
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.textshadow:hover {
+   /*text-shadow : 0 0 5px #000;*/
+   
+   color: #FFFFFF;
+   text-shadow: -1px 1px 0 #ddd, -2px 2px 0 #c8c8c8, -3px 3px 0 #ccc, -4px 4px 0 #b8b8b8, -4px 4px 0 #bbb, 0px 1px 1px rgba(0, 0, 0, .4), 0px 2px 2px rgba(0, 0, 0, .3), -1px 3px 3px rgba(0, 0, 0, .2), -1px 5px 5px rgba(0, 0, 0, .1), -2px 8px 8px rgba(0, 0, 0, .1), -2px 13px 13px rgba(0, 0, 0, .1);
+}
+
+.clearFloat {
+   clear: both;
+}
+
+.mandatory {
+   color: #FF3111 !important;
+   float: left;
+   position: absolute;
+   top: 0;
+}
+/************************************************/
+/********************* Forms ********************/
+/************************************************/
+form { width:600px; margin:0 auto; padding:10px; background: #375C6A; }
+input,
+select,
+textarea {
+   font-family: 'tw_cen_mtregular', sans-serif;
+   font-size: 1.25em;
+}
+
+input:focus,
+textarea:focus {
+   background: #d3e7f4 !important;
+}
+
+.styled-select-short:focus {
+   background: #d3e7f4 url('../images/down_arrow_select.png') no-repeat right !important;
+}
+
+form li {
+   list-style: none !important;
+}
+
+.hidden {
+   opacity: 0;
+   display: none;
+   height: 0;
+}
+
+.formLeft .errorTip {
+    width: 280px;
+    padding: 12px 5px;
+    margin: 5px 1px -51px 1px !important;
+    border: 1px solid rgb(251, 227, 228);
+    color: #8A1F11;
+    background: rgb(251, 227, 228);
+    float:left;
+    text-align: right;
+}
+.formRight .errorTip {
+    width: 280px;
+    padding: 12px 4px;
+    margin: 5px 1px -51px 1px !important;
+    border: 1px solid rgb(251, 227, 228);
+    color: #8A1F11;
+    background: rgb(251, 227, 228);
+    float:left;
+    text-align: right;
+}
+.errorTip label {
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.contact-response {
+   display: none;
+}
+
+#myModal h5 {
+   margin-bottom: 10px;
+   position: relative;
+}
+
+.inquire {
+   width: 300px;
+   height: 86px;
+   background: url('../images/inquire.png') top center no-repeat;
+   display: block;
+   cursor: pointer;
+   float: left;
+}
+
+.inquire:hover {
+   background-position: 0 -86px;
+}
+
+.inquire span {
+   display: none;
+}
+
+.dispute a {
+   width: 300px;
+   height: 86px;
+   background: url('../images/dispute.png') top center no-repeat;
+   display: block;
+   cursor: pointer;
+   float: left;
+}
+
+.dispute a:hover {
+   background-position: 0 -86px;
+}
+
+.dispute a span {
+   display: none;
+}
+
+.copy a {
+   width: 300px;
+   height: 86px;
+   background: url('../images/copy.png') top center no-repeat;
+   display: block;
+   cursor: pointer;
+   float: left;
+}
+
+.copy a:hover {
+   background-position: 0 -86px;
+}
+
+.copy a span {
+   display: none;
+}
+
+.question {
+   width: 300px;
+   height: 86px;
+   background: url('../images/question.png') top center no-repeat;
+   display: block;
+   cursor: pointer;
+   float: left;
+}
+
+.question:hover {
+   background-position: 0 -86px;
+}
+
+.question span {
+   display: none;
+}
+
+.activeButton {
+   background-position: 0 -86px;
+}
+
+.firstset {
+   padding-top: 10px;
+   border-top: solid 1px #49717F;
+}
+
+.secondset {
+   margin-bottom: 0;
+   display: none;
+   border-bottom: solid 1px #2C4F5B;
+}
+
+.inquireForm {
+   display: none;
+}
+
+.copyForm {
+   /*display: none;*/
+}
+
+.disputeForm {
+   /*display: none;*/
+}
+
+.contact h3 {
+   margin-top: 10px;
+}
+
+.contact .l1 {
+   width: 80px;
+   margin: 5px 0 10px 25px;
+   float: left;
+}
+
+.contact .l2 {
+   margin: 5px 0 10px 25px;
+   float: left;
+}
+
+.contactTop {
+   width: 600px;
+   border-bottom: solid 1px #2C4F5B;
+}
+
+.contactLeft {
+   padding: 10px 0;
+   width: 300px;
+   float: left;
+   border-top: solid 1px #49717F;
+   border-bottom: solid 1px #2C4F5B;
+}
+
+.contactLeft h4 {
+   color: #C9DDDC;
+}
+
+.contactRight {
+   padding: 10px 0;
+   width: 300px;
+   float: right;
+   border-top: solid 1px #49717F;
+   border-bottom: solid 1px #2C4F5B;
+}
+
+.contactRight h4 {
+   color: #C9DDDC;
+}
+
+.neededInfoLeft {
+   padding: 10px 0;
+   width: 300px;
+   float: left;
+}
+
+.neededInfoLeft h4 {
+   color: #C9DDDC;
+}
+
+.neededInfoRight {
+   padding: 10px 0;
+   width: 300px;
+   float: right;
+}
+
+.neededInfoRight h4 {
+   color: #C9DDDC;
+}
+
+.contactStyle ul {
+   margin: 0 !important;
+}
+
+.contactStyle {
+   padding-top: 4px;
+   border-top: 1px solid #49717F;
+}
+/************************************************/
+/************** Tax Credit Challenge ************/
+/************************************************/
+
+#wizard .formLeft {
+   padding: 0;
+   width: 422px;
+   margin-left: 10px;
+   float: left;
+   position: relative;
+   z-index: 10;
+}
+
+#wizard .formLeft input[type="text"] {
+   width: 410px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 10px 0 0 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+#wizard .formLeft input[type="text"]:hover {
+   background: #d3e7f4;
+}
+
+#wizard .formLeft .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formLeft .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formLeft .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formLeft .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formLeft .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+#wizard .formLeft .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formLeft .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formRight {
+   padding: 0;
+   width: 422px;
+   margin-left: 10px;
+   float: left;
+   position: relative;
+   z-index: 5;
+}
+
+#wizard .formRight input[type="text"] {
+   width: 410px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 10px 0 0 0;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+#wizard .formRight input[type="text"]:hover {
+   background: #D3E7F4;
+}
+
+#wizard .formRight .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formRight .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formRight .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formRight .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formRight .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+#wizard .formRight .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .formRight .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+#wizard .styled-select-short {
+   width: 420px;
+   height: 40px;
+   color: #024b92;
+   margin: 10px 2px 0 0;
+   overflow: hidden;
+   border: 1px solid #cccccc;
+   background: #fbfafb url('../images/down_arrow_select.png') no-repeat right;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+#wizard .styled-select-short select {
+   background: transparent;
+   width: 450px;
+   height: 40px;
+   padding: 10px 2px;
+   color: #024b92;
+   border: 0 solid #cccccc;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+#wizard .styled-select-short:hover {
+   background: #D3E7F4 url('../images/down_arrow_select.png') no-repeat right;
+}
+
+#wizard .styled-select-short select:focus {
+   outline: 0;
+   -moz-outline-style: none;
+}
+
+#wizard input[type="text"] {
+   width: 440px;
+   height: 40px;
+   padding: 0 8px;
+   margin: 20px 20px 0 0;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+}
+
+#wizard input[type="text"]:hover {
+   background: #D3E7F4;
+}
+
+#wizard textarea,
+#wizard .formLeft textarea {
+   width: 444px;
+   height: 40px;
+   padding: 6px;
+   margin: -5px 0 0 0;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   resize: none;
+   font-size: 1.25em;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+#wizard textarea:hover {
+   background: #D3E7F4;
+}
+
+#wizardstatus {
+   width: 460px;
+   float: left;
+}
+
+#wizardstatus p {
+   width: 460px;
+}
+
+#wizardstatus ul li {
+   font-size: .75em;
+   color: #FEFEFE;
+   width: 205px;
+   float: left;
+}
+
+.unSelected {
+   color: #6c92b6 !important;
+}
+
+#wizard .formLeft .text dt,
+#wizard .formRight .text dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formLeft .text textarea,
+#wizard .formRight .text textarea {
+   margin: 0;
+}
+
+#wizard .formLeft #sortable dt,
+#wizard .formRight #sortable dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+#wizard .formLeft #sortable,
+#wizard .formRight #sortable {
+   list-style-type: none;
+   margin: 0;
+   padding: 0;
+   width: 428px;
+}
+
+#wizard .formLeft #sortable p,
+#wizard .formRight #sortable p {
+   margin: 0 0 3px 0;
+   padding: 0.4em;
+   padding-left: 1.5em;
+   height: 18px;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   position: relative;
+   cursor: pointer;
+}
+
+#wizard .formLeft #sortable p span,
+#wizard .formRight #sortable p span {
+   position: absolute;
+   margin-left: -1.3em;
+}
+
+#wizard .formLeft #sortable p:hover,
+#wizard .formRight #sortable p:hover {
+   background: #D3E7F4;
+}
+
+#wizard .formLeft #sortable .click,
+#wizard .formRight #sortable .click {
+   position: absolute;
+   right: 10px;
+   font-family: 'tw_cen_mtregular', sans-serif;
+   font-weight: normal;
+   cursor: pointer;
+}
+/************************************************/
+/************* Contact Form on Page *************/
+/************************************************/
+
+.pageForm .contactInfo {
+   display: flex;
+   flex-flow: row wrap;
+   justify-content: space-around;
+   align-items: flex-start;
+}
+
+.pageForm .contact h3 {
+   margin-top: 10px;
+}
+
+.pageForm .contact .l1 {
+   width: 80px;
+   margin: 5px 0 10px 25px;
+   float: left;
+}
+
+.pageForm .contact .l2 {
+   margin: 5px 0 10px 25px;
+   float: left;
+}
+
+.pageForm .contactTop {
+   width: 100%;
+   border-bottom: solid 1px #2C4F5B;
+}
+
+.pageForm .contactTop h2 {
+   margin: 0 10px;
+   color: #2C4F5B;
+}
+
+.pageForm .contactLeft,
+.pageForm .contactRight {
+   flex: 1;
+   padding: 10px 0;
+   border: none;
+   width: auto;
+   /*border-top: solid 1px #49717F;*/
+   /*border-bottom: solid 1px #2C4F5B;*/
+}
+
+.pageForm .contactLeft h5,
+.pageForm .contactRight h5 {
+   margin-top: 0;
+}
+
+.pageForm .contactLeft p,
+.pageForm .contactRight p {
+   margin: 0 0 0 10px;
+}
+
+.pageForm .mandatory {
+   position: absolute;
+   top: 0;
+   right: 0;
+}
+
+.pageForm .contactStyle {
+   display: flex;
+   flex-flow: row wrap;
+}
+
+.pageForm .contactStyle .formLeft {
+   flex: 0 1 auto !important;
+   padding: 0;
+   width: 98% !important;
+   margin: auto !important;
+}
+
+.pageForm .contactStyle .formLeft input[type="text"] {
+   width: 98% !important;
+   height: 40px;
+   padding: 0 1%;
+   margin: 0 0 1% 0;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   margin-left: -1px;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.pageForm .contactStyle .formLeft input[type="text"]:hover {
+   background: #d3e7f4;
+}
+
+.pageForm .contactStyle .formLeft .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.pageForm .contactStyle .formLeft .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.pageForm .contactStyle .formLeft .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.pageForm .contactStyle .formLeft .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.pageForm .contactStyle .formLeft .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+.pageForm .contactStyle .formLeft .checkbox input[type="checkbox"] {
+   /*height: 20px;*/
+   /*margin: 0 2px 0 0;*/
+   /*color: #024b92;*/
+   /*float: left;*/
+}
+
+.pageForm .contactStyle .formLeft .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.pageForm .submitForm {
+   width: 854px;
+   margin-left: 10px;
+   float: left;
+   position: relative;
+}
+
+.pageForm .contactStyle .formLeft .checkbox {
+   width: 100%;
+}
+
+.pageForm .title {
+   width: 100%;
+   float: left;
+}
+
+.pageForm .checkboxes {}
+
+.pageForm .column {
+   display: flex;
+}
+
+.pageForm .column > label {
+   flex: 1;
+}
+
+.pageForm .contactStyle .formLeft .checkbox textarea {
+   /*height: 20px;*/
+   
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+.pageForm .contactStyle .formLeft .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.pageForm .formCenter .submitForm {
+   width: 584px !important;
+   float: left;
+}
+
+.pageForm .formCenter .submitForm input {
+   font-size: 2.2em !important;
+}
+
+.pageForm .submitForm input {
+   width: 226px;
+   height: 40px;
+   margin: 0 1% 1% 0;
+   border: 1px solid #cccccc;
+   color: #6c92b6;
+   background: #D3E7F4;
+   cursor: pointer;
+   float: right;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.pageForm .submitForm input:hover,
+.submitForm input:focus {
+   border: 1px solid #024b92 !important;
+   background: #024b92 !important;
+   color: #D3E7F4 !important;
+}
+
+.pageForm .contactStyle .styled-select-short {
+   width: 100% !important;
+   height: 40px;
+   color: #024b92;
+   margin: 4px 0 !important;
+   overflow: hidden;
+   border: 1px solid #cccccc;
+   background: #fbfafb url('../images/down_arrow_select.png') no-repeat right;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.pageForm .contactStyle .styled-select-short select {
+   background: transparent;
+   width: 105% !important;
+   height: 40px;
+   padding: 10px 2px;
+   color: #024b92;
+   border: 0 solid #cccccc;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.pageForm .contactStyle .styled-select-short:hover {
+   background: #D3E7F4 url('../images/down_arrow_select.png') no-repeat right;
+}
+
+.pageForm .contactStyle .styled-select-short select:focus {
+   outline: 0;
+   -moz-outline-style: none;
+}
+
+.pageForm .contactStyle textarea {
+   width: 100%;
+   height: 80px;
+   padding: 6px;
+   margin: 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   resize: none;
+   font-size: 1.25em;
+   display: inline;
+   position: relative;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.pageForm .contactStyle textarea:hover {
+   background: #D3E7F4;
+}
+/************************************************/
+/*************** Contact Form Left **************/
+/************************************************/
+
+.contactStyle .formLeft {
+   padding: 0;
+   width: 294px;
+   margin-left: 3px !important;
+   float: left;
+   position: relative;
+   z-index: 10;
+}
+
+.contactStyle .formLeft input[type="text"] {
+   width: 282px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .formLeft input[type="text"]:hover {
+   background: #d3e7f4;
+}
+
+.contactStyle .formLeft .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formLeft .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formLeft .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formLeft .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formLeft .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+.contactStyle .formLeft .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formLeft .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+/************************************************/
+/*************** Contact Form Right *************/
+/************************************************/
+
+.contactStyle .formRight {
+   padding: 0;
+   width: 292px;
+   margin-left: 8px !important;
+   float: left;
+   position: relative;
+   z-index: 5;
+}
+
+.contactStyle .formRight input[type="text"] {
+   width: 280px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .formRight input[type="text"]:hover {
+   background: #D3E7F4;
+}
+
+.contactStyle .formRight .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formRight .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formRight .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formRight .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formRight .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+.contactStyle .formRight .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formRight .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formRight .styled-select-short {
+   width: 290px !important;
+}
+
+.contactStyle .formRight .styled-select-short select {
+   width: 320px !important;
+}
+/************************************************/
+/************** Contact Form Center *************/
+/************************************************/
+
+.contactStyle .formCenter {
+   padding: 0;
+   width: 594px;
+   margin-left: 3px !important;
+   float: left;
+   position: relative;
+   z-index: 10;
+}
+
+.contactStyle .formCenter input[type="text"] {
+   width: 582px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .formCenter input[type="text"]:hover {
+   background: #d3e7f4;
+}
+
+.contactStyle .formCenter .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formCenter .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formCenter .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formCenter .checkbox > label {
+   width: 584px;
+   float: left;
+}
+
+.contactStyle .formCenter .checkbox div {
+   width: 282px;
+   margin: 0 0 0 10px;
+   padding: 0;
+   float: left;
+}
+
+.contactStyle .formCenter .checkbox div > label {
+   width: 100%;
+   float: left
+}
+
+.contactStyle .formCenter .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 5px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formCenter .checkbox span {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   float: left;
+   font-weight: normal;
+}
+/************************************************/
+/*************** Contact Form Three *************/
+/************************************************/
+
+.contactStyle .formThree {
+   padding: 0;
+   width: 594px;
+   margin-left: 3px !important;
+   float: left;
+   position: relative;
+   z-index: 10;
+}
+
+.contactStyle .formThree input[type="text"] {
+   width: 181px;
+   height: 40px;
+   padding: 0 5px;
+   margin: 4px 8px 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   float: left;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .formThree input[type="text"]:hover {
+   background: #d3e7f4;
+}
+
+.contactStyle .formThree li:last-child input[type="text"] {
+   margin-right: 0 !important;
+   width: 180px !important;
+}
+
+.contactStyle .formThree .radio dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formThree .radio input[type="radio"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formThree .radio p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formThree .checkbox dt {
+   margin: 20px 22px 0 0;
+   padding: 0;
+}
+
+.contactStyle .formThree .checkbox textarea {
+   margin: 5px 22px 15px 0;
+   padding: 0;
+}
+
+.contactStyle .formThree .checkbox input[type="checkbox"] {
+   height: 20px;
+   margin: 0 2px 0 0;
+   color: #024b92;
+   float: left;
+}
+
+.contactStyle .formThree .checkbox p {
+   margin: 0;
+   padding: 2px 14px 0 0;
+   color: #024b92;
+   float: left;
+}
+/************************************************/
+/************** Contact Form Select *************/
+/************************************************/
+
+.contactStyle .styled-select-short {
+   width: 292px !important;
+   height: 40px;
+   color: #024b92;
+   margin: 4px 0 !important;
+   overflow: hidden;
+   border: 1px solid #cccccc;
+   background: #fbfafb url('../images/down_arrow_select.png') no-repeat right;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .styled-select-short select {
+   background: transparent;
+   width: 322px !important;
+   height: 40px;
+   padding: 10px 2px;
+   color: #024b92;
+   border: 0 solid #cccccc;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle .styled-select-short:hover {
+   background: #D3E7F4 url('../images/down_arrow_select.png') no-repeat right;
+}
+
+.contactStyle .styled-select-short select:focus {
+   outline: 0;
+   -moz-outline-style: none;
+}
+/************************************************/
+/*************** Contact Form Text **************/
+/************************************************/
+
+.contactStyle input[type="text"] {
+   width: 440px;
+   height: 40px;
+   padding: 0 8px;
+   margin: 20px 20px 0 0;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+}
+
+.contactStyle input[type="text"]:hover {
+   background: #D3E7F4;
+}
+/************************************************/
+/************* Contact Form TextArea ************/
+/************************************************/
+
+.contactStyle .formCenter textarea {
+   width: 580px;
+   height: 80px;
+   padding: 6px;
+   margin: 4px 0 !important;
+   border: 1px solid #cccccc;
+   color: #024b92;
+   background: #fbfafb;
+   resize: none;
+   font-size: 1.25em;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.contactStyle textarea:hover {
+   background: #D3E7F4;
+}
+/************************************************/
+/************** Contact Form Status *************/
+/************************************************/
+
+.contactStyle .status {
+   width: 460px;
+   float: left;
+}
+
+.contactStyle .status p {
+   width: 460px;
+}
+
+.contactStyle .status ul li {
+   font-size: .75em;
+   color: #FEFEFE;
+   width: 205px;
+   float: left;
+}
+
+.unSelected {
+   color: #6c92b6 !important;
+}
+/************************************************/
+/***************** Submit Button ****************/
+/************************************************/
+
+.submitForm {
+   width: 854px;
+   margin-left: 10px;
+   float: left;
+   position: relative;
+}
+
+.formCenter .submitForm {
+   width: 584px !important;
+   float: left;
+}
+
+.formCenter .submitForm input {
+   font-size: 2.2em !important;
+}
+
+.submitForm input {
+   width: 226px;
+   height: 40px;
+   margin: 4px 0 10px 0;
+   border: 1px solid #cccccc;
+   color: #6c92b6;
+   background: #D3E7F4;
+   cursor: pointer;
+   float: right;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   -ms-transition: all .2s ease-in;
+   -o-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+
+.submitForm input:hover,
+.submitForm input:focus {
+   border: 1px solid #024b92 !important;
+   background: #024b92 !important;
+   color: #D3E7F4 !important;
+}
+/************************************************/
+/******************** Errors ********************/
+/************************************************/
+
+input.error, select.error, textarea.error {
+   background: rgba(251, 227, 228,.3) !important;
+   border: 1px solid #fbc2c4 !important;
+   color: #8a1f11 !important;
+}
+
+input.error:hover, select.error:hover, textarea.error:hover {
+   background: rgba(251, 201, 213,.5) !important;
+   border: 1px solid #fbc2c4 !important;
+   color: #8a1f11 !important;
+}
+
+li.selectError {
+   background: rgb(251, 227, 228) url('../images/down_arrow_select.png') no-repeat right !important;
+   border: 1px solid #fbc2c4 !important;
+   color: #8a1f11 !important;
+}
+
+li.selectError:hover {
+   background: rgb(251, 201, 213) url('../images/down_arrow_select.png') no-repeat right !important;
+   border: 1px solid #f8b5bd !important;
+   color: #8a1f11 !important;
+}
+
+li.selectError select {
+   color: #C27371 !important;
+}
