@@ -90,8 +90,8 @@ public class BookController {
     }
 
     
-    private Map<Long,Author> authorMap = new HashMap<>();
-        private Map<Long,Report> reportMap = new HashMap<>();
+    //private Map<Long,Author> authorMap = new HashMap<>();
+      //  private Map<Long,Report> reportMap = new HashMap<>();
 
             
     @PostMapping("/books/addbook")
