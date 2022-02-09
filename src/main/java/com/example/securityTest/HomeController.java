@@ -33,5 +33,10 @@ public class HomeController {
     public String viewHomePage4() {
         return "redirect:/index";
     }
+    @GetMapping("/css/newcss.css")
+    public String viewHomePage5() {
+        return "redirect:/index";
+    }
 
 }
+

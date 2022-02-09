@@ -147,6 +147,8 @@ public class BookController {
         if (result.hasErrors()) {
            System.out.println("Id of boook to be edited : " + book.getBookId());
             book.setBookId(book.getBookId());
+                       System.out.println("set Id  : " + book.getBookId());
+
             return "update-book";
         }
         //else if(book.getBookId()==result.)

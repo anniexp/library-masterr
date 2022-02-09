@@ -22,7 +22,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="title" class="col-form-label" style="color:red">Title *</label>
-                                <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" required>
+                                <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" maxlength="255" minlength="2" title="Title should be between 2 and 255 symbols" required>
                                 <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"></span>
                             </div>
 
