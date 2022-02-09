@@ -38,13 +38,13 @@
 
                             <div class="form-group col-md-6">
                                 <label for="isbn" class="col-form-label" style="color:red">ISBN *</label>
-                                <input type="text" th:field="*{isbn}" class="form-control" id="name" placeholder="ISBN" required>
+                                <input type="text" th:field="*{isbn}" class="form-control" id="name" maxlength="13" minlength="13" placeholder="ISBN" required>
                                 <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="alert alert-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="yearOfPublishing" class="col-form-label">Year of Publishing</label>
-                                <input type="number" th:field="*{yearOfPublishing}" class="form-control" id="yearOfPublishing" placeholder="YearOfPublishing">
+                                <input type="number" th:field="*{yearOfPublishing}" class="form-control" id="yearOfPublishing" max="2030" placeholder="YearOfPublishing">
                                 <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="alert alert-danger"></span>
                             </div>
                             <div class="form-group col-md-6">

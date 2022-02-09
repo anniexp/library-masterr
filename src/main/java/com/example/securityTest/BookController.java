@@ -112,7 +112,7 @@ public class BookController {
         book.setBookId(bookLastId + 1);
         System.out.print("book " + book);
 
-        boolean dublicateIsbn = bookService.checkIfIsbnExists(book.getIsbn());
+        boolean dublicateIsbn = bookService.checkIfIsbnDublicate(book.getIsbn());
 
         if (result.hasErrors()||dublicateIsbn==true) {
             
@@ -142,9 +142,20 @@ public class BookController {
     @PostMapping("/books/update/{bookId}")
     public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
             BindingResult result, Model model) {
+        
+
         if (result.hasErrors()) {
-            book.setBookId(bookId);
+           System.out.println("Id of boook to be edited : " + book.getBookId());
+            book.setBookId(book.getBookId());
             return "update-book";
+        }
+        //else if(book.getBookId()==result.)
+        if ( bookService.checkIfIsbnDublicateEdit(book.getIsbn(), bookId)==true){
+            
+            
+            book.setBookId(bookId);
+                    return "redirect:/books/edit/{bookId}";
+
         }
 
         bookRepository.save(book);
@@ -259,6 +270,23 @@ public class BookController {
         return "redirect:/books";
 
     }
+    
+     @PostMapping("/books/update/{bookId}")
+    public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
+            BindingResult result, Model model) {
+        
+
+        if (result.hasErrors()) {
+            book.setBookId(bookId);
+            return "update-book";
+        }
+        
+
+        bookRepository.save(book);
+        model.addAttribute("books", bookRepository.findAll());
+        return "redirect:/books";
+    }
 
 */
+    
 }

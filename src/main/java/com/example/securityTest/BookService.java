@@ -44,7 +44,7 @@ public class BookService {
         return bookRepository.findByKeyword(keyword);
     }
     
-    public Boolean checkIfIsbnExists(String inputIsbn){
+    public Boolean checkIfIsbnDublicate(String inputIsbn){
      List<Book> books = bookRepository.findAll();
      boolean isDublicate = false;
      for( Book book:books){
@@ -53,6 +53,27 @@ public class BookService {
          isDublicate = true;
          }
         }
+     return isDublicate;
+    }
+    
+    public Boolean checkIfIsbnDublicateEdit(String inputIsbn, long currentId){
+     List<Book> books = bookRepository.findAll();
+     boolean isDublicate = false;
+     for( Book book:books){
+         System.out.println("Current id "+ book.getBookId() + "   ");
+         System.out.println(currentId);
+         System.out.println(inputIsbn);
+         System.out.println(book.getIsbn());
+
+         if ((book.getIsbn().matches(inputIsbn))&& (book.getBookId()!=currentId))
+         //if (book.getIsbn().matches(inputIsbn))           
+         {
+         isDublicate = true;
+         
+         }
+        }
+              System.out.println(isDublicate);
+
      return isDublicate;
     }
 
