@@ -54,7 +54,7 @@ public class Book implements Serializable {
     private String title;
 
     @NotBlank(message = "isbn is mandatory")
-    @Column(unique = true, name="isbn")
+    @Column(unique = true, name="isbn", length = 13)
     private String isbn;
 
     public Book(long bookId, Author author, long authorId, String title, String isbn, int yearOfPublishing, boolean isRented, Report report) {

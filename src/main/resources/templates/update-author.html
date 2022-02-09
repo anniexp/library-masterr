@@ -19,14 +19,14 @@
                     <form action="#" th:action="@{/authors/update/{id}(id=${author.authorId})}" th:object="${author}" method="post">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="authorName" class="col-form-label">Author Name </label>
-                                <input type="text" th:field="*{authorName}" class="form-control" id="authorName" placeholder="Author name">
-                                <span th:if="${#fields.hasErrors('authorName')}" th:errors="*{authorName}" class="text-danger"></span>
+                                <label for="authorName" class="col-form-label" style="color:red">Author Name *</label>
+                                <input type="text" th:field="*{authorName}" class="form-control unique required" required  minlength = "2" maxlength="255"  id="authorName" placeholder="Author name">
+                                <span th:if="${#fields.hasErrors('authorName')}" th:errors="*{authorName}" class="alert alert-danger"></span>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="nationality" class="col-form-label">Nationality</label>
-                                <input type="text" th:field="*{nationality}" class="form-control" id="nationality" placeholder="Title">
-                                <span th:if="${#fields.hasErrors('nationality')}" th:errors="*{title}" class="text-danger"></span>
+                                <label for="nationality" class="col-form-label" style="color:red">Nationality *</label>
+                                <input type="text" th:field="*{nationality}" class="form-control required" id="nationality" placeholder="Nationality" required minlength = "2" maxlength="255">
+                                <span th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}" class="alert alert-danger"></span>
                             </div>                       
 
                         </div>

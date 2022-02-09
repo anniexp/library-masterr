@@ -29,7 +29,7 @@ public class HomeController {
     public String viewHomePage3() {
         return "redirect:/index";
     }
-    @GetMapping("/css/newcss.css")
+    @GetMapping("/css/shards.min.css")
     public String viewHomePage4() {
         return "redirect:/index";
     }

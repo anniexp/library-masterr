@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  *
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UserController {
     @Autowired
 	private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 	
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
@@ -38,11 +41,23 @@ public class UserController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
                 String userRole = Rolee.getROLE_USER().name();
+               
+                
+                if (userService.checkIfUserExists(user.getUsername()) == true) {
+                   return "registration";
+                   }
+                
+                
                // String userRoleString = Rolee.valueOf("ROLE_USER");
                 Boolean isEnabled = true;
 		user.setPassword(encodedPassword);
                 user.setRolee(userRole);
                 user.setEnabled(isEnabled);
+                
+               // userService.checkIfUserExists(user.getUsername());
+
+                
+                
 
 		userRepository.save(user);
 

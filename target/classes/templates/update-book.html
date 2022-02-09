@@ -21,31 +21,31 @@
                         <div class="row">
 
                             <div class="form-group col-md-6">
-                                <label for="title" class="col-form-label">Title</label>
-                                <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title">
-                                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></span>
+                                <label for="title" class="col-form-label" style="color:red">Title *</label>
+                                <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" required>
+                                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="author" class="col-form-label">Author</label>
-                                <select th:field="*{author}" class="form-control" id="author" placeholder="Author">
+                                <label for="author" class="col-form-label" style="color:red">Author *</label>
+                                <select th:field="*{author}" class="form-control" id="author" placeholder="Author" required>
 
                                     <option th:each="auth: ${authors}" th:text="${auth.authorName}" th:value="${auth.authorId}"/>
 
                                 </select>
-                                <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="text-danger"></span>
+                                <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="alert alert-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="isbn" class="col-form-label">ISBN</label>
-                                <input type="text" th:field="*{isbn}" class="form-control" id="name" placeholder="ISBN">
-                                <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="text-danger"></span>
+                                <label for="isbn" class="col-form-label" style="color:red">ISBN *</label>
+                                <input type="text" th:field="*{isbn}" class="form-control" id="name" placeholder="ISBN" required>
+                                <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="alert alert-danger"></span>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="yearOfPublishing" class="col-form-label">Year of Publishing</label>
                                 <input type="number" th:field="*{yearOfPublishing}" class="form-control" id="yearOfPublishing" placeholder="YearOfPublishing">
-                                <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="text-danger"></span>
+                                <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="alert alert-danger"></span>
                             </div>
                             <div class="form-group col-md-6">
                                 <input type="checkbox" th:field="*{isRented}" th:value="*{isRented}" class="form-control" id="isRented" placeholder="isRented" >

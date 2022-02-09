@@ -5,8 +5,11 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.DateTime;
@@ -16,9 +19,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class BookController {
@@ -41,6 +48,22 @@ public class BookController {
 
     @Autowired
     private HttpServletRequest request;
+     
+    
+    static ArrayList<Author> authors;
+
+   /* public BookController(BookRepository bookRepository, BookService bookService, ReportsRepository reportRepository, AuthorRepository authorRepository, UserRepository userRepository, HttpServletRequest request, ArrayList<Author> authors) {
+        this.bookRepository = bookRepository;
+        this.bookService = bookService;
+        this.reportRepository = reportRepository;
+        this.authorRepository = authorRepository;
+        this.userRepository = userRepository;
+        this.request = request;
+        this.authors = authors;
+    }
+*/
+    
+
 
     @GetMapping("/books")
     public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName) {
@@ -55,20 +78,31 @@ public class BookController {
     }
 
     @GetMapping("/books/signup")
-    public String showSignUpForm(Model model) {
-        List<Author> authors = authorRepository.findAll();
+   // @ResponseBody
+    public String showSignUpForm(Model model, @ModelAttribute("authors") ArrayList<Author> authors) {
+      authors.addAll(authorRepository.findAll());
 
         model.addAttribute("book", new Book());
-
         model.addAttribute("authors", authors);
         model.addAttribute("report", new Report());
 
         return "add-book";
     }
 
+    
+    private Map<Long,Author> authorMap = new HashMap<>();
+        private Map<Long,Report> reportMap = new HashMap<>();
+
+            
     @PostMapping("/books/addbook")
-    public String addBook(@Valid Book book, BindingResult result, Model model) {
+    public String addBook(@Valid Book book, BindingResult result, Model model,
+            @ModelAttribute("authors") ArrayList<Author> authors, RedirectAttributes attributes ) {
         System.out.print("book " + book);
+        
+        if (authors.isEmpty()){
+        authors.addAll(authorRepository.findAll());
+        model.addAttribute("authors", authors);
+        }
 
         List<Book> books = bookRepository.findAll();
 
@@ -80,7 +114,9 @@ public class BookController {
 
         boolean dublicateIsbn = bookService.checkIfIsbnExists(book.getIsbn());
 
-        if (result.hasErrors()||dublicateIsbn) {
+        if (result.hasErrors()||dublicateIsbn==true) {
+            
+            
             return "add-book";
         }
 
@@ -89,7 +125,7 @@ public class BookController {
         //  bookService.save(book);
         model.addAttribute("books", bookRepository.findAll());
 
-        return "redirect:/books";
+        return  "redirect:/books";
 
     }
 
@@ -181,5 +217,48 @@ public class BookController {
         return "redirect:/books";
 
     }
+    
+    
+    /*
+    
+     @GetMapping("/books/signup")
+    public String showSignUpForm(Model model) {
+        List<Author> authors = authorRepository.findAll();
 
+        model.addAttribute("book", new Book());
+
+        model.addAttribute("authors", authors);
+        model.addAttribute("report", new Report());
+
+        return "add-book";
+    }
+
+    @PostMapping("/books/addbook")
+    public String addBook(@Valid Book book, BindingResult result, Model model) {
+        System.out.print("book " + book);
+
+        List<Book> books = bookRepository.findAll();
+
+        long bookLastId = books.get(books.size() - 1).getBookId();
+        System.out.println("current last book id is: " + bookLastId);
+
+        book.setBookId(bookLastId + 1);
+        System.out.print("book " + book);
+
+        boolean dublicateIsbn = bookService.checkIfIsbnExists(book.getIsbn());
+
+        if (result.hasErrors()||dublicateIsbn==true) {
+            return "add-book";
+        }
+
+        bookRepository.save(book);
+
+        //  bookService.save(book);
+        model.addAttribute("books", bookRepository.findAll());
+
+        return "redirect:/books";
+
+    }
+
+*/
 }
