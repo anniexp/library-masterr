@@ -39,7 +39,7 @@ BookService bookService;
       //  model.addAttribute("reports", reportRepository.findAll());
         return "reports";
     } 
-    /*
+    
      @GetMapping("/reports/new")
     public String showNewBookForm(Model model, @Valid Book book, String name, @Valid User user) {
        
@@ -59,7 +59,7 @@ BookService bookService;
         
         bookService.save(book);
         return "redirect:/";
-    }*/
+    }
 
     
 }

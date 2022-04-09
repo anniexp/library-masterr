@@ -1,20 +1,18 @@
 package com.example.securityTest;
 
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+//import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import org.springframework.data.domain.Pageable;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class BookController {
@@ -66,6 +62,40 @@ public class BookController {
 
 
     @GetMapping("/books")
+    public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
+            @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        List<Book> books = null;
+         
+        Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Book> pageTuts;
+        
+        if (bookName != null) { 
+         //   books = bookService.findByKeyword(bookName);       
+         //pagination part      
+        pageTuts = bookRepository.findByKeyword(bookName, paging);
+   
+        } else {
+            pageTuts = bookRepository.findAll(paging);
+          //    pageTuts = bookRepository.findAll(paging);
+
+        }
+        
+        books = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+                System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+            
+        //model.addAttribute("books", books);
+        model.addAttribute("books", books);
+
+        return "books";
+    }
+    /*
+     @GetMapping("/books")
     public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName) {
         List<Book> books = null;
         if (bookName != null) {
@@ -76,12 +106,15 @@ public class BookController {
         model.addAttribute("books", books);
         return "books";
     }
-
+    */
     @GetMapping("/books/signup")
    // @ResponseBody
-    public String showSignUpForm(Model model, @ModelAttribute("authors") ArrayList<Author> authors) {
+    public String showSignUpForm(Model model, @ModelAttribute("authors") ArrayList<Author> authors )
+      {
+      
+   
       authors.addAll(authorRepository.findAll());
-
+      
         model.addAttribute("book", new Book());
         model.addAttribute("authors", authors);
         model.addAttribute("report", new Report());

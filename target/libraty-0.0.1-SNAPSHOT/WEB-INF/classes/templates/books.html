@@ -13,6 +13,22 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/shards.min.css">
         <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+        <style>.pagination a {
+  color: black;
+  
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+
+.pagination a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+</style>
     </head>
     <body>
         <div class="container">
@@ -63,6 +79,66 @@ and open the template in the editor.
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- comment 
+                        <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1">Previous</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="http://localhost:8080/books?page=0&size=10">1</a></li>
+    <li class="page-item active">
+      <a class="page-link" href="http://localhost:8080/books?page=1&size=10">2 <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="page-item"><a class="page-link" href="http://localhost:8080/books?page=2&size=10">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>-->
+                    
+                    
+                    <nav aria-label="Page navigation example">
+    Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
+    
+    <ul class="pagination">
+      <li class="page-item">
+          <a  class="page-link" th:if="${currentPage > 0}" th:href="@{http://localhost:8080/books?page=0}">First</a>
+      </li>
+       <li class="page-item">
+          <a  class="page-link" th:unless="${currentPage > 0}">First</a>
+       </li>
+
+       <li class="page-item">
+           <a  class="page-link" th:if="${currentPage > 0}" th:href="@{'http://localhost:8080/books?page=' + ${currentPage - 1}}">Previous</a>
+       </li>
+        <li class="page-item">
+           <a  class="page-link" th:unless="${currentPage > 0}">Previous</a>
+        </li>
+
+<a   th:each="i: ${#numbers.sequence(1, totalPages)}">
+    <li class="page-item">
+        <a class="page-link" th:if="${i != currentPage + 1}" th:href="@{'http://localhost:8080/books?page=' + ${i-1}}">[[${i}]]</a>
+    </li>
+     <li class="page-item">
+        <a class="page-link"  th:unless="${i != currentPage + 1}">[[${i}]]</a>
+    </li>
+</a>
+<li class="page-item">
+       <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/books?page=' + ${currentPage + 1}}">Next</a>
+</li>
+ <li class="page-item">
+       <a  class="page-link" th:unless="${currentPage < totalPages-1}">Next</a>
+</li>
+<li class="page-item">   
+    <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/books?page=' + ${totalPages - 1}}">Last</a>
+</li>
+ <li class="page-item">
+<a  class="page-link" th:unless="${currentPage < totalPages-1}">Last</a>
+ </li>
+    </ul>
+</nav>
+
+    
                     </div>      
                     <p class="my-5"><a href="/books/signup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a></p>
                     <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
