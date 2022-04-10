@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.example.securityTest;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -77,5 +78,20 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+        
+        
+        
+         @OneToMany(targetEntity = Report.class, mappedBy = "borrower", cascade = CascadeType.ALL)
+    private Set<Report> borrowedBooks;
+
+    public Set<Report> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void setBorrowedBooks(Set<Report> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
+
+    
 }
 

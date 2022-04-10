@@ -45,7 +45,7 @@ and open the template in the editor.
                                 <tbody>
                                     <tr th:each="repor : ${reports}">
                                         <td th:text="${repor.reportId}"></td>
-                                        <td th:text="${repor.borrower}"></td>
+                                        <td th:text="${repor.borrower.username}"></td>
                                         <td th:text="${repor.book.title}"></td>
                                         <td th:text="${repor.dateCreated}"></td>
                                         <td th:text="${repor.lastUpdated}"></td>

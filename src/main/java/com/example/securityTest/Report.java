@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,9 +44,18 @@ public class Report
     private Book book;
 
     
-@Column(name = "Borrower")
-    
-private String borrower;
+
+@ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User borrower;
+
+    public User getBorrower() {
+        return borrower;
+    }
+
+    public void setBorrower(User borrower) {
+        this.borrower = borrower;
+    }
 
     public Book getBook() {
         return book;
@@ -55,14 +65,16 @@ private String borrower;
         this.book = book;
     }
 
-    public String getBorrower() {
-        return borrower;
+    public Report(long reportId, Book book, User borrower, Date dateCreated, Date lastUpdated) {
+        this.reportId = reportId;
+        this.book = book;
+        this.borrower = borrower;
+        this.dateCreated = dateCreated;
+        this.lastUpdated = lastUpdated;
     }
 
-    public void setBorrower(String borrower) {
-        this.borrower = borrower;
-    }
-        
+    
+    
    // @NotBlank(message = "Author name is mandatory")
     //private String author;
 @Column(name = "date_created")
@@ -78,14 +90,7 @@ private String borrower;
     public Report() {
     }
 
-    public Report(long reportId, String borrower, Book book, Date dateCreated, Date lastUpdated) {
-        this.reportId = reportId;
-        this.borrower = borrower;
-        this.book = book;
-        this.dateCreated = dateCreated;
-        this.lastUpdated = lastUpdated;
-    }
-
+   
     public Date getDateCreated() {
         return dateCreated;
     }

@@ -213,7 +213,7 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @GetMapping("/books/getBook/{bookId}")
+   /* @GetMapping("/books/getBook/{bookId}")
     public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
@@ -263,7 +263,7 @@ public class BookController {
         return "redirect:/books";
 
     }
-    
+    */
     
     /*
     

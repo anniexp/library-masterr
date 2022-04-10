@@ -5,6 +5,7 @@
  */
 package com.example.securityTest;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class UserController {
 	private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private HttpServletRequest request;
 	
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
@@ -71,6 +74,7 @@ public class UserController {
             
             @PostMapping("/login")
             public String viewHomePage(){
+              
             return "redirect:/";
             }
             
