@@ -12,6 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,13 +39,29 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping("/authors")
-    public String index(Model model, @RequestParam(name = "searchAuthor", required = false) String authorName) {
+    public String index(Model model, @RequestParam(name = "searchAuthor", required = false) String authorName,
+               @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        
         List<Author> authors = null;
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Author> pageTuts;
+        
          if (authorName != null) {
-            authors = authorRepository.findByKeyword(authorName);
+               pageTuts = authorRepository.findByKeyword(authorName, paging);
+           // authors = authorRepository.findByKeyword(authorName);
         } else {
-            authors = authorRepository.findAll();
+            pageTuts = authorRepository.findAll(paging);
         }
+         
+          authors = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
         model.addAttribute("authors", authors);
         return "authors";
     }

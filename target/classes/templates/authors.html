@@ -58,6 +58,46 @@ and open the template in the editor.
                                 </tr>
                             </tbody>
                         </table>
+                          <nav aria-label="Page navigation example">
+    Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
+    
+    <ul class="pagination">
+      <li class="page-item">
+          <a  class="page-link" th:if="${currentPage > 0}" th:href="@{http://localhost:8080/authors?page=0}">First</a>
+      </li>
+       <li class="page-item">
+          <a  class="page-link" th:unless="${currentPage > 0}">First</a>
+       </li>
+
+       <li class="page-item">
+           <a  class="page-link" th:if="${currentPage > 0}" th:href="@{'http://localhost:8080/authors?page=' + ${currentPage - 1}}">Previous</a>
+       </li>
+        <li class="page-item">
+           <a  class="page-link" th:unless="${currentPage > 0}">Previous</a>
+        </li>
+
+<a   th:each="i: ${#numbers.sequence(1, totalPages)}">
+    <li class="page-item">
+        <a class="page-link" th:if="${i != currentPage + 1}" th:href="@{'http://localhost:8080/authors?page=' + ${i-1}}">[[${i}]]</a>
+    </li>
+     <li class="page-item">
+        <a class="page-link"  th:unless="${i != currentPage + 1}">[[${i}]]</a>
+    </li>
+</a>
+<li class="page-item">
+       <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/authors?page=' + ${currentPage + 1}}">Next</a>
+</li>
+ <li class="page-item">
+       <a  class="page-link" th:unless="${currentPage < totalPages-1}">Next</a>
+</li>
+<li class="page-item">   
+    <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/authors?page=' + ${totalPages - 1}}">Last</a>
+</li>
+ <li class="page-item">
+<a  class="page-link" th:unless="${currentPage < totalPages-1}">Last</a>
+ </li>
+    </ul>
+</nav>
                     </div>      
                     <p class="my-5"><a href="/authors/new" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a></p>
                     <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
