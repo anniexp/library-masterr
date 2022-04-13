@@ -34,7 +34,7 @@ public class BookController {
     BookService bookService;
 
     @Autowired
-    ReportsRepository reportRepository;
+    ReportRepository reportRepository;
 
     @Autowired
     AuthorRepository authorRepository;
@@ -62,7 +62,7 @@ public class BookController {
 
 
     @GetMapping("/books")
-    public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
+    public String showBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
         List<Book> books = null;
@@ -94,6 +94,18 @@ public class BookController {
 
         return "books";
     }
+    
+    
+    @GetMapping("/books/book-details/{bookId}")
+    public String showBookDetails(Model model,
+      @PathVariable("bookId") long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        model.addAttribute("book", book);
+
+        return "book-details";
+    }
+
     /*
      @GetMapping("/books")
     public String books(Model model, @RequestParam(name = "searchBook", required = false) String bookName) {
@@ -131,7 +143,7 @@ public class BookController {
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, RedirectAttributes attributes ) {
         System.out.print("book " + book);
-        
+        //if the list of authirs for the dropdown is empty on refresh or redirect, then fill them
         if (authors.isEmpty()){
         authors.addAll(authorRepository.findAll());
         model.addAttribute("authors", authors);
@@ -139,14 +151,17 @@ public class BookController {
 
         List<Book> books = bookRepository.findAll();
 
+        //generate manualy id of new book
         long bookLastId = books.get(books.size() - 1).getBookId();
         System.out.println("current last book id is: " + bookLastId);
 
         book.setBookId(bookLastId + 1);
         System.out.print("book " + book);
-
+        //create a boolean which checks if the input isbn exists already in  the db, 
+        //this custom validation is needed, because the @unique in the model checks only on model, not the form itself
         boolean dublicateIsbn = bookService.checkIfIsbnDublicate(book.getIsbn());
 
+        //if there are validation errors or the 
         if (result.hasErrors()||dublicateIsbn==true) {
             
             

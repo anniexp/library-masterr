@@ -35,14 +35,23 @@ public class HomeController {
     public String viewHomePage3() {
         return "redirect:/index";
     }
-    @GetMapping("/css/shards.min.css")
+   /* @GetMapping("/css/shards.min.css")
     public String viewHomePage4() {
         return "redirect:/index";
     }
     @GetMapping("/css/newcss.css")
     public String viewHomePage5() {
         return "redirect:/index";
+    }*/
+ @GetMapping("/newjsp")
+    public String viewHomePage5() {
+        return "newjsp";
     }
-
+    
+    @GetMapping("/contact-us")
+    public String viewContactUsPage() {
+        return "contact-us";
+    }
+    
 }
 

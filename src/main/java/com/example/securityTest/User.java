@@ -26,9 +26,20 @@ public class User {
 
 	@Column(name = "username", unique = true, nullable = false, length = 20)
 	private String username;
+
+    public User(Long user_id, String password, String username, String rolee, boolean enabled) {
+        this.user_id = user_id;
+        this.password = password;
+        this.username = username;
+        this.rolee = rolee;
+        this.enabled = enabled;
+    }
         
         @Column(name = "role", nullable = false)
 	private String rolee;
+
+    public User() {
+    }
 
     public String getRolee() {
         return rolee;

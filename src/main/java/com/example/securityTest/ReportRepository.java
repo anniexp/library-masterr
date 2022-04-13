@@ -14,9 +14,13 @@ import org.springframework.stereotype.Repository;
  * @author Lenovo
  */
     @Repository
-public interface ReportsRepository extends JpaRepository<Report, Long>{
+public interface ReportRepository extends JpaRepository<Report, Long>{
     
         List<Report> findByReportId(long reportId);
+        
+        
+   
+    
 
     
 }
