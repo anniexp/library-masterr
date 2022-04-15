@@ -16,9 +16,15 @@
             <h2 class="mb-5">New Book</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <form action="#" th:action="@{/books/addbook}" th:object="${book}" method="post">
+                    <form action="#" th:action="@{/books/addbook}" th:object="${book}" method="post" enctype="multipart/form-data">
                         <div class="row">
 
+                             <div class="form-group col-md-12">
+                                <label for="title" class="col-form-label" style="color:red">Title *</label>
+                                <input type="text" th:field="*{title}" class="form-control required" id="title" placeholder="Title" title="Title should be between 2 and 255 symbols" autofocus required>
+                                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"  style="margin:10px;"></span>
+                            </div>
+                            
                             <div class="form-group col-md-12">
                                 <label for="author" class="col-form-label" style="color:red">Author *</label>
                                 <select th:field="*{author}" class="form-control" id="author" placeholder="Author" required>
@@ -28,12 +34,67 @@
                                 </select>
                                 <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="alert alert-danger"></span>
                             </div>
-
-                            <div class="form-group col-md-12">
-                                <label for="title" class="col-form-label" style="color:red">Title *</label>
-                                <input type="text" th:field="*{title}" class="form-control required" id="title" placeholder="Title" title="Title should be between 2 and 255 symbols" autofocus required>
-                                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"  style="margin:10px;"></span>
+                            
+                            
+                            
+ <div class="form-group col-md-12">
+                                <label for="edition" class="col-form-label" style="color:red">Edition *</label>
+                                <input type="text" th:field="*{edition}" class="form-control required" id="edition" placeholder="Edition" title="Edition should be between 2 and 255 symbols">
+                                <span th:if="${#fields.hasErrors('edition')}" th:errors="*{edition}" class="alert alert-danger"  style="margin:10px;"></span>
                             </div>
+                            
+                            <div class="form-group col-md-12">
+                                <label for="pages" class="col-form-label" style="color:red">Pages *</label>
+                                <input type="number" th:field="*{pages}" class="form-control required" id="pages" placeholder="Pages" title="Number of pages should be between 0 and 20000 ">
+                                <span th:if="${#fields.hasErrors('pages')}" th:errors="*{pages}" class="alert alert-danger"  style="margin:10px;"></span>
+                            </div>
+                            
+                            <div class="form-group col-md-12">
+                                <label for="volume" class="col-form-label" style="color:red">Volume *</label>
+                                <input type="number" th:field="*{volume}" class="form-control required" id="volume" placeholder="Volume" title="Volume number should be a number between 1 and 2000 ">
+                                <span th:if="${#fields.hasErrors('volume')}" th:errors="*{volume}" class="alert alert-danger"  style="margin:10px;"></span>
+                            </div>
+                            
+                             <div class="form-group col-md-12">
+                                <label for="publisher" class="col-form-label" style="color:red">Publisher *</label>
+                                <input type="text" th:field="*{publisher}" class="form-control required" id="publisher" placeholder="Publisher" title="Publisher name should be between 2 and 255 symbols ">
+                                <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{volume}" class="alert alert-danger"  style="margin:10px;"></span>
+                            </div>
+                            
+                             <div class="form-group col-md-12">
+                                <label for="series" class="col-form-label" style="color:red">Series *</label>
+                                <input type="text" th:field="*{series}" class="form-control required" id="series" placeholder="Series" title="Series name should be between 0 and 255 symbols ">
+                                <span th:if="${#fields.hasErrors('series')}" th:errors="*{series}" class="alert alert-danger"  style="margin:10px;"></span>
+                            </div>
+                            
+                            
+                           
+                            
+    <!--- <div>
+     
+    <label  for="photos">Photos: </label>
+    <input type="file" th:field="*{photos}" name="image" id="image" accept="image/png, image/jpeg" />
+     
+    </div>-->
+    <div class="form-group col-md-12"
+                             <input
+               name="file" type="file" id="formFile"><br />
+    </div>
+    
+      <div class="card" style="width: 18rem;" align="center">
+      <div class="card-body" align="center">
+        <h2 class="card-title">File Upload</h2>
+        <h6 class="text-success">[[${success}]]</h6>
+        <div class="mb-3">
+          
+            <input
+              class="form-control" name="file" type="file" id="formFile"><br />
+           
+         
+        </div>
+      </div>
+     </div>
+    
                             <div class="form-group col-md-12">
                                 <label for="isbn" class="col-form-label" style="color:red">ISBN *</label>
                                 <input type="text" th:field="*{isbn}" class="form-control required" id="isbn" maxlength="13" minlength="13" placeholder="ISBN" required>

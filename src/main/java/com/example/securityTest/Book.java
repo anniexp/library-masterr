@@ -1,6 +1,7 @@
 package com.example.securityTest;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,13 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "book")
@@ -57,16 +52,98 @@ public class Book implements Serializable {
     @Column(unique = true, name="isbn", length = 13)
     private String isbn;
 
-    public Book(long bookId, Author author, long authorId, String title, String isbn, int yearOfPublishing, boolean isRented, Report report) {
+ 
+        @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "book")
+    private Report report;
+    
+      
+    @Column(name = "publisher")
+    @Size(min = 2, max = 255)
+    private String publisher;
+         
+    @Column(name = "pages")
+   @Min(value=0, message="must be equal or greater than 0")  
+    @Max(value=20000, message="must be equal or less than 20000") 
+    private int pages;
+    
+    @Column(name = "volume")
+  @Min(value=1, message="must be equal or greater than 1")  
+    @Max(value=2000, message="must be equal or less than 2000") 
+    private int volume;
+
+     @Column(name = "edition",  nullable= true)
+    @Size(min = 0, max = 255,  message="must be between 0 and 255 characters long")
+    private String edition;
+     
+ @Column(name = "series", nullable= true)
+    @Size(min = 2, max = 255, message="must be between 0 and 255 characters long")
+    private String series;
+ /*
+ @Column(name = "ratings",  nullable= true)
+  private List<Integer> ratings;
+ 
+
+    public List<Integer> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Integer> ratings) {
+        this.ratings = ratings;
+    }*/
+
+ private String profilePicture;
+ private long size;
+ private byte [] content;
+ 
+    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String profilePicture, long size, byte[] content) {
         this.bookId = bookId;
-        this.title = title;
-        this.isbn = isbn;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
         this.author = author;
+        this.title = title;
+        this.isbn = isbn;
         this.report = report;
+        this.publisher = publisher;
+        this.pages = pages;
+        this.volume = volume;
+        this.edition = edition;
+        this.series = series;
+        this.profilePicture = profilePicture;
+        this.size = size;
+        this.content = content;
+    }
+    
+ 
+ 
+
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+    
+
+public Book() {
+
+    }
     public Author getAuthor() {
         return author;
     }
@@ -121,19 +198,7 @@ public class Book implements Serializable {
         return "Book{" + "bookId=" + bookId + ", yearOfPublishing=" + yearOfPublishing + ", isRented=" + isRented + ", author=" + author + ", title=" + title + ", isbn=" + isbn + '}';
     }
 
-    public Book() {
-
-    }
-
     
-   /* @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "report_id")*/
-    
-    
-        @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "book")
-    private Report report;
-
     public Report getReport() {
         return report;
     }
@@ -141,6 +206,53 @@ public class Book implements Serializable {
     public void setReport(Report report) {
         this.report = report;
     }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+   
+
+    
+    
+    
+    
 }
 
     

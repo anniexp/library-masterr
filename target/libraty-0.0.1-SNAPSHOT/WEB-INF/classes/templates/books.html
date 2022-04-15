@@ -53,6 +53,7 @@ and open the template in the editor.
                                 <tr>
                                     <th>Book Id</th>
                                     <th>Title</th>
+                                     <th>Photo</th>
                                     <th>ISBN-13</th>
                                     <th>Year of Publishing</th>
                                     <th>Is rented</th>
@@ -67,6 +68,10 @@ and open the template in the editor.
                                     <td th:text="${bok.bookId}"></td>
 
                                     <td th:text="${bok.title}"></td>
+                                    <td>
+                                        <img th:src="@{'/image?id='+ ${bok.bookId}}" width="100px" height="50px">
+                                    </td>
+                                    
                                     <td th:text="${bok.isbn}"></td>                                 
                                     <td th:text="${bok.yearOfPublishing}"></td>  
                                     <td th:text="${bok.isRented}"></td>  

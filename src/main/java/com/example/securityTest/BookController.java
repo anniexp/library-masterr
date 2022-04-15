@@ -1,6 +1,7 @@
 package com.example.securityTest;
 
 //import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import java.security.Principal;
 import java.text.DateFormat;
@@ -8,19 +9,25 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -141,7 +148,8 @@ public class BookController {
             
     @PostMapping("/books/addbook")
     public String addBook(@Valid Book book, BindingResult result, Model model,
-            @ModelAttribute("authors") ArrayList<Author> authors, RedirectAttributes attributes ) {
+            @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
+            RedirectAttributes attributes ) throws IOException {
         System.out.print("book " + book);
         //if the list of authirs for the dropdown is empty on refresh or redirect, then fill them
         if (authors.isEmpty()){
@@ -167,8 +175,15 @@ public class BookController {
             
             return "add-book";
         }
+        
+        //picture attributes
+        String fileName = file.getOriginalFilename();
+  book.setProfilePicture(fileName);
+  book.setContent(file.getBytes());
+  book.setSize(file.getSize());
 
         bookRepository.save(book);
+  model.addAttribute("success", "File Uploaded Successfully!!!");
 
         //  bookService.save(book);
         model.addAttribute("books", bookRepository.findAll());
@@ -178,7 +193,7 @@ public class BookController {
     }
 
     @GetMapping("/books/edit/{bookId}")
-    public String showUpdateForm(@PathVariable("bookId") long bookId, Model model) {
+    public String showUpdateForm(@PathVariable("bookId") long bookId, Model model) throws IOException  {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         List<Author> authors = authorRepository.findAll();
@@ -189,6 +204,7 @@ public class BookController {
 
     @PostMapping("/books/update/{bookId}")
     public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
+           
             BindingResult result, Model model) {
         
 
@@ -207,8 +223,16 @@ public class BookController {
                     return "redirect:/books/edit/{bookId}";
 
         }
-
+ //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+      //  book.setPhotos(fileName);
+  
+  //save the data in  the db
         bookRepository.save(book);
+        
+         // String uploadDir = "../images/user-photos/" + bookId;
+        //FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        
+        
         model.addAttribute("books", bookRepository.findAll());
         return "redirect:/books";
     }
@@ -228,6 +252,36 @@ public class BookController {
         return "redirect:/books";
     }
 
+    @GetMapping("/image")
+ public void showImage(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
+   throws ServletException, IOException {
+  
+  book = bookService.findById(id);
+  response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+  response.getOutputStream().write(book.get().getContent());
+  response.getOutputStream().close();
+ }
+    
+ 
+ @PostMapping("/upload")
+ public String fileUpload(@RequestParam("file") MultipartFile file,  Model model,
+         Book book) throws IOException {
+
+   //picture attributes
+        String fileName = file.getOriginalFilename();
+  book.setProfilePicture(fileName);
+  book.setContent(file.getBytes());
+  book.setSize(file.getSize());
+
+  
+  model.addAttribute("success", "File Uploaded Successfully!!!");
+  model.addAttribute("profilePicture", book.getProfilePicture() );
+  model.addAttribute("content",book.getContent());
+  model.addAttribute("size",book.getSize() );
+
+  return "add-book";
+  
+ }
    /* @GetMapping("/books/getBook/{bookId}")
     public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {
         Book book = bookRepository.findById(bookId)
