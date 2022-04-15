@@ -9,8 +9,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,7 +31,7 @@ public class ReportService {
 
     @Autowired
     ReportRepository reportRepository;
-  @Autowired
+    @Autowired
     BookService bookService;
     @Autowired
     BookRepository bookRepository;
@@ -39,7 +43,7 @@ public class ReportService {
     public void save(Report report) {
         reportRepository.save(report);
     }
-    
+
     //create a date number of days after input date
     public Date createDateAfterDate(LocalDate localDate, int numberOfDays) {
         LocalDate dateReturn = localDate.plusDays(14);
@@ -51,16 +55,35 @@ public class ReportService {
     }
 
     //creates a list of all currently available books 
-     public List<Book> listAvailableBooks(){
-     List<Book> books = bookRepository.findAll();
-    
-     for( Book book:books){
-         if (book.isIsRented())
-         {
-         books.remove(book);
-         }
+    public List<Book> listAvailableBooks() {
+        List<Book> books = bookRepository.findAll();
+        System.out.println("all books :  " + books.size());
+        List<Book> filtererBooks = new ArrayList<Book>();
+        ListIterator<Book> listIterator = books.listIterator();
+       
+      
+        books.stream().forEach(elem -> System.out.println(elem));
+       
+        for (Book book : books) {
+            /* if(book.toString().equalsIgnoreCase(null)){
+            continue;}*/
+             
+            boolean alo = book.isIsRented();
+            System.out.println("is it rented :  " + alo);
+           
+            if (alo) {
+            } 
+           
+            else {
+                filtererBooks.add(book);
+                System.out.println("available books :  " + filtererBooks.size());
+            }
+        
         }
-     return books;
-    }     
+        System.out.println("available books :  " + filtererBooks.size());
+        return filtererBooks;
+
+    }
+    
     
 }

@@ -60,7 +60,7 @@ public class ReportController {
         List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
 
-        
+      
         
         // User currentUserEmployee= (User) currentEmployee;
         //if it doesnt work, then to build it with a constructor, if that does not work, 
@@ -85,6 +85,8 @@ public class ReportController {
         //current date
         Date dateCreated = new Date();
         LocalDate currDate = LocalDate.now();
+        
+        
 
         //boolean isBookRented = bok.isIsRented();
         // System.out.println("Is the current book rented - " + bok.isIsRented());
@@ -110,6 +112,7 @@ public class ReportController {
 
         rep.setLastUpdated(returnDate);
 
+       
         /*
         if (isBookRented == false){
         reportService.save(report);    
@@ -125,7 +128,8 @@ public class ReportController {
         }
 
         reportService.save(rep);
-
+        rep.getBook().setIsRented(true);
+ 
         model.addAttribute("reports", reportRepository.findAll());
 
         return "redirect:/reports";
