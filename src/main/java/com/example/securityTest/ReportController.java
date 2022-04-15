@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -20,25 +21,25 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class ReportController {
-
+    
     @Autowired
     ReportRepository reportRepository;
     @Autowired
     BookService bookService;
     @Autowired
     BookRepository bookRepository;
-
+    
     @Autowired
     AuthorRepository authorRepository;
-
+    
     @Autowired
     UserRepository userRepository;
-
+    
     @Autowired
     private HttpServletRequest request;
     @Autowired
     ReportService reportService;
-
+    
     @GetMapping("/reports")
     public String index(Model model) {
         List<Report> reports = null;
@@ -51,17 +52,15 @@ public class ReportController {
         //  model.addAttribute("reports", reportRepository.findAll());
         return "reports";
     }
-
+    
     @GetMapping("/reports/new-report")
     public String showNewReportForm(Model model
     ) {
-
+        
         List<Book> book = reportService.listAvailableBooks();
         List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
 
-      
-        
         // User currentUserEmployee= (User) currentEmployee;
         //if it doesnt work, then to build it with a constructor, if that does not work, 
         //then firstly get the name of the cuurent user, then loop all users, if the
@@ -71,33 +70,31 @@ public class ReportController {
         System.out.println("Number of books : " + book.size());
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
-
+        
         model.addAttribute("book", book);
         model.addAttribute("users", users);
         model.addAttribute("report", new Report());
-
+        
         return "add-report";
     }
-
+    
     @PostMapping("/reports/add_report")
     public String addReport(@Valid Report rep, BindingResult result, Model model
     ) {
         //current date
         Date dateCreated = new Date();
         LocalDate currDate = LocalDate.now();
-        
-        
 
         //boolean isBookRented = bok.isIsRented();
         // System.out.println("Is the current book rented - " + bok.isIsRented());
         List<Report> reports = reportRepository.findAll();
-
+        
         long reportLastId = reports.get(reports.size() - 1).getReportId();
         System.out.println("current last report id is: " + reportLastId);
-
+        
         rep.setReportId(reportLastId + 1);
         System.out.print("report :  " + rep);
-
+        
         rep.setDateCreated(dateCreated);
         System.out.println("current date :  " + dateCreated);
         /*
@@ -106,13 +103,15 @@ public class ReportController {
             Instant instant = dateReturn.atTime(LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant();
             Date dateBookReturn = Date.from(instant);
          */
-
+        
         Date returnDate = reportService.createDateAfterDate(currDate, 14);
         System.out.println("return date :  " + returnDate);
+        
+        rep.setLastUpdated(reportService.createDateAfterDate(currDate, 14));
+        System.out.println("return date :  " + returnDate);
+        
+        rep.setIsReturned(false);
 
-        rep.setLastUpdated(returnDate);
-
-       
         /*
         if (isBookRented == false){
         reportService.save(report);    
@@ -123,17 +122,77 @@ public class ReportController {
         }*/
         //if there are validation errors or the 
         if (result.hasErrors()) {
-
+            
             return "add-report";
         }
-
+        Book bookToUpdate = rep.getBook();
+        bookToUpdate.setIsRented(true);
+        
+        bookService.save(bookToUpdate);
         reportService.save(rep);
-        rep.getBook().setIsRented(true);
- 
+        
         model.addAttribute("reports", reportRepository.findAll());
-
+        
         return "redirect:/reports";
     }
+    
+     @GetMapping("/reports/edit/{reportId}")
+    public String showUpdateForm(@PathVariable("reportId") long reportId, Model model) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + reportId));
+        
+         List<Book> book = reportService.listAvailableBooks();
+        List<User> users = userRepository.findAll();
+        Principal currentEmployee = UserController.getCurrentUser(request);
+
+        // User currentUserEmployee= (User) currentEmployee;
+        //if it doesnt work, then to build it with a constructor, if that does not work, 
+        //then firstly get the name of the cuurent user, then loop all users, if the
+        //name equals, then this is the cuurent user 
+        //User currentUserEmployee= new User(currentEmployee., String password,
+        //String username, String rolee, boolean enabled);
+        System.out.println("Number of books : " + book.size());
+        System.out.println("Number of users : " + users.size());
+        System.out.println("Current employeeee is : " + currentEmployee);
+        
+        model.addAttribute("book", book);
+        model.addAttribute("users", users);
+        model.addAttribute("report", report);
+     
+        return "update-report";
+    }
+
+    @PostMapping("/reports/update/{reportId}")
+    public String updateBook(@PathVariable("reportId") long reportId, @Valid Report report,
+            BindingResult result, Model model) {
+        
+
+        if (result.hasErrors()) {
+           System.out.println("Id of report to be edited : " + report.getReportId());
+            report.setReportId(report.getReportId());
+                       System.out.println("set Id  : " +report.getReportId());
+
+            return "update-report";
+        }
+      
+
+        reportService.save(report);
+        model.addAttribute("reports", reportRepository.findAll());
+        return "redirect:/reports";
+    }
+
+    @GetMapping("/reports/delete/{reportId}")
+    public String deleteBook(@PathVariable("reportId") long reportId, Model model) {
+        
+       Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + reportId));
+
+        reportRepository.delete(report);
+        model.addAttribute("reports", reportRepository.findAll());
+        return "redirect:/reports";
+    }
+    
+    
     /*
     @GetMapping("/books/getBook/{bookId}")
     public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {

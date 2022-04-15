@@ -86,6 +86,21 @@ public class Report
     @UpdateTimestamp
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastUpdated;
+    
+     @Column(name = "is_returned", updatable = true)
+    private boolean isReturned;
+     
+     
+     
+
+    public boolean isIsReturned() {
+        return isReturned;
+    }
+
+    public void setIsReturned(boolean isReturned) {
+        this.isReturned = isReturned;
+    }
+   
 
     public Report() {
     }
