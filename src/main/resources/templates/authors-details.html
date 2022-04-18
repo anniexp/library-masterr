@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Books by author</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-iwdth, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        <link rel="stylesheet" href="../css/shards.min.css">
+        <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="../css/style.css" rel="stylesheet">
+
+        <style>.pagination a {
+                color: black;
+
+                text-decoration: none;
+                transition: background-color .3s;
+            }
+
+
+            .pagination a.active {
+                background-color: dodgerblue;
+                color: white;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div th:switch="${books}" class="container my-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 th:case="null">No books yet!</h2>
+
+                    <div th:case="*">
+                        <h2 class="my-5">Books</h2>
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                                <tr>
+                                    <th>Book Id</th>
+                                    <th>Title</th>
+                                    <th>Photo</th>
+                                    <th>Year of Publishing</th>
+                                    <th>Is rented</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+
+                            <tr th:each="bok : ${author.books}">
+                                <td th:text="${bok.bookId}"></td>
+
+                                <td th:text="${bok.title}"></td>
+                                <td>
+                                    <img th:src="@{'/image?id='+ ${bok.bookId}}" width="100px" height="50px">
+                                </td>
+                                <td th:text="${bok.yearOfPublishing}"></td>  
+                                <td th:text="${bok.isRented}"></td>  
+                                <td> <a th:href="@{/books/book-details/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i>Details</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <nav aria-label="Page navigation example">
+                            Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
+
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a  class="page-link" th:if="${currentPage > 0}" th:href="@{http://localhost:8080/authors/author-details/' + {authorId}(authorId=${author.authorId}) + '/?page=0}">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a  class="page-link" th:unless="${currentPage > 0}">First</a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a  class="page-link" th:if="${currentPage > 0}" th:href="@{'http://localhost:8080/authorsauthor-details/' + {authorId}(authorId=${author.authorId}) + '/?page=' + ${currentPage - 1}}">Previous</a>
+                                </li>
+                                <li class="page-item">
+                                    <a  class="page-link" th:unless="${currentPage > 0}">Previous</a>
+                                </li>
+
+                                <a   th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                    <li class="page-item">
+                                        <a class="page-link" th:if="${i != currentPage + 1}" th:href="@{'http://localhost:8080/authors/author-details/' + {authorId}(authorId=${author.authorId}) + '/?page='  + ${i-1}}">[[${i}]]</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link"  th:unless="${i != currentPage + 1}">[[${i}]]</a>
+                                    </li>
+                                </a>
+                                <li class="page-item">
+                                    <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/authors/author-details/' + {authorId}(authorId=${author.authorId}) + '/?page=' + ${currentPage + 1}}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a  class="page-link" th:unless="${currentPage < totalPages-1}">Next</a>
+                                </li>
+                                <li class="page-item">   
+                                    <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/authors/author-details/' + {authorId}(authorId=${author.authorId}) + '/?page='  + ${totalPages - 1}}">Last</a>
+                                </li>
+                                <li class="page-item">
+                                    <a  class="page-link" th:unless="${currentPage < totalPages-1}">Last</a>
+                                </li>
+                            </ul>
+                        </nav>
+
+
+
+                    </div>      
+
+                    <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -53,5 +53,11 @@ public class HomeController {
         return "contact-us";
     }
     
+     @GetMapping("/page404")
+    public String loadHttpResponse404CustomPage() {
+        return "404";
+    }
+    
+    
 }
 

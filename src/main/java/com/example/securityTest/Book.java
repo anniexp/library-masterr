@@ -76,8 +76,12 @@ public class Book implements Serializable {
     private String edition;
      
  @Column(name = "series", nullable= true)
-    @Size(min = 2, max = 255, message="must be between 0 and 255 characters long")
+    @Size(min = 2, max = 255, message="must be between 2 and 255 characters long")
     private String series;
+ 
+ @Column(name = "description", nullable= true)
+    @Size(min = 2, max = 255, message="must be between 2 and 1000 characters long")
+    private String description;
  /*
  @Column(name = "ratings",  nullable= true)
   private List<Integer> ratings;
@@ -93,9 +97,18 @@ public class Book implements Serializable {
 
  private String profilePicture;
  private long size;
- private byte [] content;
  
-    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String profilePicture, long size, byte[] content) {
+ private byte [] content;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String description, String profilePicture, long size, byte[] content) {
         this.bookId = bookId;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
@@ -108,10 +121,13 @@ public class Book implements Serializable {
         this.volume = volume;
         this.edition = edition;
         this.series = series;
+        this.description = description;
         this.profilePicture = profilePicture;
         this.size = size;
         this.content = content;
     }
+ 
+    
     
  
  
@@ -246,12 +262,8 @@ public Book() {
     public void setSeries(String series) {
         this.series = series;
     }
+    
 
-   
-
-    
-    
-    
     
 }
 

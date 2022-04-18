@@ -54,6 +54,7 @@ and open the template in the editor.
                                     <th>Book Id</th>
                                     <th>Title</th>
                                      <th>Photo</th>
+                                      <th>Description</th>
                                     <th>ISBN-13</th>
                                     <th>Year of Publishing</th>
                                     <th>Is rented</th>
@@ -71,7 +72,7 @@ and open the template in the editor.
                                     <td>
                                         <img th:src="@{'/image?id='+ ${bok.bookId}}" width="100px" height="50px">
                                     </td>
-                                    
+                                      <td th:text="${bok.description}"></td>        
                                     <td th:text="${bok.isbn}"></td>                                 
                                     <td th:text="${bok.yearOfPublishing}"></td>  
                                     <td th:text="${bok.isRented}"></td>  
@@ -81,7 +82,7 @@ and open the template in the editor.
                                     <td ><a th:href="@{/books/edit/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary">  <i class="fas fa-user-edit ml-2"></i>Edit</a>
 
                                     </td>                                  
-                                    <td><a th:href="@{/books/delete/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary" onclick="return confirm('Are you sure you want to delete this game?');"
+                                    <td><a th:href="@{/books/delete/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary" onclick="return confirm('Are you sure you want to delete this book?');"
                                            ><i class="fas fa-user-times ml-2"></i>Delete</a></td>
                                    <!-- <td> <a th:href="@{/books/borrowBook/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>-->
                                      <td> <a th:href="@{/books/book-details/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>

@@ -108,7 +108,9 @@ public class BookController {
       @PathVariable("bookId") long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        
         model.addAttribute("book", book);
+        
 
         return "book-details";
     }
@@ -282,6 +284,28 @@ public class BookController {
   return "add-book";
   
  }
+ 
+ @GetMapping("books/requestToBorrow/{bookId}")
+    public String requestABookToBeBorrowed(@PathVariable("bookId") long bookId, Model model) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+    /*    bookRepository.
+        model.addAttribute("books", bookRepository.findAll());*/
+ 
+        return "redirect:/book-details";
+    }
+    
+    @GetMapping("b/books/addToWishlist/{bookId}")
+    public String addBookToWishlist(@PathVariable("bookId") long bookId, Model model) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+    /*    bookRepository.
+        model.addAttribute("books", bookRepository.findAll());*/
+  
+    
+        return "redirect:/book-details";
+    }
+ 
    /* @GetMapping("/books/getBook/{bookId}")
     public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {
         Book book = bookRepository.findById(bookId)

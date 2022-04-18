@@ -8,6 +8,7 @@ package com.example.securityTest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
@@ -72,6 +73,44 @@ public class AuthorController {
         model.addAttribute("author", new Author());
         return "add-author";
     }
+    
+      @GetMapping("/authors/author-details/{authorId}")
+    public String showBookDetails(@PathVariable("authorId") long authorId, Model model,
+     @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        List<Book> books = null;
+        Author author = authorService.findById(authorId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid author Id:" + authorId));
+   
+         if (author == null) {   
+                      System.out.println("author does not exist");
+
+          return "page404";
+             }  
+         else
+         {
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Book> pageTuts;
+         pageTuts = bookRepository.findByAuthor(author, paging);
+         System.out.println("number of books by this author: " + author.getBooks().size());
+
+         
+         
+          books = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+        
+        model.addAttribute("author", author);
+        model.addAttribute("books",  books);
+        return "authors-details";
+         }
+    }
 
     @PostMapping("/authors/addauthor")
     public String addAuthor(@Valid Author author, BindingResult result, Model model) {
@@ -88,8 +127,11 @@ public class AuthorController {
     @GetMapping("/authors/edit/{authorId}")
     public String showAuthorUpdateForm(@PathVariable("authorId") long authorId, Model model) {
         List<Book> books = bookRepository.findAll();
-        Author author = authorService.findById(authorId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid author Id:" + authorId));
+        Optional<Author> author = authorService.findById(authorId);           
+             if (author == null) {   
+          return "page404";
+             }
+        
 
         model.addAttribute("author", author);
         model.addAttribute("books", books);

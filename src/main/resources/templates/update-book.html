@@ -48,6 +48,12 @@
                                 <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="alert alert-danger"></span>
                             </div>
                             <div class="form-group col-md-6">
+                                <label for="description" class="col-form-label" style="color:red">Description</label>
+                                <input type="text" th:field="*{description}" class="form-control" id="description" placeholder="Description" maxlength="1000" minlength="0" title="Description should be up to 1000 symbols">
+                                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="alert alert-danger"></span>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
                                 <input type="checkbox" th:field="*{isRented}" th:value="*{isRented}" class="form-control" id="isRented" placeholder="isRented" >
                                 <label for="isRented" class="col-form-label">Is Rented?</label>
                             </div>
