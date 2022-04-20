@@ -163,7 +163,7 @@
         </div>
 
         <!-- Book Detail Start --> 
-        <div class="container-fluid py-5" th:action="@{/books/book-details/{bookId}(bookId=${bookId})}" th:object="${bok}" method="get" >
+        <div class="container-fluid py-5" th:action="@{/books/book-details/{bookId}(bookId=${book.bookId})}" th:object="${book}" method="get" >
             <div class="row px-xl-5">
                 <div class="col-lg-5 pb-5">
                    

@@ -5,9 +5,14 @@
  */
 package com.example.securityTest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -77,5 +82,38 @@ public class BookService {
      return isDublicate;
     }
     
+   //creates a list of all currently available books 
+    public List<Book> listAvailableBooks() {
+        List<Book> books = bookRepository.findAll();
+        System.out.println("all books :  " + books.size());
+        List<Book> filtererBooks = new ArrayList<Book>();
+        ListIterator<Book> listIterator = books.listIterator();
+       
+      
+        books.stream().forEach(elem -> System.out.println(elem));
+       
+        for (Book book : books) {
+            /* if(book.toString().equalsIgnoreCase(null)){
+            continue;}*/
+             
+            boolean alo = book.isIsRented();
+            System.out.println("is it rented :  " + alo);
+           
+            if (alo) {
+            } 
+           
+            else {
+                filtererBooks.add(book);
+                System.out.println("available books :  " + filtererBooks.size());
+            }
+        
+        }
+        System.out.println("available books :  " + filtererBooks.size());
+        return filtererBooks;
 
+    }
+    
+     
+    
+    
 }

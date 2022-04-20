@@ -54,36 +54,6 @@ public class ReportService {
         return dateBookReturn;
     }
 
-    //creates a list of all currently available books 
-    public List<Book> listAvailableBooks() {
-        List<Book> books = bookRepository.findAll();
-        System.out.println("all books :  " + books.size());
-        List<Book> filtererBooks = new ArrayList<Book>();
-        ListIterator<Book> listIterator = books.listIterator();
-       
-      
-        books.stream().forEach(elem -> System.out.println(elem));
-       
-        for (Book book : books) {
-            /* if(book.toString().equalsIgnoreCase(null)){
-            continue;}*/
-             
-            boolean alo = book.isIsRented();
-            System.out.println("is it rented :  " + alo);
-           
-            if (alo) {
-            } 
-           
-            else {
-                filtererBooks.add(book);
-                System.out.println("available books :  " + filtererBooks.size());
-            }
-        
-        }
-        System.out.println("available books :  " + filtererBooks.size());
-        return filtererBooks;
-
-    }
-    
+ 
     
 }

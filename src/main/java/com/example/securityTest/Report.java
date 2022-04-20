@@ -77,13 +77,12 @@ public class Report
     
    // @NotBlank(message = "Author name is mandatory")
     //private String author;
-@Column(name = "date_created")
+@Column(name = "date_created", updatable = false)
     @CreationTimestamp
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateCreated;
 
-    @Column(name = "last_updated")
-    @UpdateTimestamp
+    @Column(name = "last_updated", updatable = false) 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastUpdated;
     

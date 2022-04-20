@@ -231,11 +231,7 @@
                             </div>-->
                             <div class="col-sm">
 
-                   <img th:src="@{'/image?id='+ *{bookId!=null}? *{bookId} : '(no source)'}" th:alt="*{profilePicture!=null}? *{profilePicture} : '(alt)'" width="100px" height="50px">
-        
-                                <form method="post" th:action="@{/upload}" enctype="multipart/form-data" id="sub-form" >
-
-                                    <div class="card" style="width:18em" align="center">
+               <div class="card" style="width:18em" align="center">
                                         <div class="card-body" align="center">
                                             <h2 class="card-title">File Upload</h2>
                                             <h6 class="text-success">[[${success}]]</h6>
@@ -245,10 +241,10 @@
                                                     class="form-control" name="file" type="file" id="formFile"><br />
 
                                             </div>
-                                            <input type="submit" form="sub-form" value="Add Photo">
+                                            
                                         </div>
                                     </div>
-                                </form>
+                               
                             </div>
                         </div>
 

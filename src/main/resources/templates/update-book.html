@@ -13,59 +13,188 @@
 
     </head>
     <body>
-        <div class="container my-5">
-            <h2 class="mb-5">Update Book</h2>
-            <div class="row">
-                <div>
-                    <form action="#" th:action="@{/books/update/{id}(id=${bok.bookId})}" th:object="${bok}" method="post">
-                        <div class="row">
 
-                            <div class="form-group col-md-6">
-                                <label for="title" class="col-form-label" style="color:red">Title *</label>
-                                <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title" maxlength="255" minlength="2" title="Title should be between 2 and 255 symbols" required>
-                                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="author" class="col-form-label" style="color:red">Author *</label>
-                                <select th:field="*{author}" class="form-control" id="author" placeholder="Author" required>
-
-                                    <option th:each="auth: ${authors}" th:text="${auth.authorName}" th:value="${auth.authorId}"/>
-
-                                </select>
-                                <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="alert alert-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="isbn" class="col-form-label" style="color:red">ISBN *</label>
-                                <input type="text" th:field="*{isbn}" class="form-control" id="name" maxlength="13" minlength="13" placeholder="ISBN" required>
-                                <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="alert alert-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="yearOfPublishing" class="col-form-label">Year of Publishing</label>
-                                <input type="number" th:field="*{yearOfPublishing}" class="form-control" id="yearOfPublishing" max="2030" placeholder="YearOfPublishing">
-                                <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="alert alert-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="description" class="col-form-label" style="color:red">Description</label>
-                                <input type="text" th:field="*{description}" class="form-control" id="description" placeholder="Description" maxlength="1000" minlength="0" title="Description should be up to 1000 symbols">
-                                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="alert alert-danger"></span>
-                            </div>
-                            
-                            <div class="form-group col-md-6">
-                                <input type="checkbox" th:field="*{isRented}" th:value="*{isRented}" class="form-control" id="isRented" placeholder="isRented" >
-                                <label for="isRented" class="col-form-label">Is Rented?</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mt-5">
-                                <input type="submit" class="btn btn-primary" value="Update Book">
-                            </div>
-                        </div>    
-                    </form>
+        <!-- Page Header Start -->
+        <div class="container-fluid bg-secondary mb-5">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Update Book</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="">Home</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0">Update Book</p>
                 </div>
             </div>
         </div>
-    </body>
+        <!-- Page Header End -->
+
+        <div class="col-lg-9">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                <a href="" class="text-decoration-none d-block d-lg-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>AnniEbrary</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto py-0">
+                        <a href="/index" class="nav-item nav-link active">Home</a>
+                        <a href="/books" class="nav-item nav-link" role="button">Books</a>
+                        <a href="/authors" class="nav-item nav-link" role="button">Authors</a>
+                        <a href="/about" class="nav-item nav-link">About</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                                <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+                                <a href="checkout.html" class="dropdown-item">Checkout</a>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    </div>
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="" class="nav-item nav-link">Login</a>
+                        <a href="" class="nav-item nav-link">Register</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+
+    <center>
+        <div>
+
+            <div>
+                <div class="container-md" style="width: 80%">
+
+                    <form action="#" th:action="@{/books/update/{id}(id=${bok.bookId})}" th:object="${bok}" method="post" enctype="multipart/form-data" id="main-form" >
+                        <div class="row col-md-12" >
+                            <div class="col-md-8">
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-4 mb-3">
+                                        <label for="title" class="col-form-label" style="color:red">Title *</label>
+                                        <input type="text" th:field="*{title}" class="form-control required" id="title" placeholder="Title" title="Title should be between 2 and 255 symbols" autofocus required>
+                                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-4 mb-3">
+                                        <label for="author" class="col-form-label" style="color:red">Author *</label>
+                                        <select th:field="*{author}" class="form-control" id="author" placeholder="Author" required>
+
+                                            <option th:each="auth: ${authors}" th:text="${auth.authorName}" th:value="${auth.authorId}"/>
+
+                                        </select>
+                                        <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="alert alert-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row ">   
+
+                                    <div class="form-group col-md-4">
+                                        <label for="series" class="col-form-label" style="color:red">Series *</label>
+                                        <input type="text" th:field="*{series}" class="form-control required" id="series" placeholder="Series" title="Series name should be between 0 and 255 symbols ">
+                                        <span th:if="${#fields.hasErrors('series')}" th:errors="*{series}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="edition" class="col-form-label" style="color:red">Edition *</label>
+                                        <input type="text" th:field="*{edition}" class="form-control required" id="edition" placeholder="Edition" title="Edition should be between 2 and 255 symbols">
+                                        <span th:if="${#fields.hasErrors('edition')}" th:errors="*{edition}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="yearOfPublishing" class="col-form-label">Year of Publishing</label>
+                                        <input type="number" th:field="*{yearOfPublishing}" class="form-control" id="yearOfPublishing" max="2030" placeholder="YearOfPublishing">
+                                        <span th:if="${#fields.hasErrors('yearOfPublishing')}" th:errors="*{yearOfPublishing}" class="alert alert-danger" style="margin:10px;"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row ">
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="volume" class="col-form-label" style="color:red">Volume</label>
+                                        <input type="number" th:field="*{volume}" class="form-control required" id="volume" placeholder="Volume" title="Volume number should be a number between 1 and 2000 ">
+                                        <span th:if="${#fields.hasErrors('volume')}" th:errors="*{volume}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="pages" class="col-form-label" style="color:red">Pages</label>
+                                        <input type="number" th:field="*{pages}" class="form-control required" id="pages" placeholder="Pages" title="Number of pages should be between 0 and 20000 ">
+                                        <span th:if="${#fields.hasErrors('pages')}" th:errors="*{pages}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-4 mb-3">
+                                        <label for="publisher" class="col-form-label" style="color:red">Publisher</label>
+                                        <input type="text" th:field="*{publisher}" class="form-control required" id="publisher" placeholder="Publisher" title="Publisher name should be between 2 and 255 symbols ">
+                                        <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="isbn" class="col-form-label" style="color:red">ISBN-13 *</label>
+                                        <input type="text" th:field="*{isbn}" class="form-control required" id="isbn" maxlength="13" minlength="13" placeholder="ISBN" required>
+                                        <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="alert alert-danger"   style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-2 mb-3">
+                                        <label for="isRented" class="col-form-label">Is Rented?</label>
+                                        <input type="checkbox" th:field="*{isRented}" th:value="*{isRented}" class="form-control" id="isRented" placeholder="isRented" >
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="genres" class="col-form-label">Genres</label>
+                                        <input type="text" th:field="*{genres}" class="form-control required" id="genres" placeholder="Genres" title="Genres  should be up to 255 symbols ">
+                                        <span th:if="${#fields.hasErrors('genres')}" th:errors="*{genres}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+
+                                    <div class="form-row col-md-8">
+                                        <label for="description" class="col-form-label">Description</label>
+                                        <textarea type="text" th:field="*{description}" class="form-control required" id="description" placeholder="Description" title="Description  should be up to 1000 symbols "></textarea>
+                                        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="alert alert-danger"  style="margin:10px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--- <div>
+                             
+                            <label  for="photos">Photos: </label>
+                            <input type="file" th:field="*{photos}" name="image" id="image" accept="image/png, image/jpeg" />
+                             
+                            </div>-->
+                            <div class="col-sm">
+                   <img th:src="@{'/image?id='+ *{bookId!=null}? *{bookId} : '(no source)'}" th:alt="*{profilePicture!=null}? *{profilePicture} : '(alt)'" width="100px" height="50px">
+       <input type="text" th:field="*{profilePicture}" class="form-control required" id="profilePicture" placeholder="profilePicture" >
+       <input type="number" th:field="*{size}" class="form-control required" id="size" placeholder="size">
+       <input type="text" th:field="*{content}" class="form-control required" id="content" placeholder="content">
+       
+                   <div class="card" style="width:18em" align="center">
+                                        <div class="card-body" align="center">
+                                            <h2 class="card-title">File Upload</h2>
+                                            <h6 class="text-success">[[${success}]]</h6>
+                                            <div class="mb-3">
+
+                                                <input
+                                                    class="form-control" name="file" type="file" id="formFile"><br />
+
+                                            </div>
+                                         
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6 mt-5">
+                                <input type="submit"  class="btn btn-primary" value="Update Book" form="main-form">
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+    </center> 
+</body>
 </html>

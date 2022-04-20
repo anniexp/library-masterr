@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
@@ -57,7 +58,7 @@ public class ReportController {
     public String showNewReportForm(Model model
     ) {
         
-        List<Book> book = reportService.listAvailableBooks();
+        List<Book> book = bookService.listAvailableBooks();
         List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
 
@@ -141,7 +142,21 @@ public class ReportController {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + reportId));
         
-         List<Book> book = reportService.listAvailableBooks();
+        
+        //create a list of all currently available plus the current book
+         List<Book> book = bookService.listAvailableBooks();
+                 System.out.println("Number of books : " + book.size());
+
+         book.add(report.getBook());
+                 System.out.println("Number of books : " + book.size());
+
+                       System.out.println("Create date : " + report.getDateCreated());
+                      System.out.println("Return date  : " + report.getLastUpdated());     
+                      
+ model.addAttribute("dateCreated", report.getDateCreated());
+ model.addAttribute("dateReturned", report.getLastUpdated());
+         
+         
         List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
 
@@ -151,7 +166,8 @@ public class ReportController {
         //name equals, then this is the cuurent user 
         //User currentUserEmployee= new User(currentEmployee., String password,
         //String username, String rolee, boolean enabled);
-        System.out.println("Number of books : " + book.size());
+      
+       
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
         
@@ -164,7 +180,8 @@ public class ReportController {
 
     @PostMapping("/reports/update/{reportId}")
     public String updateBook(@PathVariable("reportId") long reportId, @Valid Report report,
-            BindingResult result, Model model) {
+            BindingResult result, Model model
+           ) {
         
 
         if (result.hasErrors()) {
@@ -175,8 +192,10 @@ public class ReportController {
             return "update-report";
         }
       
-
+    
+   
         reportService.save(report);
+        
         model.addAttribute("reports", reportRepository.findAll());
         return "redirect:/reports";
     }
