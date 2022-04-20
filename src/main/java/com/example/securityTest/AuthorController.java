@@ -127,10 +127,8 @@ public class AuthorController {
     @GetMapping("/authors/edit/{authorId}")
     public String showAuthorUpdateForm(@PathVariable("authorId") long authorId, Model model) {
         List<Book> books = bookRepository.findAll();
-        Optional<Author> author = authorService.findById(authorId);           
-             if (author == null) {   
-          return "page404";
-             }
+        Author author = authorService.findById(authorId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + authorId));
         
 
         model.addAttribute("author", author);

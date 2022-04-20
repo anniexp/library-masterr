@@ -17,10 +17,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
  
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebSecurity(debug = false)
+@EnableWebMvc
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Autowired
@@ -36,8 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                        .antMatchers("/register", "/resources/**", "/static/**","/webjars/**","/post_register").permitAll()
+        http.cors().and().authorizeRequests()
+                        .antMatchers("/register", "/resources/**", "/static/**","/webjars/**","/post_register", "/css/**","/javascript/**").permitAll()
 
             .anyRequest().authenticated()
             .and()
@@ -47,6 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout().permitAll()
             .and()
-            .exceptionHandling().accessDeniedPage("/accessDenied.html");  
+            .exceptionHandling().accessDeniedPage("/accessDenied.html").and().httpBasic();  
     }
+    
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
+    
+   
+
 }

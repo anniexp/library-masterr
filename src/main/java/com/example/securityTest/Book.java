@@ -79,6 +79,10 @@ public class Book implements Serializable {
     @Size(min = 2, max = 255, message="must be between 2 and 255 characters long")
     private String series;
  
+ @Column(name = "genres", nullable= true)
+    @Size(min = 0, max = 255, message="must be between 2 and 255 characters long")
+    private String genres;
+ 
  @Column(name = "description", nullable= true)
     @Size(min = 2, max = 255, message="must be between 2 and 1000 characters long")
     private String description;
@@ -94,7 +98,7 @@ public class Book implements Serializable {
     public void setRatings(List<Integer> ratings) {
         this.ratings = ratings;
     }*/
-
+@Column(name = "profile_picture", nullable= true)
  private String profilePicture;
  private long size;
  
@@ -108,7 +112,15 @@ public class Book implements Serializable {
         this.description = description;
     }
 
-    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String description, String profilePicture, long size, byte[] content) {
+    public String getGenres() {
+        return genres;
+    }
+
+    public void setGenres(String genres) {
+        this.genres = genres;
+    }
+
+    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String genres, String description, String profilePicture, long size, byte[] content) {
         this.bookId = bookId;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
@@ -121,11 +133,14 @@ public class Book implements Serializable {
         this.volume = volume;
         this.edition = edition;
         this.series = series;
+        this.genres = genres;
         this.description = description;
         this.profilePicture = profilePicture;
         this.size = size;
         this.content = content;
     }
+
+   
  
     
     

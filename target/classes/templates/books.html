@@ -11,8 +11,10 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-iwdth, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-        <link rel="stylesheet" href="../css/shards.min.css">
-        <link href="../css/newcss.css" rel="stylesheet" type="text/css"/>
+        
+        <link href="../static/css/newcss.css" rel="stylesheet" type="text/css"/>
+        <link href="../static/css/shards.min.css" rel="stylesheet" type="text/css"/>
+        
           <!-- Customized Bootstrap Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
     
@@ -59,6 +61,7 @@ and open the template in the editor.
                                     <th>Year of Publishing</th>
                                     <th>Is rented</th>
                                     <th>Author</th>
+                                    <th>Genres</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                     <th>Details</th>
@@ -70,13 +73,15 @@ and open the template in the editor.
 
                                     <td th:text="${bok.title}"></td>
                                     <td>
-                                        <img th:src="@{'/image?id='+ ${bok.bookId}}" width="100px" height="50px">
+                                       
+                                        <img th:src="@{'/image?id='+ ${bok.bookId}}"  th:alt="*{bok.profilePicture!=null}? *{bok.profilePicture} : '(alt)'" width="100px" height="50px">
                                     </td>
                                       <td th:text="${bok.description}"></td>        
                                     <td th:text="${bok.isbn}"></td>                                 
                                     <td th:text="${bok.yearOfPublishing}"></td>  
                                     <td th:text="${bok.isRented}"></td>  
                                     <td th:text="${bok.author.authorName}"></td>
+                                         <td th:text="${bok.genres}"></td>
 
 
                                     <td ><a th:href="@{/books/edit/{bookId}(bookId=${bok.bookId})}" class="btn btn-primary">  <i class="fas fa-user-edit ml-2"></i>Edit</a>

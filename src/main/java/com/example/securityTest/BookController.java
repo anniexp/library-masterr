@@ -177,21 +177,35 @@ public class BookController {
             
             return "add-book";
         }
-        
+        /*
         //picture attributes
         String fileName = file.getOriginalFilename();
   book.setProfilePicture(fileName);
   book.setContent(file.getBytes());
   book.setSize(file.getSize());
-
-        bookRepository.save(book);
+  
   model.addAttribute("success", "File Uploaded Successfully!!!");
+  model.addAttribute("profilePicture", book.getProfilePicture() );
+  model.addAttribute("content",book.getContent());
+  model.addAttribute("size",book.getSize() );
+  
+*/
+       
+       if( book.getProfilePicture()!=null)
+       {
+        
+        bookRepository.save(book);
+  
 
         //  bookService.save(book);
         model.addAttribute("books", bookRepository.findAll());
 
         return  "redirect:/books";
-
+       }
+       else
+       {
+       return "add-book";
+       }
     }
 
     @GetMapping("/books/edit/{bookId}")
@@ -281,6 +295,8 @@ public class BookController {
   model.addAttribute("content",book.getContent());
   model.addAttribute("size",book.getSize() );
 
+  System.out.println("Image is uploaded");
+  model.addAttribute("success", "File Uploaded Successfully!!!");
   return "add-book";
   
  }
