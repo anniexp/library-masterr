@@ -5,7 +5,12 @@
  */
 package com.example.securityTest;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -24,6 +29,8 @@ public class BookService {
 
     @Autowired
     BookRepository bookRepository;
+    
+  
 
     List<Book> findByTitle(String title) {
         return bookRepository.findByTitle(title);
@@ -82,6 +89,18 @@ public class BookService {
      return isDublicate;
     }
     
+    
+    //create a date number of days before input date
+    public Date createDateBeforeCurrentDate(LocalDate localDate, int numberOfDays) {
+        LocalDate localDateBefore = localDate.minusDays(numberOfDays);
+        Instant instant = localDateBefore.atTime(LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant();
+        Date dateBefore = Date.from(instant);
+        System.out.print("new date :  " + dateBefore);
+
+        return dateBefore;
+    }
+ 
+    
    //creates a list of all currently available books 
     public List<Book> listAvailableBooks() {
         List<Book> books = bookRepository.findAll();
@@ -110,6 +129,48 @@ public class BookService {
         }
         System.out.println("available books :  " + filtererBooks.size());
         return filtererBooks;
+
+    }
+    
+     //creates a list of all currently available books 
+    public Page<Book> listNewBooks(Pageable paging) {
+        List<Book> books = bookRepository.findAll();
+        System.out.println("all books :  " + books.size());
+        List<Book> filtererBooks = new ArrayList<Book>();
+        ListIterator<Book> listIterator = books.listIterator();
+        
+        //all new books will be added max 14 days ago
+        LocalDate currDate = LocalDate.now();
+        // date is set to 1 day ago
+        Date dateForNewBooks =  createDateBeforeCurrentDate(currDate, 1);
+        
+      
+        books.stream().forEach(elem -> {
+            System.out.println(elem);
+             Date elemDateAdded = elem.getDateAdded();
+             
+            //if the date the book was added is less than 14 days ago, then add it to the list of new books
+            boolean alo =  dateForNewBooks.before(elemDateAdded);
+            
+             System.out.println("Has the book been added less than 14 days ago? : "
+                         + dateForNewBooks.before(elemDateAdded));
+           
+           
+            if (alo) {
+                 System.out.println("yes! :  " + alo);
+                   filtererBooks.add(elem);
+            } 
+                 else {
+                 System.out.println("no! :  " + alo);
+                 
+            } 
+            
+        });
+      
+        System.out.println("new books :  " + filtererBooks.size());
+        Page<Book> page = new PageImpl<>(filtererBooks);
+        
+        return page;
 
     }
     

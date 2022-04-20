@@ -46,14 +46,14 @@ public class ReportService {
 
     //create a date number of days after input date
     public Date createDateAfterDate(LocalDate localDate, int numberOfDays) {
-        LocalDate dateReturn = localDate.plusDays(14);
+        LocalDate dateReturn = localDate.plusDays(numberOfDays);
         Instant instant = dateReturn.atTime(LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant();
         Date dateBookReturn = Date.from(instant);
         System.out.print("new date :  " + dateBookReturn);
 
         return dateBookReturn;
     }
-
+    
  
     
 }

@@ -1,6 +1,7 @@
 package com.example.securityTest;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,10 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "book")
@@ -86,6 +89,11 @@ public class Book implements Serializable {
  @Column(name = "description", nullable= true)
     @Size(min = 2, max = 255, message="must be between 2 and 1000 characters long")
     private String description;
+ 
+ @Column(name = "date_added", updatable = false)
+    @CreationTimestamp
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateAdded;
  /*
  @Column(name = "ratings",  nullable= true)
   private List<Integer> ratings;
@@ -98,11 +106,12 @@ public class Book implements Serializable {
     public void setRatings(List<Integer> ratings) {
         this.ratings = ratings;
     }*/
-@Column(name = "profile_picture", nullable= true)
- private String profilePicture;
- private long size;
+@Column(name = "book_picture", nullable= true)
+ private String bookPicture;
+
+ private long pictureSize;
  
- private byte [] content;
+ private byte [] pictureContent;
 
     public String getDescription() {
         return description;
@@ -120,7 +129,36 @@ public class Book implements Serializable {
         this.genres = genres;
     }
 
-    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String genres, String description, String profilePicture, long size, byte[] content) {
+    public String getBookPicture() {
+        return bookPicture;
+    }
+
+    public void setBookPicture(String bookPicture) {
+        this.bookPicture = bookPicture;
+    }
+
+    public long getPictureSize() {
+        return pictureSize;
+    }
+
+    public void setPictureSize(long pictureSize) {
+        this.pictureSize = pictureSize;
+    }
+
+    public byte[] getPictureContent() {
+        return pictureContent;
+    }
+
+    public void setPictureContent(byte[] pictureContent) {
+        this.pictureContent = pictureContent;
+    }
+
+
+public Book() {
+
+    }
+
+    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String genres, String description, Date dateAdded, String bookPicture, long pictureSize, byte[] pictureContent) {
         this.bookId = bookId;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
@@ -135,46 +173,23 @@ public class Book implements Serializable {
         this.series = series;
         this.genres = genres;
         this.description = description;
-        this.profilePicture = profilePicture;
-        this.size = size;
-        this.content = content;
+        this.dateAdded = dateAdded;
+        this.bookPicture = bookPicture;
+        this.pictureSize = pictureSize;
+        this.pictureContent = pictureContent;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
    
- 
-    
-    
- 
- 
 
-    public String getProfilePicture() {
-        return profilePicture;
-    }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
-    
-
-public Book() {
-
-    }
     public Author getAuthor() {
         return author;
     }

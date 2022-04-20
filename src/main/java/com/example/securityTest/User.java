@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package com.example.securityTest;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 /**
  *
@@ -25,22 +28,123 @@ public class User {
 	private String password;
 
 	@Column(name = "username", unique = true, nullable = false, length = 20)
-	private String username;
-
-    public User(Long user_id, String password, String username, String rolee, boolean enabled) {
-        this.user_id = user_id;
-        this.password = password;
-        this.username = username;
-        this.rolee = rolee;
-        this.enabled = enabled;
-    }
+	private String username; 
         
+        @Column(name = "email", unique = true, nullable = false, length = 100)
+        @Email
+        @NotBlank
+	private String email;
+        
+         @Column(name = "phoneNumber", nullable = true, length = 20)
+	private String phoneNumber;       
+         
+         
+        @Column(name = "profilePicture", nullable= true)
+        private String profilePicture;
+        
+        
+        private long profilePictureSize;
+ 
+        @Column(name = "pictureContent", nullable= true)
+        private byte [] pictureContent;
+
+        @Column(name = "address", nullable = true, length = 255)
+	private String userAddress;
+       
+        
+            
+         
+         /*
+        //many to many
+         @Column(name = "wishlist", nullable = true)
+	private List<Book> wishlist;
+        
+        //many to many
+         @Column(name = "borrowRequests", nullable = true)
+	private List<BorrowRequests> requests;
+*/
         @Column(name = "role", nullable = false)
 	private String rolee;
+        
+        @Column(name = "enabled", nullable = false)
+	private boolean enabled;
+        
+          @OneToMany(targetEntity = Report.class, mappedBy = "borrower", cascade = CascadeType.ALL)
+    private Set<Report> borrowedBooks;
+
 
     public User() {
     }
 
+   
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public long getProfilePictureSize() {
+        return profilePictureSize;
+    }
+
+    public void setProfilePictureSize(long profilePictureSize) {
+        this.profilePictureSize = profilePictureSize;
+    }
+
+    public byte[] getPictureContent() {
+        return pictureContent;
+    }
+
+    public void setPictureContent(byte[] pictureContent) {
+        this.pictureContent = pictureContent;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+   
+    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, Set<Book> wishlist, String rolee, boolean enabled, Set<Report> borrowedBooks) {
+        this.user_id = user_id;
+        this.password = password;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+        this.profilePictureSize = profilePictureSize;
+        this.pictureContent = pictureContent;
+        this.userAddress = userAddress;
+        this.rolee = rolee;
+        this.enabled = enabled;
+        this.borrowedBooks = borrowedBooks;
+    }
+
+    
+    
+    
     public String getRolee() {
         return rolee;
     }
@@ -51,8 +155,7 @@ public class User {
 
     
         
-        @Column(name = "enabled", nullable = false)
-	private boolean enabled;
+        
 
     public boolean isEnabled() {
         return enabled;
@@ -92,9 +195,7 @@ public class User {
         
         
         
-         @OneToMany(targetEntity = Report.class, mappedBy = "borrower", cascade = CascadeType.ALL)
-    private Set<Report> borrowedBooks;
-
+       
     public Set<Report> getBorrowedBooks() {
         return borrowedBooks;
     }

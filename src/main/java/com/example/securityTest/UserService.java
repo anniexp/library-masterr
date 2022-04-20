@@ -32,6 +32,18 @@ public class UserService {
      return isDublicate;
     }
      
+      public Boolean checkIfUserWithSameEmailExists(String inputEmail){
+     List<User> users = userRepository.findAll();
+     boolean isDublicate = false;
+     for( User user:users){
+         if (user.getEmail().matches(inputEmail))
+         {
+         isDublicate = true;
+         }
+        }
+     return isDublicate;
+    }
+     
      
 
     

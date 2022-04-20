@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,8 @@ public class BookController {
 
     @Autowired
     ReportRepository reportRepository;
+       @Autowired
+    ReportService reportService;
 
     @Autowired
     AuthorRepository authorRepository;
@@ -139,6 +142,9 @@ public class BookController {
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
             RedirectAttributes attributes ) throws IOException {
+        //current date
+        Date dateAdded = new Date();
+        
         System.out.print("book " + book);
         //if the list of authirs for the dropdown is empty on refresh or redirect, then fill them
         if (authors.isEmpty()){
@@ -154,6 +160,10 @@ public class BookController {
 
         book.setBookId(bookLastId + 1);
         System.out.print("book " + book);
+     
+  
+       book.setDateAdded(dateAdded);
+        
         //create a boolean which checks if the input isbn exists already in  the db, 
         //this custom validation is needed, because the @unique in the model checks only on model, not the form itself
         boolean dublicateIsbn = bookService.checkIfIsbnDublicate(book.getIsbn());
@@ -167,14 +177,14 @@ public class BookController {
         
         //picture attributes
         String fileName = file.getOriginalFilename();
-  book.setProfilePicture(fileName);
-  book.setContent(file.getBytes());
-  book.setSize(file.getSize());
+  book.setBookPicture(fileName);
+  book.setPictureContent(file.getBytes());
+  book.setPictureSize(file.getSize());
   
   model.addAttribute("success", "File Uploaded Successfully!!!");
-  model.addAttribute("profilePicture", book.getProfilePicture() );
-  model.addAttribute("content",book.getContent());
-  model.addAttribute("size",book.getSize() );
+  model.addAttribute("bookPicture", book.getBookPicture() );
+  model.addAttribute("content",book.getPictureContent());
+  model.addAttribute("size",book.getPictureSize() );
   
 
   System.out.println("Image is uploaded");
@@ -229,14 +239,14 @@ public class BookController {
         
         
         String fileName = file.getOriginalFilename();
-         book.setProfilePicture(fileName);
+         book.setBookPicture(fileName);
         try {
-            book.setContent(file.getBytes());
+            book.setPictureContent(file.getBytes());
         } catch (IOException ex) {
             Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-  book.setSize(file.getSize());
+  book.setPictureSize(file.getSize());
   
  
   
@@ -279,11 +289,11 @@ public class BookController {
   
   book = bookService.findById(id);
   response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
-  response.getOutputStream().write(book.get().getContent());
+  response.getOutputStream().write(book.get().getPictureContent());
   response.getOutputStream().close();
  }
     
- 
+ /*
  @PostMapping("/upload")
  public String fileUpload(@RequestParam("file") MultipartFile file,  Model model,
          Book book) throws IOException {
@@ -304,7 +314,8 @@ public class BookController {
   model.addAttribute("success", "File Uploaded Successfully!!!");
   return "add-book";
   
- }
+ }*/
+ 
  
  
   @GetMapping("/available-books")
@@ -322,7 +333,6 @@ public class BookController {
         pageTuts = bookRepository.findByKeyword(bookName, paging);
    
         } else {
-           // pageTuts = bookService.listAvailableBooksPagination(paging);       
               pageTuts = bookRepository.findByIsRented(false, paging);
 
         }
@@ -335,11 +345,50 @@ public class BookController {
          System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
             
-        //model.addAttribute("books", books);
         model.addAttribute("books", books);
 
         return "books";
     }
+    
+    @GetMapping("/recently-added")
+    public String showNewBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
+            @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        List<Book> books = null;
+        
+        
+      
+       
+      
+        Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Book> pageTuts;
+        //if there are no available searched titles, then return all search results
+        if (bookName != null) { 
+         //   books = bookService.findByKeyword(bookName);       
+         //pagination part      
+        pageTuts = bookRepository.findByKeyword(bookName, paging);
+   
+        } else {
+            
+            
+              pageTuts = bookService.listNewBooks(paging);
+
+
+        }
+        
+        books = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+                System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+            
+        model.addAttribute("books", books);
+
+        return "books";
+    }
+    
     
  
  @GetMapping("books/requestToBorrow/{bookId}")
