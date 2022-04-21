@@ -26,101 +26,118 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 @Controller
 public class UserController {
+
     @Autowired
-	private UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private UserService userService;
     @Autowired
     private HttpServletRequest request;
-	
-	@GetMapping("/register")
-	public String showRegistrationForm(Model model) {
-		model.addAttribute("user", new User());
 
-		return "registration";
-	
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+
+        return "registration";
+
+    }
+
+    @PostMapping("/post_register")
+    public String postRegister(User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String userRole = Rolee.getROLE_USER().name();
+
+        //if there exists an user with the input username, return the view
+        if (userService.checkIfUserExists(user.getUsername()) == true) {
+
+            return "registration";
         }
-        
-	@PostMapping("/post_register")
-	public String postRegister(User user) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encodedPassword = passwordEncoder.encode(user.getPassword());
-                String userRole = Rolee.getROLE_USER().name();
-               
-                //if there exists an user with the input username, return the view
-                if (userService.checkIfUserExists(user.getUsername()) == true) {
-                   
-                   return "registration";
-                   }
-             
-                 //if there exists an user with the input email address, return the view
-                        if (userService.checkIfUserWithSameEmailExists(user.getEmail()) == true) {
-                   return "registration";
-                   }
-               // String userRoleString = Rolee.valueOf("ROLE_USER");
-                Boolean isEnabled = true;
-		user.setPassword(encodedPassword);
-                user.setRolee(userRole);
-                user.setEnabled(isEnabled);
-                
-               // userService.checkIfUserExists(user.getUsername());
 
-                
-                
+        //if there exists an user with the input email address, return the view
+        if (userService.checkIfUserWithSameEmailExists(user.getEmail()) == true) {
+            return "registration";
+        }
+        // String userRoleString = Rolee.valueOf("ROLE_USER");
+        Boolean isEnabled = true;
+        user.setPassword(encodedPassword);
+        user.setRolee(userRole);
+        user.setEnabled(isEnabled);
 
-		userRepository.save(user);
+        // userService.checkIfUserExists(user.getUsername());
+        userRepository.save(user);
 
-		return "successful_registration";
-	}
-        
-          @GetMapping("/login")
-	    public String viewLoginPage() {	         
-	        return "login";
-	    }
-            
-            @PostMapping("/login")
-            public String viewHomePage(){
-              
-            return "redirect:/";
-            }
-            
-     //   @RequestMapping(value = "/username", method = RequestMethod.GET)    
-        public static  Principal  getCurrentUser(HttpServletRequest request){
-            
-            Principal principal = request.getUserPrincipal();
-            System.out.println("Current user has name : " + principal.getName());
+        return "successful_registration";
+    }
+
+    @GetMapping("/login")
+    public String viewLoginPage() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String viewHomePage() {
+
+        return "redirect:/";
+    }
+
+    //   @RequestMapping(value = "/username", method = RequestMethod.GET)    
+    public static Principal getCurrentUser(HttpServletRequest request) {
+
+        Principal principal = request.getUserPrincipal();
+        System.out.println("Current user has name : " + principal.getName());
         return principal;
-        }
-        
-        @GetMapping("/profile")
-                 public String showUserProfile(Model model
-      ){
- 
-         List<User> users = userRepository.findAll();
+    }
+
+    @GetMapping("/profile")
+    public String showUserProfile(Model model
+    ) {
+
+        List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
-            String currUserUsername = currentEmployee.getName();
-            User currUser = userService.findByUsername(currUserUsername).get(0);
-      //  User currentUserEmployee= (User) currentEmployee;
-      
-      
-        //if it doesnt work, then to build it with a constructor, if that does not work, 
-        //then firstly get the name of the cuurent user, then loop all users, if the
-        //name equals, then this is the cuurent user 
-        //User currentUserEmployee= new User(currentEmployee., String password,
-        //String username, String rolee, boolean enabled);
-      
-       
+        String currUserUsername = currentEmployee.getName();
+        User currUser = userService.findByUsername(currUserUsername).get(0);
+
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
-        
-         model.addAttribute("user", currUser);
-         
-         
-        
+
+        model.addAttribute("user", currUser);
 
         return "profilePage";
-        
-        
-                 }
+    }
 
+    @GetMapping("/profile/edit")
+    public String showUserProfileEditForm(Model model
+    ) {
+
+        List<User> users = userRepository.findAll();
+        Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+        User currUser = userService.findByUsername(currUserUsername).get(0);
+
+        System.out.println("Current employeeee is : " + currentEmployee);
+        model.addAttribute("user", currUser);
+
+        return "update-user-profile";
+    }
+    
+    
+    
+    
+    @GetMapping("/profile/edit/pass")
+    public String showUserChangePasswordForm(Model model
+    ) {
+
+        List<User> users = userRepository.findAll();
+        Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+        User currUser = userService.findByUsername(currUserUsername).get(0);
+
+        System.out.println("Current employeeee is : " + currentEmployee);
+        model.addAttribute("user", currUser);
+
+        return "change-user-password";
+    }
+    
+ 
 }

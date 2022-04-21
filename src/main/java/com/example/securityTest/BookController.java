@@ -4,9 +4,6 @@ package com.example.securityTest;
 import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,7 +41,7 @@ public class BookController {
 
     @Autowired
     ReportRepository reportRepository;
-       @Autowired
+    @Autowired
     ReportService reportService;
 
     @Autowired
@@ -54,56 +50,49 @@ public class BookController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    private HttpServletRequest request;
-     
-    
+ 
+
     static ArrayList<Author> authors;
 
-   
     @GetMapping("/books")
     public String showBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         List<Book> books = null;
-         
-        Pageable paging = (Pageable) PageRequest.of(page, size);  
-         Page<Book> pageTuts;
-        
-        if (bookName != null) { 
-             
-         //pagination part      
-        pageTuts = bookRepository.findByKeyword(bookName, paging);
-   
+
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Book> pageTuts;
+
+        if (bookName != null) {
+
+            //pagination part      
+            pageTuts = bookRepository.findByKeyword(bookName, paging);
+
         } else {
             pageTuts = bookRepository.findAll(paging);
-   
+
         }
-        
-        books = pageTuts.getContent();     
+
+        books = pageTuts.getContent();
         model.addAttribute("currentPage", pageTuts.getNumber());
-                System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
         model.addAttribute("totalItems", pageTuts.getTotalElements());
-         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
-     
+
         model.addAttribute("books", books);
 
         return "books";
     }
-    
-    
-    
-    
+
     @GetMapping("/books/book-details/{bookId}")
     public String showBookDetails(Model model,
-      @PathVariable("bookId") long bookId) {
+            @PathVariable("bookId") long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
-        
+
         model.addAttribute("book", book);
-        
 
         return "book-details";
     }
@@ -120,15 +109,13 @@ public class BookController {
         model.addAttribute("books", books);
         return "books";
     }
-    */
+     */
     @GetMapping("/books/signup")
-   // @ResponseBody
-    public String showSignUpForm(Model model, @ModelAttribute("authors") ArrayList<Author> authors )
-      {
-      
-   
-      authors.addAll(authorRepository.findAll());
-      
+    // @ResponseBody
+    public String showSignUpForm(Model model, @ModelAttribute("authors") ArrayList<Author> authors) {
+
+        authors.addAll(authorRepository.findAll());
+
         model.addAttribute("book", new Book());
         model.addAttribute("authors", authors);
         model.addAttribute("report", new Report());
@@ -136,20 +123,17 @@ public class BookController {
         return "add-book";
     }
 
-          
-    
     @PostMapping("/books/addbook")
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
-            RedirectAttributes attributes ) throws IOException {
+            RedirectAttributes attributes) throws IOException {
         //current date
         Date dateAdded = new Date();
-        
         System.out.print("book " + book);
         //if the list of authirs for the dropdown is empty on refresh or redirect, then fill them
-        if (authors.isEmpty()){
-        authors.addAll(authorRepository.findAll());
-        model.addAttribute("authors", authors);
+        if (authors.isEmpty()) {
+            authors.addAll(authorRepository.findAll());
+            model.addAttribute("authors", authors);
         }
 
         List<Book> books = bookRepository.findAll();
@@ -157,51 +141,45 @@ public class BookController {
         //generate manualy id of new book
         long bookLastId = books.get(books.size() - 1).getBookId();
         System.out.println("current last book id is: " + bookLastId);
-
         book.setBookId(bookLastId + 1);
         System.out.print("book " + book);
-     
-  
-       book.setDateAdded(dateAdded);
-        
+
+        book.setDateAdded(dateAdded);
+
         //create a boolean which checks if the input isbn exists already in  the db, 
         //this custom validation is needed, because the @unique in the model checks only on model, not the form itself
         boolean dublicateIsbn = bookService.checkIfIsbnDublicate(book.getIsbn());
 
         //if there are validation errors or the 
-        if (result.hasErrors()||dublicateIsbn==true) {
-            
-            
+        if (result.hasErrors() || dublicateIsbn == true) {
+
             return "add-book";
         }
-        
+
         //picture attributes
         String fileName = file.getOriginalFilename();
-  book.setBookPicture(fileName);
-  book.setPictureContent(file.getBytes());
-  book.setPictureSize(file.getSize());
-  
-  model.addAttribute("success", "File Uploaded Successfully!!!");
-  model.addAttribute("bookPicture", book.getBookPicture() );
-  model.addAttribute("content",book.getPictureContent());
-  model.addAttribute("size",book.getPictureSize() );
-  
+        book.setBookPicture(fileName);
+        book.setPictureContent(file.getBytes());
+        book.setPictureSize(file.getSize());
 
-  System.out.println("Image is uploaded");
-  model.addAttribute("success", "File Uploaded Successfully!!!");
-  
+        model.addAttribute("success", "File Uploaded Successfully!!!");
+        model.addAttribute("bookPicture", book.getBookPicture());
+        model.addAttribute("content", book.getPictureContent());
+        model.addAttribute("size", book.getPictureSize());
+
+        System.out.println("Image is uploaded");
+        model.addAttribute("success", "File Uploaded Successfully!!!");
 
         bookRepository.save(book);
- 
+
         model.addAttribute("books", bookRepository.findAll());
 
-        return  "redirect:/books";
-      
+        return "redirect:/books";
+
     }
 
-    
     @GetMapping("/books/edit/{bookId}")
-    public String showUpdateForm(@PathVariable("bookId") long bookId, Model model) throws IOException  {
+    public String showUpdateForm(@PathVariable("bookId") long bookId, Model model) throws IOException {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         List<Author> authors = authorRepository.findAll();
@@ -210,64 +188,50 @@ public class BookController {
         return "update-book";
     }
 
-    
-    
     @PostMapping("/books/update/{bookId}")
-    public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book, 
+    public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
             BindingResult result, Model model, @RequestParam("file") MultipartFile file) {
-        
 
         if (result.hasErrors()) {
-           System.out.println("Id of boook to be edited : " + book.getBookId());
+            System.out.println("Id of boook to be edited : " + book.getBookId());
             book.setBookId(book.getBookId());
-                       System.out.println("set Id  : " + book.getBookId());
+            System.out.println("set Id  : " + book.getBookId());
 
             return "update-book";
         }
         //else if(book.getBookId()==result.)
-        if ( bookService.checkIfIsbnDublicateEdit(book.getIsbn(), bookId)==true){
-            
-            
+        if (bookService.checkIfIsbnDublicateEdit(book.getIsbn(), bookId) == true) {
+
             book.setBookId(bookId);
-                    return "redirect:/books/edit/{bookId}";
+            return "redirect:/books/edit/{bookId}";
 
         }
- //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-      //  book.setPhotos(fileName);
-      
+        //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        //  book.setPhotos(fileName);
+
         //picture attributes
-        
-        
         String fileName = file.getOriginalFilename();
-         book.setBookPicture(fileName);
+        book.setBookPicture(fileName);
         try {
             book.setPictureContent(file.getBytes());
         } catch (IOException ex) {
             Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-  book.setPictureSize(file.getSize());
-  
- 
-  
 
-  System.out.println("Image is uploaded");
-  model.addAttribute("success", "File Uploaded Successfully!!!");
-      
-  
-  //save the data in  the db
+        book.setPictureSize(file.getSize());
+
+        System.out.println("Image is uploaded");
+        model.addAttribute("success", "File Uploaded Successfully!!!");
+
+        //save the data in  the db
         bookRepository.save(book);
-        
-         // String uploadDir = "../images/user-photos/" + bookId;
+
+        // String uploadDir = "../images/user-photos/" + bookId;
         //FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-        
-        
         model.addAttribute("books", bookRepository.findAll());
         return "redirect:/books";
     }
 
-    
-    
     @GetMapping("/books/delete/{bookId}")
     public String deleteBook(@PathVariable("bookId") long bookId, Model model) {
         Book book = bookRepository.findById(bookId)
@@ -284,16 +248,16 @@ public class BookController {
     }
 
     @GetMapping("/image")
- public void showImage(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
-   throws ServletException, IOException {
-  
-  book = bookService.findById(id);
-  response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
-  response.getOutputStream().write(book.get().getPictureContent());
-  response.getOutputStream().close();
- }
-    
- /*
+    public void showImage(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
+            throws ServletException, IOException {
+
+        book = bookService.findById(id);
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+        response.getOutputStream().write(book.get().getPictureContent());
+        response.getOutputStream().close();
+    }
+
+    /*
  @PostMapping("/upload")
  public String fileUpload(@RequestParam("file") MultipartFile file,  Model model,
          Book book) throws IOException {
@@ -315,214 +279,86 @@ public class BookController {
   return "add-book";
   
  }*/
- 
- 
- 
-  @GetMapping("/available-books")
+    @GetMapping("/available-books")
     public String showAvailableBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         List<Book> books = null;
-         
-        Pageable paging = (Pageable) PageRequest.of(page, size);  
-         Page<Book> pageTuts;
+
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Book> pageTuts;
         //if there are no available searched titles, then return all search results
-        if (bookName != null) { 
-         //   books = bookService.findByKeyword(bookName);       
-         //pagination part      
-        pageTuts = bookRepository.findByKeyword(bookName, paging);
-   
+        if (bookName != null) {
+            //   books = bookService.findByKeyword(bookName);       
+            //pagination part      
+            pageTuts = bookRepository.findByKeyword(bookName, paging);
+
         } else {
-              pageTuts = bookRepository.findByIsRented(false, paging);
+            pageTuts = bookRepository.findByIsRented(false, paging);
 
         }
-        
-        books = pageTuts.getContent();     
+
+        books = pageTuts.getContent();
         model.addAttribute("currentPage", pageTuts.getNumber());
-                System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
         model.addAttribute("totalItems", pageTuts.getTotalElements());
-         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
-            
+
         model.addAttribute("books", books);
 
         return "books";
     }
-    
+
     @GetMapping("/recently-added")
     public String showNewBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         List<Book> books = null;
-        
-        
-      
-       
-      
-        Pageable paging = (Pageable) PageRequest.of(page, size);  
-         Page<Book> pageTuts;
-        //if there are no available searched titles, then return all search results
-        if (bookName != null) { 
-         //   books = bookService.findByKeyword(bookName);       
-         //pagination part      
-        pageTuts = bookRepository.findByKeyword(bookName, paging);
-   
-        } else {
-            
-            
-              pageTuts = bookService.listNewBooks(paging);
 
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Book> pageTuts;
+        //if there are no available searched titles, then return all search results
+        if (bookName != null) {
+            //   books = bookService.findByKeyword(bookName);       
+            //pagination part      
+            pageTuts = bookRepository.findByKeyword(bookName, paging);
+
+        } else {
+
+            pageTuts = bookService.listNewBooks(paging);
 
         }
-        
-        books = pageTuts.getContent();     
+        books = pageTuts.getContent();
         model.addAttribute("currentPage", pageTuts.getNumber());
-                System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
         model.addAttribute("totalItems", pageTuts.getTotalElements());
-         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
-            
+
         model.addAttribute("books", books);
 
         return "books";
     }
-    
-    
- 
- @GetMapping("books/requestToBorrow/{bookId}")
-    public String requestABookToBeBorrowed(@PathVariable("bookId") long bookId, Model model) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
-    /*    bookRepository.
-        model.addAttribute("books", bookRepository.findAll());*/
- 
-        return "redirect:/book-details";
-    }
-    
-    @GetMapping("b/books/addToWishlist/{bookId}")
-    public String addBookToWishlist(@PathVariable("bookId") long bookId, Model model) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
-    /*    bookRepository.
-        model.addAttribute("books", bookRepository.findAll());*/
-  
-    
-        return "redirect:/book-details";
-    }
- 
-    
-    
-   /* @GetMapping("/books/getBook/{bookId}")
-    public String showBorrowBookForm(@PathVariable("bookId") long bookId, Model model) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
-        boolean isBookRented = book.isIsRented();
-        System.out.println(isBookRented);
-        if (isBookRented == false) {
 
-            model.addAttribute("book", book);
-            model.addAttribute("report", new Report());
-
-            return "borrow-book";
-        }
-
-        return "redirect:/books";
-
+    @PostMapping("/books/createRequestToBorrow")
+    public String requestABookToBeBorrowed(@Valid Book book, @Valid User user,  BindingResult result,Model model, RedirectAttributes attributes) {
+       
+        bookService.createABorrowRequest(book);
+      //  return "redirect:/borrow-requests";
+       return "redirect:/user/borrow-requests";
     }
 
-    @PostMapping("/books/borrowBook/{bookId}")
-    public String borrowBook(@PathVariable("bookId") long bookId, @Valid Book book,
-            BindingResult result, Model model, Report report) {
-
-        System.out.println("Is the current book rented - " + book.isIsRented());
-
-        if (!book.isIsRented()) {
-            book.setIsRented(true);
-            bookRepository.save(book);
-
-            Principal currentUser = UserController.getCurrentUser(request);
-            // List<User> users = userRepository.findAll();
-            User borrower = (User) currentUser;
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date dateCreated = new Date();
-            dateFormat.format(dateCreated);
-
-            System.out.println("Current date is " + dateCreated);
-            report.setBook(book);
-            report.setBorrower(borrower.getUsername());
-            report.setDateCreated(dateCreated);
-            report.setLastUpdated(dateCreated);
-
-            reportRepository.save(report);
-
-            model.addAttribute("books", bookRepository.findAll());
-
-        }
-
-        return "redirect:/books";
-
-    }
-    */
     
-    /*
-    
-     @GetMapping("/books/signup")
-    public String showSignUpForm(Model model) {
-        List<Author> authors = authorRepository.findAll();
-
-        model.addAttribute("book", new Book());
-
-        model.addAttribute("authors", authors);
-        model.addAttribute("report", new Report());
-
-        return "add-book";
-    }
-
-    @PostMapping("/books/addbook")
-    public String addBook(@Valid Book book, BindingResult result, Model model) {
-        System.out.print("book " + book);
-
-        List<Book> books = bookRepository.findAll();
-
-        long bookLastId = books.get(books.size() - 1).getBookId();
-        System.out.println("current last book id is: " + bookLastId);
-
-        book.setBookId(bookLastId + 1);
-        System.out.print("book " + book);
-
-        boolean dublicateIsbn = bookService.checkIfIsbnExists(book.getIsbn());
-
-        if (result.hasErrors()||dublicateIsbn==true) {
-            return "add-book";
-        }
-
-        bookRepository.save(book);
-
-        //  bookService.save(book);
-        model.addAttribute("books", bookRepository.findAll());
-
-        return "redirect:/books";
-
-    }
-    
-     @PostMapping("/books/update/{bookId}")
-    public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
-            BindingResult result, Model model) {
+    @PostMapping("/books/addToWishlist/{bookId}")
+    public String addBookToWishlist(@Valid Book book, @Valid User user, BindingResult result, Model model,  RedirectAttributes attributes) {
         
-
-        if (result.hasErrors()) {
-            book.setBookId(bookId);
-            return "update-book";
-        }
         
-
-        bookRepository.save(book);
-        model.addAttribute("books", bookRepository.findAll());
-        return "redirect:/books";
+        bookService.addToWishList(book);
+        return "wishlist";
     }
 
-*/
     
 }

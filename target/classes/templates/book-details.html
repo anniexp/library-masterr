@@ -22,32 +22,32 @@
         <!-- Libraries Stylesheet -->
         <link th:href="@{../css/owl.carousel.min.css}" type="text/css" rel="stylesheet" crossorigin="anonymous"/>
         <!-- Customized Bootstrap Stylesheet -->
-        
-        <link href="../static/css/newcss.css" rel="stylesheet" type="text/css"  crossorigin="anonymous"/>
-        <link href="../static/css/details.css" rel="stylesheet" type="text/css"  crossorigin="anonymous"/>
-        <link href="../static/css/owl.carousel.min.css" rel="stylesheet" type="text/css"  crossorigin="anonymous"/>
-        <link href="../static/css/shards.min.css" rel="stylesheet" type="text/css"  crossorigin="anonymous"/>
-        
-         
+
+        <link href="../static/css/newcss.css" rel="stylesheet" type="text/css"  media="all" crossorigin="anonymous"/>
+        <link href="../static/css/details.css" rel="stylesheet" type="text/css"  media="all" crossorigin="anonymous"/>
+        <link href="../static/css/owl.carousel.min.css" rel="stylesheet" type="text/css"  media="all"  crossorigin="anonymous"/>
+        <link href="../static/css/shards.min.css" rel="stylesheet" type="text/css"  media="all" crossorigin="anonymous"/>
+
+
         <link rel="stylesheet" href="https://github.com/anniexp/library-masterr/blob/main/src/main/resources/css/shards.min.css" 
               integrity="sha384-ujUqGRGQ1ovsKxGdmhe9QU6kK/CNKT9Rsr9Uhq6GKuY7tz0tgusql8e3mAJViNxO"
               crossorigin="anonymous"/> 
 
-        
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
               crossorigin="anonymous" />
 
-        
-        
-        
-        
-         <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    
 
-        
+
+
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+
+
     </head>
     <body>
         <!-- Topbar Start -->
@@ -164,20 +164,29 @@
 
         <!-- Book Detail Start --> 
         <div class="container-fluid py-5" th:action="@{/books/book-details/{bookId}(bookId=${book.bookId})}" th:object="${book}" method="get" >
-            <div class="row px-xl-5">
+            <div class="row">
                 <div class="col-lg-5 pb-5">
-                   
-                        <div class="carousel-inner border">
-                            <div class="carousel-item active">
-                                <img class="w-100 h-100" th:src="@{'/image?id='+ ${bookId}}" alt="Book" style="width: 50px; height: auto">
-                            </div>
+
+
+                    <div>
+                        <div class="carousel-item active text-center">
+                            
+                                <a target="_blank" th:href="@{'/image?id='+ ${bookId}}" alt="BookThumbnail">
+                                </a>
+                                <img  th:src="@{'/image?id='+ ${bookId}}" alt="Book" style="border: 1px solid #ddd; border-radius: 14px;  padding: 25px;  width: 400px; text-align: center">
+
+                           
                         </div>
-                        
                     </div>
+
+
                 </div>
 
                 <div class="col-lg-7 pb-5">
-                    <h3 class="font-weight-semi-bold" th:text="${book.title}" ></h3>
+                    <h2 class="font-weight-semi-bold" th:text="${book.title}" ></h2>
+                    <p class="font-weight-semi-bold" th:text="by " ></p>
+                   <a th:href="@{/authors/author-details/{authorId}(authorId=${book.author.authorId})}">
+                       <h4 class="font-weight-semi-bold" th:text="${book.author.authorName}" ></h4></a>
                     <div class="d-flex mb-3">
                         <div class="text-primary mr-2">
                             <small class="fas fa-star"></small>
@@ -188,12 +197,12 @@
                         </div>
                         <small class="pt-1">(50 Reviews)</small>
                     </div>
-                  
-                    <div th:switch="${book.isRented}">
-        <h3 class="font-weight-semi-bold mb-4" th:case="true">Book is currently not available</h3>
-        <h3 class="font-weight-semi-bold mb-4" th:case="false">Book is available</h3>
-        <h3 class="font-weight-semi-bold mb-4" th:case="*">No information</h3>
-    </div>
+
+                    <div class="  border-white"  th:switch="${book.isRented}">
+                        <h3 class="text-primary font-weight-bold border px-3 mr-1" th:case="true">Book is currently not available</h3>
+                        <h3 class="text-primary font-weight-bold border  px-3 mr-1" th:case="false">Book is available</h3>
+                        <h3 class="text-primary font-weight-bold border px-3 mr-1" th:case="*">No information</h3>
+                    </div>
 
                     <!-- comment 
                     <div class="d-flex align-items-center mb-4 pt-2">
@@ -212,154 +221,182 @@
                         </div>
                     -->
                     <button class="btn btn-primary px-3" ><i class="fa fa-shopping-cart mr-1"></i>Sneak Peak</button>
-                    
+
                     <div th:switch="${book.isRented}">           
-                    <a class="btn btn-primary px-3" th:case="'true'" th:href="@{/books/requestToBorrow/{bookId}(bookId=${bok.bookId})}" onclick="return confirm('Are you sure you want to borrow this book?');" onsubmit="return alert('Book has been requested!');"
-                       ><i class="fa fa-shopping-cart mr-1"></i>Borrow</a>
-                       
-                    <a class="btn btn-primary px-3" th:case="'false'" th:href="@{/books/addToWishlist/{bookId}(bookId=${bok.bookId})}" onclick="return confirm('Are you sure you want to add this book to wishlist?');"><i class="fa fa-shopping-cart mr-1"></i>Add to Wishlist</a>
-                </div>
-                <div class="d-flex pt-2">
-                    <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
-                    <div class="d-inline-flex">
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-pinterest"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row px-xl-5">
-            <div class="col">
-                <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                    <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tab-pane-1">
-                        <h4 class="mb-3">Book Description</h4>
-                        <p th:text="${book.description}"></p>
-                    </div>
-                    <div class="tab-pane fade" id="tab-pane-2">
-                        <h4 class="mb-3">Additional Information</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0" th:text="${book.title}">
-                                        
-                                    </li>
-                                    <li class="list-group-item px-0" th:text="${book.title}">
-                                       
-                                    </li>
-                                    <li class="list-group-item px-0"  th:text="${book.title}">
-                                      
-                                    </li>
-                                    <li class="list-group-item px-0" th:text="${book.title}">
-                                       
-                                    </li>
-                                  </ul> 
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0"  th:text="${book.title}">  
-                                       
-                                    </li>
-                                    <li class="list-group-item px-0"  th:text="${book.title}">
-                                        
-                                    </li>
-                                    <li class="list-group-item px-0"  th:text="${book.title}">
-                                        
-                                    </li>
-                                    <li class="list-group-item px-0"  th:text="${book.title}">
-                                        
-                                    </li>
-                                  </ul> 
+                        <a class="btn btn-primary px-3" th:case="false" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="return confirm('Are you sure you want to borrow this book?');" onsubmit="return alert('Book has been requested!');"
+                           ><i class="fa fa-shopping-cart mr-1"></i>Borrow</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" th:href="@{/books/addToWishlist/{bookId}(bookId=${book.bookId})}" >
+                            Launch static backdrop modal
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Understood</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!-- End of Modal -->            
+                        <a class="btn btn-primary px-3" th:case="true" th:href="@{/books/addToWishlist/{bookId}(bookId=${book.bookId})}" onclick="return confirm('Are you sure you want to add this book to wishlist?');"><i class="fa fa-shopping-cart mr-1"></i>Add to Wishlist</a>
                     </div>
-                  
+                    <div class="d-flex pt-2">
+                        <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
+                        <div class="d-inline-flex">
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a class="text-dark px-2" href="">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row px-xl-5">
+                <div class="col">
+                    <div class="nav nav-tabs justify-content-center border-secondary mb-4">
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                        <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-pane-1">
+                            <h4 class="mb-3">Book Description</h4>
+                            <p th:text="${book.description}"></p>
+                        </div>
+                        <div class="tab-pane fade" id="tab-pane-2">
+                            <h4 class="mb-3">Additional Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush">
+
+
+                                        <li>
+                                        <li class="list-group-item px-0" th:text="'Series | ' +${book.series}"> 
+
+                                        </li>
+                                        </li>
+
+                                        <li class="list-group-item px-0" th:text="'Edition | ' +${book.edition}">
+
+                                        </li>
+                                        <li class="list-group-item px-0"  th:text="'Volume | ' +${book.volume}">
+
+                                        </li>
+                                        <li class="list-group-item px-0" th:text="'Pages  | ' +${book.pages}">
+
+                                        </li>
+                                    </ul> 
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0"  th:text="'Publisher | ' +${book.publisher}">  
+
+                                        </li>
+                                        <li class="list-group-item px-0"  th:text="'Year of publishing | ' +${book.yearOfPublishing}">
+
+                                        </li>
+                                        <li class="list-group-item px-0"  th:text="'ISBN-13 | ' +${book.isbn}">
+
+                                        </li>
+                                        <li class="list-group-item px-0"  th:text="'Genres | ' +${book.genres}">
+
+                                        </li>
+                                    </ul> 
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Shop Detail End -->
+        <!-- Shop Detail End -->
         <!-- Footer Start -->
-    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <a href="" class="text-decoration-none">
-                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">ANNIE</span>brary</h1>
-                </a>
-                <p>This is a project about an E-library, form where an user can see what books are available in the library, without going to the physical location.</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>bul. "Knyaginya Maria Luiza" 5227, 1202 Sofia Center, Sofia, Bulgaria</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 6789</p>
-            </div>
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-dark mb-2" href="/books"><i class="fa fa-angle-right mr-2"></i>All Books</a>
-                             <a class="text-dark mb-2" href="/available-books"><i class="fa fa-angle-right mr-2"></i>Available Books</a>
-                            <a class="text-dark mb-2" href="/authors"><i class="fa fa-angle-right mr-2"></i>Authors</a>
-                   
+        <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
+            <div class="row px-xl-5 pt-5">
+                <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                    <a href="" class="text-decoration-none">
+                        <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">ANNIE</span>brary</h1>
+                    </a>
+                    <p>This is a project about an E-library, form where an user can see what books are available in the library, without going to the physical location.</p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>bul. "Knyaginya Maria Luiza" 5227, 1202 Sofia Center, Sofia, Bulgaria</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
+                    <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 6789</p>
+                </div>
+                <div class="col-lg-8 col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 mb-5">
+                            <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                            <div class="d-flex flex-column justify-content-start">
+                                <a class="text-dark mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                                <a class="text-dark mb-2" href="/books"><i class="fa fa-angle-right mr-2"></i>All Books</a>
+                                <a class="text-dark mb-2" href="/available-books"><i class="fa fa-angle-right mr-2"></i>Available Books</a>
+                                <a class="text-dark mb-2" href="/authors"><i class="fa fa-angle-right mr-2"></i>Authors</a>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                             <a class="text-dark" href="/profile"><i class="fa fa-angle-right mr-2"></i>Profile</a>
-                            <a class="text-dark" href="/contact-us"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        <div class="col-md-4 mb-5">
+                            <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
+                            <div class="d-flex flex-column justify-content-start">
+                                <a class="text-dark" href="/profile"><i class="fa fa-angle-right mr-2"></i>Profile</a>
+                                <a class="text-dark" href="/contact-us"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
-                        <form action="">
-                            <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
-                                    required="required" />
-                            </div>
-                            <div>
-                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
-                            </div>
-                        </form>
+                        <div class="col-md-4 mb-5">
+                            <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                            <form action="">
+                                <div class="form-group">
+                                    <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
+                                           required="required" />
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row border-top border-light mx-xl-5 py-4">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">ANNIEbrary</a>. All Rights Reserved. 
-					
-					<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-					Designed by <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a>
-                </p>
+            <div class="row border-top border-light mx-xl-5 py-4">
+                <div class="col-md-6 px-xl-0">
+                    <p class="mb-md-0 text-center text-md-left text-dark">
+                        &copy; <a class="text-dark font-weight-semi-bold" href="#">ANNIEbrary</a>. All Rights Reserved. 
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed by <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a>
+                    </p>
+                </div>
+                <div class="col-md-6 px-xl-0 text-center text-md-right">
+                    <img class="img-fluid" src="img/payments.png" alt="">
+                </div>
             </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
-            </div>
         </div>
-    </div>
-    <!-- Footer End -->
+        <!-- Footer End -->
 
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-</body>
+    </body>
 </html>
