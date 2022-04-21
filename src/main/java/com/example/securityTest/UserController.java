@@ -98,8 +98,11 @@ public class UserController {
  
          List<User> users = userRepository.findAll();
         Principal currentEmployee = UserController.getCurrentUser(request);
-
-        User currentUserEmployee= (User) currentEmployee;
+            String currUserUsername = currentEmployee.getName();
+            User currUser = userService.findByUsername(currUserUsername).get(0);
+      //  User currentUserEmployee= (User) currentEmployee;
+      
+      
         //if it doesnt work, then to build it with a constructor, if that does not work, 
         //then firstly get the name of the cuurent user, then loop all users, if the
         //name equals, then this is the cuurent user 
@@ -110,7 +113,7 @@ public class UserController {
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
         
-         model.addAttribute("user", currentUserEmployee);
+         model.addAttribute("user", currUser);
          
          
         
