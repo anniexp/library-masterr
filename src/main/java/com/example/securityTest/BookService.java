@@ -33,8 +33,6 @@ public class BookService {
 
     @Autowired
     BookRepository bookRepository;
-    
-  
 
     List<Book> findByTitle(String title) {
         return bookRepository.findByTitle(title);
@@ -59,41 +57,38 @@ public class BookService {
     public List<Book> findByKeyword(String keyword) {
         return bookRepository.findByKeyword(keyword);
     }
-    
-    public Boolean checkIfIsbnDublicate(String inputIsbn){
-     List<Book> books = bookRepository.findAll();
-     boolean isDublicate = false;
-     for( Book book:books){
-         if (book.getIsbn().matches(inputIsbn))
-         {
-         isDublicate = true;
-         }
-        }
-     return isDublicate;
-    }
-    
-    public Boolean checkIfIsbnDublicateEdit(String inputIsbn, long currentId){
-     List<Book> books = bookRepository.findAll();
-     boolean isDublicate = false;
-     for( Book book:books){
-         System.out.println("Current id "+ book.getBookId() + "   ");
-         System.out.println(currentId);
-         System.out.println(inputIsbn);
-         System.out.println(book.getIsbn());
 
-         if ((book.getIsbn().matches(inputIsbn))&& (book.getBookId()!=currentId))
-         //if (book.getIsbn().matches(inputIsbn))           
-         {
-         isDublicate = true;
-         
-         }
+    public Boolean checkIfIsbnDublicate(String inputIsbn) {
+        List<Book> books = bookRepository.findAll();
+        boolean isDublicate = false;
+        for (Book book : books) {
+            if (book.getIsbn().matches(inputIsbn)) {
+                isDublicate = true;
+            }
         }
-              System.out.println(isDublicate);
-
-     return isDublicate;
+        return isDublicate;
     }
-    
-    
+
+    public Boolean checkIfIsbnDublicateEdit(String inputIsbn, long currentId) {
+        List<Book> books = bookRepository.findAll();
+        boolean isDublicate = false;
+        for (Book book : books) {
+            System.out.println("Current id " + book.getBookId() + "   ");
+            System.out.println(currentId);
+            System.out.println(inputIsbn);
+            System.out.println(book.getIsbn());
+
+            if ((book.getIsbn().matches(inputIsbn)) && (book.getBookId() != currentId)) //if (book.getIsbn().matches(inputIsbn))           
+            {
+                isDublicate = true;
+
+            }
+        }
+        System.out.println(isDublicate);
+
+        return isDublicate;
+    }
+
     //create a date number of days before input date
     public Date createDateBeforeCurrentDate(LocalDate localDate, int numberOfDays) {
         LocalDate localDateBefore = localDate.minusDays(numberOfDays);
@@ -103,77 +98,70 @@ public class BookService {
 
         return dateBefore;
     }
- 
-    
-   //creates a list of all currently available books 
+
+    //creates a list of all currently available books 
     public List<Book> listAvailableBooks() {
         List<Book> books = bookRepository.findAll();
         System.out.println("all books :  " + books.size());
         List<Book> filtererBooks = new ArrayList<Book>();
         ListIterator<Book> listIterator = books.listIterator();
-       
-      
+
         books.stream().forEach(elem -> System.out.println(elem));
-       
+
         for (Book book : books) {
             /* if(book.toString().equalsIgnoreCase(null)){
             continue;}*/
-             
+
             boolean alo = book.isIsRented();
             System.out.println("is it rented :  " + alo);
-           
+
             if (alo) {
-            } 
-           
-            else {
+            } else {
                 filtererBooks.add(book);
                 System.out.println("available books :  " + filtererBooks.size());
             }
-        
+
         }
         System.out.println("available books :  " + filtererBooks.size());
         return filtererBooks;
 
     }
-    
-     //creates a list of all new books 
+
+    //creates a list of all new books 
     public Page<Book> listNewBooks(Pageable paging) {
         List<Book> books = bookRepository.findAll();
         System.out.println("all books :  " + books.size());
         List<Book> filtererBooks = new ArrayList<Book>();
         ListIterator<Book> listIterator = books.listIterator();
-        
+
         //all new books will be added max 14 days ago
         LocalDate currDate = LocalDate.now();
         // date is set to 1 day ago
-        Date dateForNewBooks =  createDateBeforeCurrentDate(currDate, 1);
-        
-      
+        Date dateForNewBooks = createDateBeforeCurrentDate(currDate, 1);
+
         books.stream().forEach(elem -> {
             System.out.println(elem);
-             Date elemDateAdded = elem.getDateAdded();
-             
+            Date elemDateAdded = elem.getDateAdded();
+
             //if the date the book was added is less than 14 days ago, then add it to the list of new books
-            boolean alo =  dateForNewBooks.before(elemDateAdded);
-            
-             System.out.println("Has the book been added less than 14 days ago? : "
-                         + dateForNewBooks.before(elemDateAdded));
-           
-           
+            boolean alo = dateForNewBooks.before(elemDateAdded);
+
+            System.out.println("Has the book been added less than 14 days ago? : "
+                    + dateForNewBooks.before(elemDateAdded));
+
             if (alo) {
-                 System.out.println("yes! :  " + alo);
-                   filtererBooks.add(elem);
-            } 
-                 else {
-                 System.out.println("no! :  " + alo);
-                 
-            } 
-            
+                System.out.println("yes! :  " + alo);
+                filtererBooks.add(elem);
+            } else {
+                System.out.println("no! :  " + alo);
+
+            }
+
         });
-      
+
         System.out.println("new books :  " + filtererBooks.size());
         Page<Book> page = new PageImpl<>(filtererBooks);
-        
+
         return page;
 
     }
@@ -185,16 +173,83 @@ public class BookService {
     void createABorrowRequest(Book book) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
-     
-     public void showImage( HttpServletResponse response,Book book)
+
+    public void showImage(HttpServletResponse response, Book book)
             throws ServletException, IOException {
 
-     
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
         response.getOutputStream().write(book.getPictureContent());
-       
+
+    }
+
+    List<Book> findByGenres(String genre) {
+
+        return bookRepository.findByGenres(genre);
+    }
+
+    //creates a list which gets the n first elements of a list
+    List<Book> getFirstNBooksList(List<Book> books, Integer n) {
+
+        List<Book> leading = books.subList(0, n - 1);
+        System.out.println("Size of list: " + leading.size());
+
+        return leading;
+    }
+
+    //split a list into 3lists, which will fill in a grid the views
+    public void splitListInto3Lists(List<Book> books) {
+        //genetare n lists
+        /*for (int i = 0, i < numberOfColumns, i++) {
+            List<Book> book= null;
+        }*/
+
+        List<Book> firstList = null;
+        List<Book> secondList = null;
+        List<Book> thirdList = null;
+        
+        for (int j = 0; j < books.size (); j++) {
+            switch (j / 3) {
+                case 0:
+                    firstList.add(books.get(j));
+                    break;
+                case 1:
+                    secondList.add(books.get(j));
+                    break;
+                case 2:
+                    thirdList.add(books.get(j));
+                    break;
+                default:
+                    System.out.println("Null element!");
+                    break;
+            }
+
+        }
+
     }
     
+    //split a list into 3lists, which will fill in a grid the views
+    public void splitStringListIntoSeveralLists(List<String> strList,List<String> firstList, List<String> secondList,List<String> thirdList) {
+        //genetare n lists
+        /*for (int i = 0, i < numberOfColumns, i++) {
+            List<Book> book= null;
+        }*/
+        for (int j = 0; j < strList.size (); j++) {
+            switch (j / 3) {
+                case 0:
+                    firstList.add(strList.get(j));
+                    break;
+                case 1:
+                    secondList.add(strList.get(j));
+                    break;
+                case 2:
+                    thirdList.add(strList.get(j));
+                    break;
+                default:
+                    System.out.println("Null element!");
+                    break;
+            }
+
+        }
+
+    }
 }

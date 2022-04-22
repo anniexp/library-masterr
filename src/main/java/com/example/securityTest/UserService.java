@@ -18,7 +18,8 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
-    
+      @Autowired
+    LibraryCardService cardService;
     
      public Boolean checkIfUserExists(String inputUsername){
      List<User> users = userRepository.findAll();
@@ -48,7 +49,28 @@ public class UserService {
            
         return userRepository.findByUsername(username);
     }
+       
+       
+     public Boolean checkIfUserInfoMatchWithCardInfo(String inputFirstName, String inputLastName,String inputCardNumber){
+     List<LibraryCard> cards = cardService.findAll();
+     boolean matches = false;
      
+     //if the input data matches the a card records in the db, then the user is a valid client of the library and registartion can proceeds
+     for( LibraryCard card:cards){
+         if (card.getCardNumber().matches(inputCardNumber)&&card.getFirstName().matches(inputFirstName)&&card.getLastName().matches(inputLastName))
+         {
+        matches= true;
+         }
+        }
+     return matches;
+    }
+     
+     
+     
+       List<User> findByCardNumber(String cardNumber) {
+           
+        return userRepository.findByCardNumber(cardNumber);
+    }
 
     
 }

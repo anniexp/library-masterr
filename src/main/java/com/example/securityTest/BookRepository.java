@@ -17,7 +17,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleStartingWith(String title);
     Page<Book> findByAuthor(Author author, Pageable pageable);
     
-     
+     List<Book> findByGenres(String genre);
+
     
     //Custom query
     @Query(value = "select * from book s where s.title like %:keyword% ", nativeQuery = true)

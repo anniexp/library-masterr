@@ -51,6 +51,15 @@ public class User {
         @Column(name = "address", nullable = true, length = 255)
 	private String userAddress;
        
+        @Column(name = "first_name", nullable = false, length = 200)
+	private String firstName; 
+        
+        @Column(name = "last_name", nullable = false, length = 200)
+	private String lastName; 
+        
+        @Column(name = "card_number", nullable = false, length = 255)
+	private String cardNumber; 
+        
         
             
          
@@ -74,6 +83,24 @@ public class User {
 
 
     public User() {
+    }
+
+    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, String firstName, String lastName, String cardNumber, String rolee, boolean enabled, Set<Report> borrowedBooks) {
+        this.user_id = user_id;
+        this.password = password;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+        this.profilePictureSize = profilePictureSize;
+        this.pictureContent = pictureContent;
+        this.userAddress = userAddress;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cardNumber = cardNumber;
+        this.rolee = rolee;
+        this.enabled = enabled;
+        this.borrowedBooks = borrowedBooks;
     }
 
    
@@ -126,22 +153,32 @@ public class User {
         this.userAddress = userAddress;
     }
 
-   
-    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, Set<Book> wishlist, String rolee, boolean enabled, Set<Report> borrowedBooks) {
-        this.user_id = user_id;
-        this.password = password;
-        this.username = username;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.profilePicture = profilePicture;
-        this.profilePictureSize = profilePictureSize;
-        this.pictureContent = pictureContent;
-        this.userAddress = userAddress;
-        this.rolee = rolee;
-        this.enabled = enabled;
-        this.borrowedBooks = borrowedBooks;
+    public String getFirstName() {
+        return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+   
+   
     
     
     

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+       <!-- Page Content Start -->
+        <div class="container">
+            <h2>Search for Users</h2>
+            <form  th:action="@{/users}" method="get">
+                <input type="text" name="searchUser" id="searchUser" size="50"/>
+                <button type="submit" value="Search"/>
+            </form>
+        </div>
+        <div th:switch="${authors}" class="container my-5" sec:authorize="isAuthenticated()">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 th:case="null">No users yet!</h2>
+
+                    <div th:case="*">
+                        <h2 class="my-5">Users</h2>
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Family Name</th>
+                                    <th>Is enabled</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone number</th>
+                                     
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="author : ${authors}">
+                                    <td th:text="${author.authorName}"></td>
+                                    <td><ul th:each="bok : ${author.books}" >
+                                            <li th:text="${bok.title}"></li></ul></td>
+                                    <!--  <td th:text="${author.books.title}"></td>-->
+                                    <td th:text="${author.nationality}"></td>
+
+
+                                    <td > <a th:href="@{/authors/edit/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-edit ml-2"></i>Edit</a></td> 
+
+                                    <td><a th:href="@{/authors/delete/{authorId}(authorId=${author.authorId})}" onclick="return confirm('Are you sure you want to delete this author?');"><i class="fas fa-user-times ml-2"></i>Delete</a></td>
+                                    <td><a th:href="@{/authors/author-details/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-times ml-2"></i>Details</a></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                          <nav aria-label="Page navigation example">
+    Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
+    
+    <ul class="pagination">
+      <li class="page-item">
+          <a  class="page-link" th:if="${currentPage > 0}" th:href="@{http://localhost:8080/users?page=0}">First</a>
+      </li>
+       <li class="page-item">
+          <a  class="page-link" th:unless="${currentPage > 0}">First</a>
+       </li>
+
+       <li class="page-item">
+           <a  class="page-link" th:if="${currentPage > 0}" th:href="@{'http://localhost:8080/users?page=' + ${currentPage - 1}}">Previous</a>
+       </li>
+        <li class="page-item">
+           <a  class="page-link" th:unless="${currentPage > 0}">Previous</a>
+        </li>
+
+<a   th:each="i: ${#numbers.sequence(1, totalPages)}">
+    <li class="page-item">
+        <a class="page-link" th:if="${i != currentPage + 1}" th:href="@{'http://localhost:8080/users?page=' + ${i-1}}">[[${i}]]</a>
+    </li>
+     <li class="page-item">
+        <a class="page-link"  th:unless="${i != currentPage + 1}">[[${i}]]</a>
+    </li>
+</a>
+<li class="page-item">
+       <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/users?page=' + ${currentPage + 1}}">Next</a>
+</li>
+ <li class="page-item">
+       <a  class="page-link" th:unless="${currentPage < totalPages-1}">Next</a>
+</li>
+<li class="page-item">   
+    <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/users?page=' + ${totalPages - 1}}">Last</a>
+</li>
+ <li class="page-item">
+<a  class="page-link" th:unless="${currentPage < totalPages-1}">Last</a>
+ </li>
+    </ul>
+</nav>
+                    </div>      
+                    <p class="my-5"><a href="/authors/new" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i>Add an author</a></p>
+                    <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
+
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

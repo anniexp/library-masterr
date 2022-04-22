@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.view.RedirectView;
  *
  * @author Lenovo
  */
+@ControllerAdvice
 @Controller
 public class UserController {
 
@@ -38,16 +41,52 @@ public class UserController {
     @Autowired
     private HttpServletRequest request;
 
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    
+    @GetMapping("/registration-part-1")
+    public String showRegistrationFirstForm(Model model) {
         model.addAttribute("user", new User());
+   
+        return "registration-card";
 
+    }
+    
+     @PostMapping("/register")
+    public String showRegistrationSecondForm(Model model,@ModelAttribute("user") User user ) {
+        
+       String inputFirstName = user.getFirstName();
+       String inputLastName = user.getLastName();
+       String inputCardNumber = user.getCardNumber();
+       
+      Boolean correctCredentials = userService.checkIfUserInfoMatchWithCardInfo(inputFirstName, inputLastName, inputCardNumber);
+      
+      
+      if (correctCredentials){
+          model.addAttribute("inputFirstName",inputFirstName);
+           model.addAttribute("inputLastName",inputLastName);
+            model.addAttribute("inputCardNumber",inputCardNumber);
+       return "redirect:/registration-part-2";
+      }
+      else{
+          model.addAttribute("message","Data does not match card info!");
+          
+      return "registration-card";
+      }
+        
+
+    }
+    @GetMapping("/registration-part-2")
+    public String showRegistrationForm(Model model,@ModelAttribute("inputFirstName") String inputFirstName,@ModelAttribute("inputLastName") String inputLastName,
+            @ModelAttribute("inputCardNumber") String inputCardNumber ,@ModelAttribute("user") User user) {
+        user.setCardNumber(inputCardNumber);
+        user.setFirstName(inputFirstName);
+        user.setLastName(inputLastName);
         return "registration";
 
     }
 
     @PostMapping("/post_register")
-    public String postRegister(User user) {
+    public String postRegister(User user, Model model , @ModelAttribute("inputFirstName") String inputFirstName,@ModelAttribute("inputLastName") String inputLastName,
+            @ModelAttribute("inputCardNumber") String inputCardNumber ) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         String userRole = Rolee.getROLE_USER().name();
@@ -67,6 +106,10 @@ public class UserController {
         user.setPassword(encodedPassword);
         user.setRolee(userRole);
         user.setEnabled(isEnabled);
+        
+        user.setCardNumber(inputCardNumber);
+        user.setFirstName(inputFirstName);
+        user.setLastName(inputLastName);
 
         // userService.checkIfUserExists(user.getUsername());
         userRepository.save(user);
