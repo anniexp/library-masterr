@@ -35,6 +35,8 @@ public class ReportService {
     BookService bookService;
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    UserService userService;
 
     List<Report> findByReportId(long reportId) {
         return reportRepository.findByReportId(reportId);
@@ -53,7 +55,16 @@ public class ReportService {
 
         return dateBookReturn;
     }
-    
- 
+
+     List<Report> findByBorrower(User currUser) {
+        return reportRepository.findByBorrower(currUser);
+        
+            }
+      
+    List<Report> findByKeyword(String id) {
+      
+        return reportRepository.findByKeyword(id);
+        
+            }
     
 }

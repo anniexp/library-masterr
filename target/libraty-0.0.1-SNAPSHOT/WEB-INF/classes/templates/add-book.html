@@ -244,7 +244,12 @@
                                             <h2 class="card-title">File Upload</h2>
                                             <h6 class="text-success">[[${success}]]</h6>
                                             <div class="mb-3">
-
+                                                <div>
+                                                    <img th:src="@{file}" 
+                                                         th:alt="*{bookPicture!=null}? *{bookPicture} : '(alt)'" width="100px" height="50px">
+                                                  
+                                                    
+                                                </div>
                                                 <input
                                                     class="form-control" name="file" type="file" id="formFile"><br />
                                                 <span>Supported picture types are jpeg, pg, png, gif and pdf</span>

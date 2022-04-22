@@ -5,6 +5,7 @@
  */
 package com.example.securityTest;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,10 +15,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 /**
@@ -132,7 +136,7 @@ public class BookService {
 
     }
     
-     //creates a list of all currently available books 
+     //creates a list of all new books 
     public Page<Book> listNewBooks(Pageable paging) {
         List<Book> books = bookRepository.findAll();
         System.out.println("all books :  " + books.size());
@@ -182,7 +186,15 @@ public class BookService {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
-     
     
+     
+     public void showImage( HttpServletResponse response,Book book)
+            throws ServletException, IOException {
+
+     
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+        response.getOutputStream().write(book.getPictureContent());
+       
+    }
     
 }

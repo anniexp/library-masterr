@@ -1,6 +1,7 @@
 package com.example.securityTest;
 
 //import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import java.io.File;
 import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import java.security.Principal;
@@ -126,7 +127,7 @@ public class BookController {
     @PostMapping("/books/addbook")
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
-            RedirectAttributes attributes) throws IOException {
+            RedirectAttributes attributes,  HttpServletResponse response) throws IOException, ServletException {
         //current date
         Date dateAdded = new Date();
         System.out.print("book " + book);
@@ -169,8 +170,17 @@ public class BookController {
 
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
+        
+       
+      
+        // bookService.showImage(response, book);
+        // String uploadDir = "/image?id=" + book.getBookId();
+         
+           model.addAttribute("file", file);  
+      
 
         bookRepository.save(book);
+     
 
         model.addAttribute("books", bookRepository.findAll());
 
@@ -209,7 +219,19 @@ public class BookController {
         //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         //  book.setPhotos(fileName);
 
+        
         //picture attributes
+        
+        if(file==null && book.getBookPicture()!=null )
+        
+        {
+          book.setBookPicture(book.getBookPicture());
+          book.setPictureContent(book.getPictureContent());
+         book.setPictureSize(book.getPictureSize());
+        
+        }
+        else
+        {
         String fileName = file.getOriginalFilename();
         book.setBookPicture(fileName);
         try {
@@ -219,7 +241,7 @@ public class BookController {
         }
 
         book.setPictureSize(file.getSize());
-
+        }
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
 

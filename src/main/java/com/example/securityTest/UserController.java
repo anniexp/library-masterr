@@ -31,6 +31,10 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    
+     @Autowired
+    private ReportService reportService;
+     
     @Autowired
     private HttpServletRequest request;
 
@@ -100,7 +104,14 @@ public class UserController {
 
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
-
+        
+         List<Report> userBorrows = reportService.findByBorrower(currUser);
+         List<Report> userCurrentBorrows = reportService.findByKeyword(currUser.getUser_id().toString());
+         
+         
+        System.out.println("Numver of borrowed book by user : " + userBorrows.size());
+         model.addAttribute("userBorrows", userBorrows);
+         model.addAttribute("userCurrentBorrows",userCurrentBorrows);
         model.addAttribute("user", currUser);
 
         return "profilePage";
