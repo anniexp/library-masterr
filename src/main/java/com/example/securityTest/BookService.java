@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -182,9 +184,9 @@ public class BookService {
 
     }
 
-    List<Book> findByGenres(String genre) {
+    Page<Book> findByGenres(String genre, Pageable pageable) {
 
-        return bookRepository.findByGenres(genre);
+        return bookRepository.findByGenres(genre,pageable);
     }
 
     //creates a list which gets the n first elements of a list
@@ -233,8 +235,9 @@ public class BookService {
         /*for (int i = 0, i < numberOfColumns, i++) {
             List<Book> book= null;
         }*/
-        for (int j = 0; j < strList.size (); j++) {
-            switch (j / 3) {
+        //modulo operation(if remainder is 0, add to first list, if 1 - to second and if 2- yo third)
+        for (int j = 0; j < strList.size(); j++) {
+            switch (j % 3) {
                 case 0:
                     firstList.add(strList.get(j));
                     break;
@@ -251,5 +254,13 @@ public class BookService {
 
         }
 
+    }
+    public Page<Book> findSorted(final int pageNumber,final int pageSize,
+            final String sortField, final String sortDirection){
+        final Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?
+                Sort.by(sortField).ascending(): Sort.by(sortField).descending();
+final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
+    return bookRepository.findAll(pageable);
+    
     }
 }

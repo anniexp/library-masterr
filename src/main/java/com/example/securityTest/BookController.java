@@ -6,15 +6,21 @@ import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import java.security.Principal;
 import java.util.ArrayList;
+import static java.util.Arrays.sort;
+import java.util.Collections;
+import static java.util.Collections.sort;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.hibernate.annotations.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -58,11 +64,17 @@ public class BookController {
     @GetMapping("/books")
     public String showBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size
+           // @RequestParam(name ="sort-field", defaultValue = "title") String sortField,
+               // @RequestParam(name ="sort-dir", defaultValue = "asc") String sortDir
+
+            ) {
         List<Book> books = null;
 
         Pageable paging = (Pageable) PageRequest.of(page, size);
         Page<Book> pageTuts;
+                    // sortDir = "desc";
+
 
         if (bookName != null) {
 
@@ -71,17 +83,32 @@ public class BookController {
 
         } else {
             pageTuts = bookRepository.findAll(paging);
+         //   pageTuts = bookService.findSorted(page, size, bookName, sortDir);
+              // books = (List<Book>) books.stream().sorted(Comparator.comparing(Book::getTitle));
+
+            
 
         }
 
         books = pageTuts.getContent();
+
+
+        //sort books by title in alphabeticalorder
+        
         model.addAttribute("currentPage", pageTuts.getNumber());
         System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
         model.addAttribute("totalItems", pageTuts.getTotalElements());
         System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+//sort params
+             //   model.addAttribute("sortField", sortField);
+               // model.addAttribute("sortDir", sortDir);
+                //model.addAttribute("reverseSortDir",sortDir.equals("asc")? "desc" :"asc" );
 
+        
+        
         model.addAttribute("books", books);
 
         return "books";
@@ -193,6 +220,7 @@ public class BookController {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         List<Author> authors = authorRepository.findAll();
+        
         model.addAttribute("bok", book);
         model.addAttribute("authors", authors);
         return "update-book";
@@ -200,12 +228,18 @@ public class BookController {
 
     @PostMapping("/books/update/{bookId}")
     public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
-            BindingResult result, Model model, @RequestParam("file") MultipartFile file) {
+            BindingResult result, Model model, @RequestParam("file") MultipartFile file
+             ) {
 
         if (result.hasErrors()) {
             System.out.println("Id of boook to be edited : " + book.getBookId());
             book.setBookId(book.getBookId());
             System.out.println("set Id  : " + book.getBookId());
+        model.addAttribute("bookPicture", book.getBookPicture());
+        model.addAttribute("content", book.getPictureContent());
+        model.addAttribute("size", book.getPictureSize());
+        model.addAttribute("bok", book);
+        model.addAttribute("authors", authors);
 
             return "update-book";
         }
@@ -364,6 +398,45 @@ public class BookController {
 
         return "books";
     }
+    
+    
+    
+     @GetMapping("/genres/{genreName}")
+    public String loadGenresPage(Model model,
+            @PathVariable("genreName") String genre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+           , @RequestParam(name = "searchBook", required = false) String bookName) {
+        List<Book> books;
+        
+
+        Pageable paging = (Pageable) PageRequest.of(page, size);
+        Page<Book> pageTuts;
+        //if there are no available searched titles, then return all search results
+        if (bookName != null) {
+            //   books = bookService.findByKeyword(bookName);       
+            //pagination part      
+           // pageTuts = bookRepository.findByKeyword(genre, paging);
+            pageTuts = bookRepository.findByKeyword(bookName, paging);
+
+        } else {
+
+        pageTuts = bookRepository.findByGenres(genre, paging);
+
+        }
+        books = pageTuts.getContent();
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+        System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+
+        model.addAttribute("books", books);
+
+        return "books";
+    }
+    
 
     @PostMapping("/books/createRequestToBorrow")
     public String requestABookToBeBorrowed(@Valid Book book, @Valid User user,  BindingResult result,Model model, RedirectAttributes attributes) {

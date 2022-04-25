@@ -7,14 +7,19 @@ package com.example.securityTest;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -81,35 +86,32 @@ public class HomeController {
             genresList.add(gen);
             System.out.println("Numbers of elements: " +genresList.size() );
         }
-        
-        
+        System.out.println(genresList);
+                   
+                    genresList.sort(String.CASE_INSENSITIVE_ORDER);  //sorts the list in case insensitive order
+                            System.out.println(genresList);
+
+                    genresList.sort(Comparator.naturalOrder());    //sorts list in ascending order  
+
+        System.out.println(genresList);
+
             bookService.splitStringListIntoSeveralLists (genresList,firstList,secondList,thirdList);
         
             System.out.println("Numbers of elements in first sub list: " +firstList.size() );
             System.out.println("Numbers of elements in second: " +secondList.size() );
             System.out.println("Numbers of elements in third: " +thirdList.size() );
 
-          model.addAttribute("firstList", firstList); 
+          model.addAttribute("genresList", genresList); 
           model.addAttribute("secondList", secondList); 
           model.addAttribute("thirdList", thirdList); 
-        
+                  model.addAttribute("firstList", firstList); 
+
         
         
         return "genres";
     }
     
-     @GetMapping("/genres/genreName")
-    public String loadGenresPage(Model model,
-            @PathVariable("genreName") String genre) {
         
-    
-        List<Book> books = bookService.findByGenres(genre);
- 
-        model.addAttribute("books", books); 
-        
-        return "books";
-    }
-    
     
     
 }

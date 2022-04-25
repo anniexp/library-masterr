@@ -52,22 +52,23 @@ public class UserController {
     
      @PostMapping("/register")
     public String showRegistrationSecondForm(Model model,@ModelAttribute("user") User user ) {
-        
+        List<User> users = userRepository.findAll();
        String inputFirstName = user.getFirstName();
        String inputLastName = user.getLastName();
        String inputCardNumber = user.getCardNumber();
        
-      Boolean correctCredentials = userService.checkIfUserInfoMatchWithCardInfo(inputFirstName, inputLastName, inputCardNumber);
+     // Boolean correctCredentials = userService.checkIfUserInfoMatchWithCardInfo(inputFirstName, inputLastName, inputCardNumber);
+       Boolean areValidCredentials = userService.validateCardInfoInput( users,inputFirstName,  inputLastName, inputCardNumber);
       
-      
-      if (correctCredentials){
+      if (areValidCredentials == true){
           model.addAttribute("inputFirstName",inputFirstName);
            model.addAttribute("inputLastName",inputLastName);
             model.addAttribute("inputCardNumber",inputCardNumber);
+            
        return "redirect:/registration-part-2";
       }
       else{
-          model.addAttribute("message","Data does not match card info!");
+          model.addAttribute("message","Input data is not valid!");
           
       return "registration-card";
       }
@@ -90,15 +91,27 @@ public class UserController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         String userRole = Rolee.getROLE_USER().name();
+        
+        List<User> users = userRepository.findAll();
 
         //if there exists an user with the input username, return the view
-        if (userService.checkIfUserExists(user.getUsername()) == true) {
-
+        if (userService.checkIfUserWithUsernameExists(users,user.getUsername()) == true) {
+            model.addAttribute("message","Username already taken!");
+            model.addAttribute("inputFirstName",inputFirstName);
+            model.addAttribute("inputLastName",inputLastName);
+            model.addAttribute("inputCardNumber",inputCardNumber);
+            
             return "registration";
         }
 
         //if there exists an user with the input email address, return the view
-        if (userService.checkIfUserWithSameEmailExists(user.getEmail()) == true) {
+        if (userService.checkIfUserWithSameEmailExists(users, user.getEmail()) == true) {
+            
+            model.addAttribute("message","User with this email already exists!");
+            model.addAttribute("inputFirstName",inputFirstName);
+            model.addAttribute("inputLastName",inputLastName);
+            model.addAttribute("inputCardNumber",inputCardNumber);
+            
             return "registration";
         }
         // String userRoleString = Rolee.valueOf("ROLE_USER");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.ListIterator;
+import org.hibernate.annotations.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,14 +18,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleStartingWith(String title);
     Page<Book> findByAuthor(Author author, Pageable pageable);
     
-     List<Book> findByGenres(String genre);
+     Page<Book> findByGenres(String genre, Pageable pageable);
 
     
     //Custom query
     @Query(value = "select * from book s where s.title like %:keyword% ", nativeQuery = true)
     List<Book> findByKeyword(@Param("keyword") String keyword);
     
-    
+
 
     //search methods with pagination, returns a page with them, not all
      Page<Book> findByTitle(String title, Pageable pageable);
