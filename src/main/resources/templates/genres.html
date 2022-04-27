@@ -181,7 +181,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <div class="row">
                              <div class="col-sm" th:switch="${firstList}">
                                 One of three columns
-                                <ul class="list-group list-group-flush center-block" th:each="genre : ${firstList}" >
+                                <ul class="list-group list-group-flush center-block m-xl-4" th:each="genre : ${firstList}" >
                                     <li class="list-group-item px-0 font-weight-semi-bold">
                                         <a th:href="@{/genres/{genreName}(genreName=${genre})}" th:text="${genre}"/>
 

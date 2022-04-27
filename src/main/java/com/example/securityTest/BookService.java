@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -198,12 +199,13 @@ public class BookService {
         return leading;
     }
 
+    
+        /*
     //split a list into 3lists, which will fill in a grid the views
     public void splitListInto3Lists(List<Book> books) {
         //genetare n lists
-        /*for (int i = 0, i < numberOfColumns, i++) {
-            List<Book> book= null;
-        }*/
+  
+        
 
         List<Book> firstList = null;
         List<Book> secondList = null;
@@ -227,7 +229,7 @@ public class BookService {
 
         }
 
-    }
+    }*/
     
     //split a list into 3lists, which will fill in a grid the views
     public void splitStringListIntoSeveralLists(List<String> strList,List<String> firstList, List<String> secondList,List<String> thirdList) {
@@ -255,6 +257,28 @@ public class BookService {
         }
 
     }
+  
+     List<String> createGenresList(    List<String> genresList
+){
+    for (Genres genre : Genres.values()) { 
+            
+          String gen = genre.toString();
+            genresList.add(gen);
+            System.out.println("Numbers of elements: " +genresList.size() );
+        }
+        System.out.println(genresList);
+                   
+                    genresList.sort(String.CASE_INSENSITIVE_ORDER);  //sorts the list in case insensitive order
+                            System.out.println(genresList);
+
+                    genresList.sort(Comparator.naturalOrder());    //sorts list in ascending order  
+                    
+                    return genresList;
+                    
+    }
+    
+    
+    
     public Page<Book> findSorted(final int pageNumber,final int pageSize,
             final String sortField, final String sortDirection){
         final Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?
@@ -263,4 +287,42 @@ final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
     return bookRepository.findAll(pageable);
     
     }
+    
+    
+    List<Book> getOtherGenreTitles(List<String> genresList, Page<Book> pageTuts,
+            Pageable paging
+    ) {
+        Page<Book> otherGenreBooks = bookRepository.findAll(paging);
+        List<Book> allBooks = otherGenreBooks.getContent();
+
+      //  genresList = createGenresList(genresList);
+        List<Book> genreBooks;
+        List<Book> allGenreBooks = new ArrayList<>();
+        List<Book> otheGenreBooks = new ArrayList<>();
+
+        for (String genre : genresList) {
+
+            pageTuts = findByGenres(genre, paging);
+            genreBooks = pageTuts.getContent();
+            for (Book genr : genreBooks) {
+                allGenreBooks.add(genr);
+
+            }
+
+        }
+
+        System.out.println("Size of books: " + allGenreBooks.size());
+
+        for (Book genreBook : allGenreBooks) {
+            for (Book book : allBooks) {
+                if (book.getGenres().equals(genreBook.getGenres()) == false) {
+                    otheGenreBooks.add(book);
+                }
+            }
+        }
+
+        //   System.out.println("Size of list of remaining books: " + otherGenreBooksList.size());
+        return otheGenreBooks;
+    }
+    
 }

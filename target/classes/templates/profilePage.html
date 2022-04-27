@@ -155,31 +155,59 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <div class="container-fluid py-5" th:action="@{/profile}" th:object="${user}" method="get" >
             <div class="row">
                 <div class="col-lg-5 pb-5">
-
-                    <div>
+ <div class="col">
+                    <div class="row">
                         <div class="carousel-item active text-center">
 
-                            <a target="_blank" th:href="@{'/image?id='+ ${user.user_id}}" alt="Profile Picture Thumbnail">
-                            </a>
-                            <img  th:src="@{'/image?id='+ ${user.user_id}}" alt="Profile Picture" style="border: 1px solid #ddd; border-radius: 14px;  padding: 25px;  width: 400px; text-align: center">
+                         
+                            <img  th:src="@{'/profile/image?username='+ *{username}}"   style="border: 1px solid #ddd; border-radius: 14px;  padding: 25px;  width: 400px; text-align: center"
+                                 th:alt="*{profilePicture!=null}?  *{profilePicture} : '(alt)'">
 
 
                         </div>
                     </div>
-                    <div th:switch="${user.profilePicture}">           
-                        <a class="btn btn-primary px-3"   th:href="@{/upload}"th:case="null" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                           ><i class="fa fa-shopping-cart mr-1"></i>Borrow</a>
+                    <div class="row carousel-item active text-center" align="center">
+                          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                        <a class="btn btn-primary px-3 form-btn center-block" onclick="showMask();" >
+                           Change photo</a>
+                           
                         <!-- Button trigger modal -->
+                      
+                     <div  style="border: 1px solid #ddd; border-radius: 14px;  padding: 100px;  width: 400px; text-align: center">
+                         <form  style="visibility: hidden;  text-align: center; align-content: center" action="#" th:action="@{/profile/edit/upload}" th:object="${user}" method="post" enctype="multipart/form-data" id="photo-form" >
+                        <div class="card" style="width:18em" align="center">
+                                        <div class="card-body" align="center">
+                                            <h2 class="card-title">File Upload</h2>
+                                            <h6 class="text-success">[[${success}]]</h6>
+                                            <div class="mb-3">
+                                                <div>
+                                                    <img th:src="@{'/profile/image?username='+ *{username}}" 
+                                                         th:alt="*{profilePicture!=null}? *{profilePicture} : '(alt)'" width="100px" height="50px">
+                                                  
+                                                    
+                                                </div>
+                                                <input
+                                                    class="form-control" name="file" type="file" id="formFile"><br />
+                                                <span>Supported picture types are jpeg, pg, png, gif and pdf</span>
+                                                 <input type="submit"  class="btn btn-primary" value="Change Picture" form="photo-form">
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                         </form>
+                     </div></div>
+     </div>
 
+ <a href="/index" class="nav-item nav-link active">Home</a>
+ 
+     </div>
+            
 
-
-                        <a class="btn btn-primary px-3" th:case="true" th:href="@{/books/addToWishlist/{bookId}(bookId=${book.bookId})}" onclick="return confirm('Are you sure you want to add this book to wishlist?');"><i class="fa fa-shopping-cart mr-1"></i>Add to Wishlist</a>
-                    </div>
-
-                </div>
+                
 
                 <div class="col-lg-7 pb-5"> 
-                    <ul class="list-group list-group-flush center-block col-lg-4">
+                    <div class="row">
+                    <ul class="list-group list-group-flush center-block col-lg-3">
 
 
 
@@ -197,7 +225,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
                         </li>
                     </ul> 
+                     <ul class="list-group list-group-flush center-block col-lg-3">
 
+
+
+                        <li class="list-group-item px-0 font-weight-semi-bold" th:text="'First Name | ' +${user.firstName}"> 
+
+                        </li>
+
+                        <li class="list-group-item px-0 font-weight-semi-bold" th:text="'Last Name | ' +${user.lastName}">
+
+                        </li>
+                        <li class="list-group-item px-0 font-weight-semi-bold"  th:text="'Card Number | ' +${user.cardNumber}">
+
+                        </li>
+                        
+                    </ul> 
+
+                    </div>
+                     <td> <a th:href="@{/profile/edit}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i>Edit User Information</a></td>
 
                 </div>
             </div>
@@ -408,5 +454,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+           <!-- Show change profile photo form -->
+        <script>
+            
+            
+            function showMask() {
+    var node = document.getElementById('photo-form');
+    if (node.style.visibility==='visible') {
+        node.style.visibility = 'hidden';
+    }
+    else
+        node.style.visibility = 'visible';
+}
+        </script>
     </body>
 </html>

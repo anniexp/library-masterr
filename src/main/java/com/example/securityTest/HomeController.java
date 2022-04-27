@@ -37,6 +37,8 @@ public class HomeController {
 
     @Autowired
     BookService bookService;
+    @Autowired
+    HomeService homeService;
     
     @GetMapping("index")
     public String viewHomePageAgain() {
@@ -80,7 +82,7 @@ public class HomeController {
         List<String> secondList = new ArrayList<>();
         List<String> thirdList = new ArrayList<>();
         
-        for (Genres genre : Genres.values()) { 
+       /* for (Genres genre : Genres.values()) { 
             
           String gen = genre.toString();
             genresList.add(gen);
@@ -93,7 +95,10 @@ public class HomeController {
 
                     genresList.sort(Comparator.naturalOrder());    //sorts list in ascending order  
 
-        System.out.println(genresList);
+        System.out.println(genresList);*/
+       
+           bookService.createGenresList( genresList);
+
 
             bookService.splitStringListIntoSeveralLists (genresList,firstList,secondList,thirdList);
         

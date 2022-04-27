@@ -141,6 +141,7 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
+   
         <!-- Navbar End -->
         
         <!-- Page Content Start -->
@@ -151,16 +152,17 @@ and open the template in the editor.
                 <input type="submit" value="Search"/>
             </form>
         </div>-->
-        <div th:switch="${reports}" class="container my-5" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
-            <div class="row">
-                <div class="col-md-6">
+        
+        <div th:switch="${reports}" class="container-fluid py-5" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
+            <div class="row px-xl-5">
+                <div class="col-lg-8 table-responsive mb-5 align-middle">
                     <h2 th:case="null">No borrowed books yet!</h2>
 
                     <div th:case="*">
                         <h2 class="my-5"> Reports</h2>
                         <div class="table-responsive">
-                            <table class="table table-striped table-responsive-md">
-                                <thead>
+                            <table class="table table-striped table-responsive-md table-bordered text-center mb-0">
+                                <thead class="bg-secondary text-dark">
                                     <tr>
                                         <th scope="col">report id</th>
                                         <th scope="col">borrower</th>
@@ -172,7 +174,7 @@ and open the template in the editor.
 
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="align-middle">
                                     <tr th:each="repor : ${reports}">
                                         <td th:text="${repor.reportId}"></td>
                                         <td th:text="${repor.borrower.username}"></td>

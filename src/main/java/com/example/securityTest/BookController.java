@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import static java.util.Arrays.sort;
 import java.util.Collections;
 import static java.util.Collections.sort;
@@ -57,7 +58,8 @@ public class BookController {
     @Autowired
     UserRepository userRepository;
 
- 
+    @Autowired
+    HomeService homeService;
 
     static ArrayList<Author> authors;
 
@@ -65,16 +67,15 @@ public class BookController {
     public String showBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
-           // @RequestParam(name ="sort-field", defaultValue = "title") String sortField,
-               // @RequestParam(name ="sort-dir", defaultValue = "asc") String sortDir
+    // @RequestParam(name ="sort-field", defaultValue = "title") String sortField,
+    // @RequestParam(name ="sort-dir", defaultValue = "asc") String sortDir
 
-            ) {
+    ) {
         List<Book> books = null;
 
         Pageable paging = (Pageable) PageRequest.of(page, size);
         Page<Book> pageTuts;
-                    // sortDir = "desc";
-
+        // sortDir = "desc";
 
         if (bookName != null) {
 
@@ -83,32 +84,25 @@ public class BookController {
 
         } else {
             pageTuts = bookRepository.findAll(paging);
-         //   pageTuts = bookService.findSorted(page, size, bookName, sortDir);
-              // books = (List<Book>) books.stream().sorted(Comparator.comparing(Book::getTitle));
-
-            
+            //   pageTuts = bookService.findSorted(page, size, bookName, sortDir);
+            // books = (List<Book>) books.stream().sorted(Comparator.comparing(Book::getTitle));
 
         }
 
         books = pageTuts.getContent();
 
-
         //sort books by title in alphabeticalorder
-        
         model.addAttribute("currentPage", pageTuts.getNumber());
         System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
         model.addAttribute("totalItems", pageTuts.getTotalElements());
         System.out.println("number of pages: " + pageTuts.getTotalPages());
         model.addAttribute("totalPages", pageTuts.getTotalPages());
-        
-//sort params
-             //   model.addAttribute("sortField", sortField);
-               // model.addAttribute("sortDir", sortDir);
-                //model.addAttribute("reverseSortDir",sortDir.equals("asc")? "desc" :"asc" );
 
-        
-        
+//sort params
+        //   model.addAttribute("sortField", sortField);
+        // model.addAttribute("sortDir", sortDir);
+        //model.addAttribute("reverseSortDir",sortDir.equals("asc")? "desc" :"asc" );
         model.addAttribute("books", books);
 
         return "books";
@@ -154,7 +148,7 @@ public class BookController {
     @PostMapping("/books/addbook")
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
-            RedirectAttributes attributes,  HttpServletResponse response) throws IOException, ServletException {
+            RedirectAttributes attributes, HttpServletResponse response) throws IOException, ServletException {
         //current date
         Date dateAdded = new Date();
         System.out.print("book " + book);
@@ -190,6 +184,12 @@ public class BookController {
         book.setPictureContent(file.getBytes());
         book.setPictureSize(file.getSize());
 
+        if(book.getPictureSize() >= 1048576)
+        {
+          model.addAttribute("success", "Picture is too big!!!");
+
+            return "add-book";
+        }
         model.addAttribute("success", "File Uploaded Successfully!!!");
         model.addAttribute("bookPicture", book.getBookPicture());
         model.addAttribute("content", book.getPictureContent());
@@ -197,17 +197,12 @@ public class BookController {
 
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
-        
-       
-      
+
         // bookService.showImage(response, book);
         // String uploadDir = "/image?id=" + book.getBookId();
-         
-           model.addAttribute("file", file);  
-      
+        model.addAttribute("file", file);
 
         bookRepository.save(book);
-     
 
         model.addAttribute("books", bookRepository.findAll());
 
@@ -220,7 +215,7 @@ public class BookController {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         List<Author> authors = authorRepository.findAll();
-        
+
         model.addAttribute("bok", book);
         model.addAttribute("authors", authors);
         return "update-book";
@@ -229,17 +224,17 @@ public class BookController {
     @PostMapping("/books/update/{bookId}")
     public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
             BindingResult result, Model model, @RequestParam("file") MultipartFile file
-             ) {
+    ) {
 
         if (result.hasErrors()) {
             System.out.println("Id of boook to be edited : " + book.getBookId());
             book.setBookId(book.getBookId());
             System.out.println("set Id  : " + book.getBookId());
-        model.addAttribute("bookPicture", book.getBookPicture());
-        model.addAttribute("content", book.getPictureContent());
-        model.addAttribute("size", book.getPictureSize());
-        model.addAttribute("bok", book);
-        model.addAttribute("authors", authors);
+            model.addAttribute("bookPicture", book.getBookPicture());
+            model.addAttribute("content", book.getPictureContent());
+            model.addAttribute("size", book.getPictureSize());
+            model.addAttribute("bok", book);
+            model.addAttribute("authors", authors);
 
             return "update-book";
         }
@@ -253,28 +248,22 @@ public class BookController {
         //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         //  book.setPhotos(fileName);
 
-        
         //picture attributes
-        
-        if(file==null && book.getBookPicture()!=null )
-        
-        {
-          book.setBookPicture(book.getBookPicture());
-          book.setPictureContent(book.getPictureContent());
-         book.setPictureSize(book.getPictureSize());
-        
-        }
-        else
-        {
-        String fileName = file.getOriginalFilename();
-        book.setBookPicture(fileName);
-        try {
-            book.setPictureContent(file.getBytes());
-        } catch (IOException ex) {
-            Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (file == null && book.getBookPicture() != null) {
+            book.setBookPicture(book.getBookPicture());
+            book.setPictureContent(book.getPictureContent());
+            book.setPictureSize(book.getPictureSize());
 
-        book.setPictureSize(file.getSize());
+        } else {
+            String fileName = file.getOriginalFilename();
+            book.setBookPicture(fileName);
+            try {
+                book.setPictureContent(file.getBytes());
+            } catch (IOException ex) {
+                Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            book.setPictureSize(file.getSize());
         }
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
@@ -326,8 +315,8 @@ public class BookController {
 
   
   model.addAttribute("success", "File Uploaded Successfully!!!");
-  model.addAttribute("profilePicture", book.getProfilePicture() );
-  model.addAttribute("content",book.getContent());
+  model.addAttribute("profilePicture", book.getBookPicture());
+  model.addAttribute("content",book.get);
   model.addAttribute("size",book.getSize() );
 
   System.out.println("Image is uploaded");
@@ -398,33 +387,57 @@ public class BookController {
 
         return "books";
     }
-    
-    
-    
-     @GetMapping("/genres/{genreName}")
+
+    @GetMapping("/genres/{genreName}")
     public String loadGenresPage(Model model,
             @PathVariable("genreName") String genre,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-           , @RequestParam(name = "searchBook", required = false) String bookName) {
+            @RequestParam(defaultValue = "10") int size,
+             @RequestParam(name = "searchBook", required = false) String bookName) {
         List<Book> books;
-        
 
         Pageable paging = (Pageable) PageRequest.of(page, size);
-        Page<Book> pageTuts;
+        Page<Book> pageTuts=null;
+         List<String> genresList = new ArrayList<>();
         //if there are no available searched titles, then return all search results
         if (bookName != null) {
             //   books = bookService.findByKeyword(bookName);       
             //pagination part      
-           // pageTuts = bookRepository.findByKeyword(genre, paging);
+            // pageTuts = bookRepository.findByKeyword(genre, paging);
             pageTuts = bookRepository.findByKeyword(bookName, paging);
+            books = pageTuts.getContent();
 
         } else {
 
-        pageTuts = bookRepository.findByGenres(genre, paging);
+           
+            if (genre.equalsIgnoreCase("other")) {
+
+                            pageTuts = bookRepository.findAll( paging);
+
+                            
+                            
+                //  books = bookRepository.findAll();
+                //
+                 genresList = bookService.createGenresList(genresList);
+               
+                ////for (Genres genr : Genres.) { 
+            
+               // String genresList = Arrays.toString(Genres.values());
+            System.out.println(" elements: " +genresList );
+        
+               
+               
+              //  System.out.println("Number of genres : " +genresList.size());
+                books= bookService.getOtherGenreTitles( genresList, pageTuts, paging);
+            }
+            else
+            {
+             pageTuts = bookRepository.findByGenres(genre, paging);
+               books = pageTuts.getContent();
+
+            }
 
         }
-        books = pageTuts.getContent();
         model.addAttribute("currentPage", pageTuts.getNumber());
         System.out.println("current page number is: " + pageTuts.getNumber());
         System.out.println("number of elements: " + pageTuts.getTotalElements());
@@ -436,24 +449,20 @@ public class BookController {
 
         return "books";
     }
-    
 
     @PostMapping("/books/createRequestToBorrow")
-    public String requestABookToBeBorrowed(@Valid Book book, @Valid User user,  BindingResult result,Model model, RedirectAttributes attributes) {
-       
+    public String requestABookToBeBorrowed(@Valid Book book, @Valid User user, BindingResult result, Model model, RedirectAttributes attributes) {
+
         bookService.createABorrowRequest(book);
-      //  return "redirect:/borrow-requests";
-       return "redirect:/user/borrow-requests";
+        //  return "redirect:/borrow-requests";
+        return "redirect:/user/borrow-requests";
     }
 
-    
     @PostMapping("/books/addToWishlist/{bookId}")
-    public String addBookToWishlist(@Valid Book book, @Valid User user, BindingResult result, Model model,  RedirectAttributes attributes) {
-        
-        
+    public String addBookToWishlist(@Valid Book book, @Valid User user, BindingResult result, Model model, RedirectAttributes attributes) {
+
         bookService.addToWishList(book);
         return "wishlist";
     }
 
-    
 }

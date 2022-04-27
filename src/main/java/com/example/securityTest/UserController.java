@@ -6,20 +6,30 @@
 package com.example.securityTest;
 
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 /**
@@ -177,18 +187,23 @@ public class UserController {
     public String showUserProfileEditForm(Model model
     ) {
 
-        List<User> users = userRepository.findAll();
+        
         Principal currentEmployee = UserController.getCurrentUser(request);
         String currUserUsername = currentEmployee.getName();
         User currUser = userService.findByUsername(currUserUsername).get(0);
 
         System.out.println("Current employeeee is : " + currentEmployee);
+        
+        model.addAttribute("inputCardNumber",currUser.getCardNumber());
+        model.addAttribute("inputFirstName",currUser.getFirstName());
+        model.addAttribute("inputLastName",currUser.getLastName());
+        model.addAttribute("pass",currUser.getPassword());
+
         model.addAttribute("user", currUser);
+        
 
         return "update-user-profile";
     }
-    
-    
     
     
     @GetMapping("/profile/edit/pass")
@@ -206,5 +221,162 @@ public class UserController {
         return "change-user-password";
     }
     
+    @PostMapping("/profile/update/pass")
+    public String changePassword(Model model,
+            @ModelAttribute("password") String password,
+            @ModelAttribute("newPass") String newPass,
+            @ModelAttribute("newPass2") String newPass2,
+            User user
+    ) {
+        if (password.equals(user.getPassword())) {
+            if (newPass.equals(newPass2)) {
+                user.setPassword(newPass);
+                  user.setEmail(user.getEmail());
+         user.setPhoneNumber(user.getPhoneNumber());
+         user.setUserAddress(user.getUserAddress());
+         user.setUsername(user.getUsername());
+  
+  user.setEnabled(user.isEnabled());
+  user.setUser_id(user.getUser_id());
+  user.setBorrowedBooks(user.getBorrowedBooks());
+  user.setRolee(user.getRolee());
+user.setProfilePicture(user.getProfilePicture());
+  user.setPictureContent(user.getPictureContent());
+  user.setProfilePictureSize(user.getProfilePictureSize());
+    
+  userRepository.save(user);
+
+                 model.addAttribute(user);
+                 return "profilePage";
+                
+                
+
+            }
+        }
+        else{
+            model.addAttribute("mess","New password Does not match");
+       return "change-user-password";
+        }
+        model.addAttribute("mess","Old Password does not match");
+return "change-user-password";
+       
+    }
+    
+   
+    @PostMapping("/profile/update")
+    public String updateUserProfileInfo(Model model, User user,    
+              @ModelAttribute("inputCardNumber") String inputCardNumber,
+               @ModelAttribute("inputFirstName") String inputFirstName,
+               @ModelAttribute("inputLastName") String inputLastName,
+
+              BindingResult result
+    ) {
+
+        Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+         User curruser = userService.findByUsername(currUserUsername).get(0);
+         
+
+        System.out.println("Current employeeee is : " + user);
+       
+         if (result.hasErrors()) {
+            
+            return "redirect:/profile/edit";
+        }
+         user.setFirstName(inputFirstName);
+         user.setLastName(inputLastName);
+         
+  user.setCardNumber(inputCardNumber);
+  user.setEnabled(curruser.isEnabled());
+  user.setUser_id(curruser.getUser_id());
+ // user.setBorrowedBooks(user.getBorrowedBooks());
+  user.setPassword(curruser.getPassword());
+  user.setRolee(Rolee.getROLE_USER().name()
+);
+  user.setProfilePicture(curruser.getProfilePicture());
+  user.setPictureContent(curruser.getPictureContent());
+  user.setProfilePictureSize(curruser.getProfilePictureSize());
+    
+  userRepository.save(user);
+
+  
+  return "redirect:/profile";
+
+    }
+    
+    
+    
+    
+    
+    
+    @PostMapping("/profile/edit/upload")
+ public String profilePictureUpload(@RequestParam("file") MultipartFile file,  Model model,
+        
+         User user) throws IOException {
+
+       List<User> users = userRepository.findAll();
+        Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+         user = userService.findByUsername(currUserUsername).get(0);
+
+        System.out.println("Current employeeee is : " + currentEmployee);
+     
+   
+//picture attributes
+  String fileName = file.getOriginalFilename();
+  user.setProfilePicture(fileName);
+  user.setPictureContent(file.getBytes());
+  user.setProfilePictureSize(file.getSize());
+  
+  model.addAttribute("success", "File Uploaded Successfully!!!");
+  model.addAttribute("profilePicture", user.getProfilePicture());
+  model.addAttribute("content",user.getPictureContent());
+  model.addAttribute("size",user.getProfilePictureSize() );
+
+  System.out.println("Image is uploaded");
+  model.addAttribute("success", "File Uploaded Successfully!!!");
+  
+  System.out.println( "User email : " + user.getEmail());
+  
+  user.setEmail(user.getEmail());
+  
+  user.setUsername(user.getUsername());
+    user.setUserAddress(user.getUserAddress());
+      user.setPhoneNumber(user.getPhoneNumber());
+
+    
+  user.setCardNumber(user.getCardNumber());
+  user.setFirstName(user.getFirstName());
+  user.setLastName(user.getLastName());
+  user.setEnabled(user.isEnabled());
+  user.setUser_id(user.getUser_id());
+  user.setBorrowedBooks(user.getBorrowedBooks());
+  user.setPassword(user.getPassword());
+  user.setRolee(user.getRolee());
+
+    
+  userRepository.save(user);
+  model.addAttribute(user);
+  return "profilePage";
+  
+ }
  
+ 
+    @GetMapping("/profile/image")
+    public void showIImage(@Param("username")String username, HttpServletResponse response,User user)
+            throws ServletException, IOException {
+
+        
+        //Principal currentEmployee = UserController.getCurrentUser(request);
+      //  String currUserUsername = currentEmployee.getName();
+         user = userService.findByUsername(username).get(0);
+
+        System.out.println("Current employeeee is : " + user);
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+        response.getOutputStream().write(user.getPictureContent());
+        response.getOutputStream().close();
+    }
+
+    
+  
 }
