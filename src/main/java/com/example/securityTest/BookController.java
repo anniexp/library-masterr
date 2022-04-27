@@ -446,6 +446,7 @@ public class BookController {
         model.addAttribute("totalPages", pageTuts.getTotalPages());
 
         model.addAttribute("books", books);
+        model.addAttribute("subtitle", genre);
 
         return "books";
     }

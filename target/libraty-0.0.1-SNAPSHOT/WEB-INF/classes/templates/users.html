@@ -142,7 +142,19 @@ and open the template in the editor.
             </div>
         </div>
    
-        
+          <!-- Page Header Start -->
+        <div class="container-fluid bg-secondary mb-5">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Users</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="/">Home</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0">Users</p>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End -->
         
         <div th:switch="${users}" class="container-fluid py-5" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
             <div class="row px-xl-5">
@@ -175,10 +187,11 @@ and open the template in the editor.
                                         <td th:text="${user.lastName}"></td>           
                                         <td th:text="${user.email}"></td>
                                        <td> <ul th:each="rep : ${user.borrowedBooks}" >
-                                            <li th:text="${rep.reportId}"></li>
-                                           <li th:text="${rep.dateCreated}"></li>
-                                           <li th:text="${rep.lastUpdated}"></li>
-                                           <li th:text="${rep.isReturned}"></li></ul>
+                                            <li th:text="'Id | ' + ${rep.reportId}"></li>
+                                           <li th:text="'Date Created | ' + ${rep.dateCreated}"></li>
+                                           <li th:text="'To be returned by | ' + ${rep.lastUpdated}"></li>
+                                           <li th:text="'Is it returned | ' + ${rep.isReturned}"></li></ul>
+                                           <br>
                                         </td>
                                          <td th:text="${user.enabled}"></td>
                                          <td ><a th:href="@{/users/ban/{user_id}(user_id=${user.user_id})}" class="btn btn-danger"> 

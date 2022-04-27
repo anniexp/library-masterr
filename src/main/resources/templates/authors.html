@@ -67,11 +67,14 @@ and open the template in the editor.
                     </a>
                 </div>
 
+                
+                
+               
                 <!-- Search books bar -->
                 <div class="col-lg-6 col-6 text-left">
-                    <form   th:action="@{/books}" method="get">
+                    <form   th:action="@{/authors}" method="get">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for books" name="searchBook"  id="title" size="50"/>
+                            <input type="text" class="form-control" placeholder="Search for authors" name="searchAuthor"  id="searchAuthor" size="50"/>
                             <div class="input-group-append">
                                 <span class="input-group-text bg-transparent text-primary">
                                     <button type="submit"> <i class="fa fa-search"></i></button>
@@ -143,15 +146,22 @@ and open the template in the editor.
             </div>
         </div>
         <!-- Navbar End -->
-        
-        <!-- Page Content Start -->
-        <div class="container">
-            <h2>Search for authors</h2>
-            <form  th:action="@{/authors}" method="get">
-                <input type="text" name="searchAuthor" id="searchAuthor" size="50"/>
-                <button type="submit" value="Search"/>
-            </form>
+          <!-- Page Header Start -->
+        <div class="container-fluid bg-secondary mb-5">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+                <h1 class="font-weight-semi-bold text-uppercase mb-3"> Authors</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="/">Home</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0">Authors</p>
+                   
+                </div>
+            </div>
         </div>
+        <!-- Page Header End -->
+       
+        <!-- Page Content Start -->
+       
         <div th:switch="${authors}" class="container my-5" sec:authorize="isAuthenticated()">
             <div class="row">
                 <div class="col-md-6">
@@ -163,7 +173,7 @@ and open the template in the editor.
                             <thead>
                                 <tr>
                                     <th>Author</th>
-                                    <th>Books</th>
+                                   <!-- <th>Books</th>-->  
                                     <th>Nationality</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -175,9 +185,9 @@ and open the template in the editor.
                             <tbody>
                                 <tr th:each="author : ${authors}">
                                     <td th:text="${author.authorName}"></td>
-                                    <td><ul th:each="bok : ${author.books}" >
-                                            <li th:text="${bok.title}"></li></ul></td>
-                                    <!--  <td th:text="${author.books.title}"></td>-->
+                                    <!-- <td><ul th:each="bok : ${author.books}" >
+                                            <li th:text="${bok.title}"></li></ul></td>-->  
+                                   
                                     <td th:text="${author.nationality}"></td>
 
 
