@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -210,58 +213,108 @@ public class UserController {
     public String showUserChangePasswordForm(Model model
     ) {
 
-        List<User> users = userRepository.findAll();
+     
         Principal currentEmployee = UserController.getCurrentUser(request);
         String currUserUsername = currentEmployee.getName();
         User currUser = userService.findByUsername(currUserUsername).get(0);
-
+        String newPass = "1111111111111";
+        String newPass2 = "1111111111111";
+        
         System.out.println("Current employeeee is : " + currentEmployee);
         model.addAttribute("user", currUser);
+        model.addAttribute("newPass",  newPass);
+        model.addAttribute("newPass2",   newPass2);
+        
 
         return "change-user-password";
     }
+    
     
     @PostMapping("/profile/update/pass")
     public String changePassword(Model model,
             @ModelAttribute("password") String password,
             @ModelAttribute("newPass") String newPass,
             @ModelAttribute("newPass2") String newPass2,
-            User user
+            User user, BindingResult result
     ) {
-        if (password.equals(user.getPassword())) {
-            if (newPass.equals(newPass2)) {
-                user.setPassword(newPass);
-                  user.setEmail(user.getEmail());
-         user.setPhoneNumber(user.getPhoneNumber());
-         user.setUserAddress(user.getUserAddress());
-         user.setUsername(user.getUsername());
-  
-  user.setEnabled(user.isEnabled());
-  user.setUser_id(user.getUser_id());
-  user.setBorrowedBooks(user.getBorrowedBooks());
-  user.setRolee(user.getRolee());
-user.setProfilePicture(user.getProfilePicture());
-  user.setPictureContent(user.getPictureContent());
-  user.setProfilePictureSize(user.getProfilePictureSize());
-    
-  userRepository.save(user);
-
-                 model.addAttribute(user);
-                 return "profilePage";
-                
-                
-
-            }
-        }
-        else{
-            model.addAttribute("mess","New password Does not match");
-       return "change-user-password";
-        }
-        model.addAttribute("mess","Old Password does not match");
-return "change-user-password";
-       
+        
+        if (result.hasErrors()) {
+        return "/profile/edit/pass";
     }
-    
+        
+        
+         newPass = (String) model.getAttribute(newPass);
+          newPass2 = (String) model.getAttribute(newPass2);
+            System.out.println("Input New Password : " + newPass);
+    System.out.println("Input New Password 2 : " + newPass2);
+     
+        //get session user
+        Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+        User currUser = userService.findByUsername(currUserUsername).get(0);
+        
+          BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+       // String encodedPassword = passwordEncoder.encode(password);
+        
+        //if input matches encoded password
+        boolean isPasswordMatch = passwordEncoder.matches(password, currUser.getPassword());
+		System.out.println("Password : " + password + "   isPasswordMatch    : " + isPasswordMatch);
+              // boolean isNewPasswordMatchOldPassword = passwordEncoder.matches(newPass, currUser.getPassword());    
+                
+   System.out.println("Input Old Password : " + password);
+    System.out.println(" Session User Old Password : " +  currUser.getPassword());
+    System.out.println("Input New Password : " + newPass);
+    System.out.println("Input New Password 2 : " + newPass2);
+		
+        
+        if (isPasswordMatch == true) {
+            if (!"".equals(newPass)) {
+                //if (isNewPasswordMatchOldPassword == false) {
+                    if (newPass2.equals(newPass)) {
+
+                        String encodedPassword = passwordEncoder.encode(newPass);
+                        user.setPassword(encodedPassword);
+                        user.setEmail(currUser.getEmail());
+                        user.setPhoneNumber(currUser.getPhoneNumber());
+                        user.setUserAddress(currUser.getUserAddress());
+                        user.setUsername(currUser.getUsername());
+
+                        user.setEnabled(currUser.isEnabled());
+                        user.setUser_id(currUser.getUser_id());
+                        user.setBorrowedBooks(currUser.getBorrowedBooks());
+                        user.setRolee(currUser.getRolee());
+                        user.setProfilePicture(currUser.getProfilePicture());
+                        user.setPictureContent(currUser.getPictureContent());
+                        user.setProfilePictureSize(currUser.getProfilePictureSize());
+
+                        userRepository.save(user);
+
+                        model.addAttribute(user);
+                        return "profilePage";
+
+                    }
+                    else {
+                        model.addAttribute("mess", "New password 2 Does not match new password 1!");
+                        return "change-user-password";
+                    }
+
+                } else {
+                    model.addAttribute("mess", "New password cannot match old password!");
+                    return "change-user-password";
+                }
+
+           /* } else {
+                model.addAttribute("mess", "New password cannot be null!");
+                return "change-user-password";
+            }*/
+        }
+    else {
+            model.addAttribute("mess", "Old Password does not match user password!");
+            return "change-user-password";
+        }
+
+    }
+
    
     @PostMapping("/profile/update")
     public String updateUserProfileInfo(Model model, User user,    
@@ -291,7 +344,7 @@ return "change-user-password";
   user.setUser_id(curruser.getUser_id());
  // user.setBorrowedBooks(user.getBorrowedBooks());
   user.setPassword(curruser.getPassword());
-  user.setRolee(Rolee.getROLE_USER().name()
+  user.setRolee(curruser.getRolee()
 );
   user.setProfilePicture(curruser.getProfilePicture());
   user.setPictureContent(curruser.getPictureContent());
@@ -323,8 +376,15 @@ return "change-user-password";
      
    
 //picture attributes
+  
+ 
+  if(file.getSize()>=1048576){
+       model.addAttribute("failure", "Picture is too big!!!");
+       return "profilePage";
+  
+          }
   String fileName = file.getOriginalFilename();
-  user.setProfilePicture(fileName);
+   user.setProfilePicture(fileName);
   user.setPictureContent(file.getBytes());
   user.setProfilePictureSize(file.getSize());
   
@@ -378,5 +438,70 @@ return "change-user-password";
     }
 
     
+    
+     @GetMapping("/users")
+    public String index(Model model, @RequestParam(name = "searchUser", required = false) String searchUser,
+               @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        
+        List<User> users = null;
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<User> pageTuts;
+        
+        
+         if (searchUser != null) {
+               pageTuts = userService.findByUsername(searchUser, paging);
+           // authors = authorRepository.findByKeyword(authorName);
+        } else {
+           // pageTuts = userRepository.findAll(paging);
+           
+            pageTuts = userRepository.findByRolee("ROLE_USER", paging);
+        }
+         
+          users = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+        model.addAttribute("users", users);
+        return "users";
+    }
+    
   
+    @PostMapping("/users/ban/{user_id}")
+    public String banUser(@PathVariable("user_id") long user_id, @Valid User user,
+            BindingResult result, Model model) {
+        
+          user = userRepository.findById(user_id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + user_id));
+        if (result.hasErrors()) {
+             return "redirect:/";
+        }
+        
+        user.setEnabled(false);
+        
+        user.setFirstName(user.getFirstName());
+        user.setLastName(user.getLastName());       
+        user.setCardNumber(user.getCardNumber());
+        user.setUser_id(user.getUser_id());
+        user.setBorrowedBooks(user.getBorrowedBooks());
+        user.setPassword(user.getPassword());
+        user.setRolee(user.getRolee()
+);
+        user.setProfilePicture(user.getProfilePicture());
+        user.setPictureContent(user.getPictureContent());
+        user.setProfilePictureSize(user.getProfilePictureSize());
+        
+        user.setEmail(user.getEmail());
+        user.setPhoneNumber(user.getPhoneNumber());
+        user.setUserAddress(user.getUserAddress());
+        user.setUsername(user.getUsername());
+        
+        userRepository.save(user);
+       
+        return "redirect:/";
+    }
 }

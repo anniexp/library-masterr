@@ -9,7 +9,7 @@ package com.example.securityTest;
  * @author user
  */
 
-    public enum Genres { romance ,literary_fiction, mystery,historical, humour, fantasy,textbooks ,science_fiction, prose, horror, adventure, children, young_adult, other ;  
+    public enum Genres { romance ,literary_fiction, mystery,historical, comedy, fantasy,textbooks ,science_fiction, prose, horror, adventure, children, young_adult, other ;  
 
         public static Genres getRomance() {
             return romance;
@@ -39,9 +39,11 @@ package com.example.securityTest;
             return prose;
         }
 
-    public static Genres getHumour() {
-        return humour;
+    public static Genres getComedy() {
+        return comedy;
     }
+
+    
 
     public static Genres getTextbooks() {
         return textbooks;

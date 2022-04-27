@@ -216,9 +216,11 @@
 
             </div>
         </div>
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-            This content is only shown to administrators.
+        <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
+            This content is only shown to administrators and staff
             <a href="reports" class="btn btn-info" role="button">Rented Books Reports</a>
+              <a href="/library_cards/new-card" class="btn btn-info" role="button">Create Library Card</a>
+                <a href="/users" class="btn btn-info" role="button">Users</a>
         </div>
         <div sec:authorize="hasRole('ROLE_USER')">
             This content is only shown to users.

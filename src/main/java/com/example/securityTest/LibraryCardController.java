@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  *
  * @author user
  */
+@Controller
 public class LibraryCardController {
     
     
@@ -51,7 +53,9 @@ public class LibraryCardController {
         List<LibraryCard> cards = cardService.findAll();        
         //String username, String rolee, boolean enabled);
         System.out.println("Number of cards : " + cards.size());
-        model.addAttribute("cards", cards);
+        LibraryCard card = new LibraryCard();
+        
+        model.addAttribute("card", card);
     
         return "add-card";
     }
@@ -101,14 +105,14 @@ public class LibraryCardController {
         //if there are validation errors or the 
         if (result.hasErrors()) {
             
-            return "add-report";
+            return "add-card";
         }
                      
         cardRepository.save(card);
         
         model.addAttribute("cards", cardService.findAll());
         
-        return "redirect:/library-cards";
+        return "redirect:/";
     }
     
     

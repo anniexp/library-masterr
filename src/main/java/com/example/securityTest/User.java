@@ -9,6 +9,12 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -241,6 +247,33 @@ public class User {
         this.borrowedBooks = borrowedBooks;
     }
 
+     /*@GetMapping("/users")
+    public String index(Model model, @RequestParam(name = "searchAuthor", required = false) String authorName,
+               @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        
+        List<User> users = null;
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Author> pageTuts;
+        
+         if (authorName != null) {
+               pageTuts = authorRepository.findByKeyword(authorName, paging);
+           // authors = authorRepository.findByKeyword(authorName);
+        } else {
+            pageTuts = userRepository.findAll(paging);
+        }
+         
+          users = pageTuts.getContent();     
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+        model.addAttribute("users", users);
+        return "users";
+    }*/
     
 }
 

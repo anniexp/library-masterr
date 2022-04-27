@@ -7,6 +7,8 @@ package com.example.securityTest;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -85,6 +87,17 @@ System.out.println("Are credentials valid and not used : "+ validCredentials);
 
         return userRepository.findByCardNumber(cardNumber);
     }
+    
+     Page<User> findByCardNumber(String cardNumber, Pageable pageable) {
+
+        return userRepository.findByCardNumber(cardNumber, pageable);
+    }
+     
+      Page<User> findByUsername(String username, Pageable pageable) {
+
+        return userRepository.findByUsername(username, pageable);
+    }
+     
     //check if the registration input  user names and card do exists
 
     public Boolean checkIfUserInfoMatchWithCardInfo(String inputFirstName, String inputLastName, String inputCardNumber) {

@@ -190,7 +190,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </div>
                             <div class="col-sm" th:switch="${secondList}">
                                 One of three columns
-                                <ul class="list-group list-group-flush center-block" th:each="genre : ${secondList}" >
+                                <ul class="list-group list-group-flush center-block m-xl-4" th:each="genre : ${secondList}" >
                                     <li class="list-group-item px-0 font-weight-semi-bold"> 
                                        <a th:href="@{/genres/{genreName}(genreName=${genre})}" th:text="${genre}"/>
 
@@ -199,10 +199,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             </div> 
                             <div class="col-sm" th:switch="${thirdList}">
                                 One of three columns
-                                <ul class="list-group list-group-flush center-block" th:each="genre : ${thirdList}" >
+                                <ul class="list-group list-group-flush center-block m-xl-4" th:each="genre : ${thirdList}" >
 
                                     <li class="list-group-item px-0 font-weight-semi-bold"> 
-                                    <a th:href="@{/genres/{genreName}(genreName=${genre})}" th:text="${genre}">
+                                    <a th:href="@{/genres/{genreName}(genreName=${genre})}" th:text="${genre}"/>
 
                                     </li>                          
                                 </ul> 
