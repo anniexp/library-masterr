@@ -127,6 +127,10 @@ public class Book implements Serializable {
  
    @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
     private List<User> usersOfWishlist;
+   
+    @ManyToMany(mappedBy = "borrowRequests", fetch = FetchType.LAZY)
+    private List<User> borrowRequests;
+    
 
     public List<User> getUsersOfWishlist() {
         return usersOfWishlist;
@@ -134,6 +138,14 @@ public class Book implements Serializable {
 
     public void setUsersOfWishlist(List<User> usersOfWishlist) {
         this.usersOfWishlist = usersOfWishlist;
+    }
+
+    public List<User> getBorrowRequests() {
+        return borrowRequests;
+    }
+
+    public void setBorrowRequests(List<User> borrowRequests) {
+        this.borrowRequests = borrowRequests;
     }
  
  

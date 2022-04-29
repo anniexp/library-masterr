@@ -303,6 +303,9 @@ public class UserController {
                         user.setProfilePicture(currUser.getProfilePicture());
                         user.setPictureContent(currUser.getPictureContent());
                         user.setProfilePictureSize(currUser.getProfilePictureSize());
+                        
+        user.setBorrowRequests(currUser.getBorrowRequests());
+        user.setWishlist(currUser.getWishlist());
 
                         userRepository.save(user);
 
@@ -365,6 +368,10 @@ public class UserController {
   user.setProfilePicture(curruser.getProfilePicture());
   user.setPictureContent(curruser.getPictureContent());
   user.setProfilePictureSize(curruser.getProfilePictureSize());
+  
+         user.setBorrowedBooks(curruser.getBorrowedBooks());
+        user.setBorrowRequests(curruser.getBorrowRequests());
+        user.setWishlist(curruser.getWishlist());
     
   userRepository.save(user);
 
@@ -428,6 +435,9 @@ public class UserController {
   user.setBorrowedBooks(user.getBorrowedBooks());
   user.setPassword(user.getPassword());
   user.setRolee(user.getRolee());
+    
+        user.setBorrowRequests(user.getBorrowRequests());
+        user.setWishlist(user.getWishlist());
 
     
   userRepository.save(user);
@@ -512,6 +522,9 @@ public class UserController {
         user.setPhoneNumber(user.getPhoneNumber());
         user.setUserAddress(user.getUserAddress());
         user.setUsername(user.getUsername());
+         user.setBorrowedBooks(user.getBorrowedBooks());
+        user.setBorrowRequests(user.getBorrowRequests());
+        user.setWishlist(user.getWishlist());
         
         userRepository.save(user);
        
@@ -605,6 +618,9 @@ public class UserController {
         
         user.setUserAddress(currUser.getUserAddress()); 
         user.setBorrowedBooks(currUser.getBorrowedBooks());
+        
+        user.setBorrowRequests(currUser.getBorrowRequests());
+        
             
         userRepository.save(user);
         model.addAttribute("user",user);
@@ -655,7 +671,8 @@ public class UserController {
         
         user.setUserAddress(currUser.getUserAddress()); 
         user.setBorrowedBooks(currUser.getBorrowedBooks());
-            
+        user.setBorrowRequests(currUser.getBorrowRequests());
+   
         userRepository.save(user);
         model.addAttribute("user",user);
         

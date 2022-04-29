@@ -126,6 +126,19 @@ public class User {
                     @JoinColumn(name = "book_id", referencedColumnName = "id",
                             nullable = false, updatable = true)})
     private List<Book> wishlist ;
+     
+     
+     
+     
+      @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "users_borrow_requests",
+            joinColumns = {
+                    @JoinColumn(name = "userId", referencedColumnName = "user_id",
+                            nullable = false, updatable = true)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "book_id", referencedColumnName = "id",
+                            nullable = false, updatable = true)})
+    private List<Book> borrowRequests ;
 
     public String getEmail() {
         return email;
@@ -205,6 +218,14 @@ public class User {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    public List<Book> getBorrowRequests() {
+        return borrowRequests;
+    }
+
+    public void setBorrowRequests(List<Book> borrowRequests) {
+        this.borrowRequests = borrowRequests;
     }
 
    
