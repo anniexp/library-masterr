@@ -208,9 +208,20 @@ public class BookService {
        return wishlist;
     }
 
-    void createABorrowRequest(Book book) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    List <Book> createABorrowRequest(Book book) {
+         User currUser =  userService.getCurrentLoggedUser();
+       List<Book> borrowRequests= currUser.getBorrowRequests();
+       System.out.println("Borrow requests size before add :" + borrowRequests);
+       //if the title is not present yet, add it
+       if(!borrowRequests.contains(book)){
+       borrowRequests.add(book);
+       
+       }
+              System.out.println("Wishlist size after add :" + borrowRequests);
+
+       return borrowRequests;
+        
+         }
 
     public void showImage(HttpServletResponse response, Book book)
             throws ServletException, IOException {

@@ -246,9 +246,22 @@
                    <!--    <button class="btn btn-primary px-3" ><i class="fa fa-shopping-cart mr-1"></i>Sneak Peak</button>   -->
                  
 
-                    <div th:switch="${book.isRented}">           
+                    <div th:switch="${book.isRented}">     
+                        
+                          <form 
+                      th:case="false"
+                      style=" text-align: center; align-content: center" action="#" 
+                         th:action="@{/books/createRequestToBorrow/{bookId}(bookId=${book.bookId})}"
+                         th:object="${user}" method="post" enctype="multipart/form-data" id="borrow-form" >
+                        <input type="submit"  class="btn btn-primary px-3"   value="Request Borrowing" form="borrow-form" 
+                           onclick="return confirm('Are you sure you want to request borrowing this book?');">
+                            <i class="fa fa-shopping-cart mr-1"></i>
+            
+                  </form>
+                       <!--  
                         <a class="btn btn-primary px-3"   th:href="@{/books/createRequestToBorrow}"th:case="false" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="return confirm('Are you sure you want to borrow this book?');" onsubmit="return alert('Book has been requested!');"
                            ><i class="fa fa-shopping-cart mr-1"></i>Borrow</a>
+                       -->
                         <!-- Button trigger modal -->
                        
             <div th:case="true">

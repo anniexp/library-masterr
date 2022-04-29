@@ -183,12 +183,13 @@ public class UserController {
         
          List<Report> userBorrows = reportService.findByBorrower(currUser);
          List<Report> userCurrentBorrows = reportService.findByKeyword(currUser.getUser_id().toString());
-         
+         List<Book> borrowRequests = currUser.getBorrowRequests();
          
         System.out.println("Numver of borrowed book by user : " + userBorrows.size());
          model.addAttribute("userBorrows", userBorrows);
          model.addAttribute("userCurrentBorrows",userCurrentBorrows);
          model.addAttribute("wishlist",wishlist);
+         model.addAttribute("borrowRequests",borrowRequests);
         model.addAttribute("user", currUser);
 
         return "profilePage";
@@ -680,5 +681,61 @@ public class UserController {
                
         return "redirect:/user/wishlist";
     }
-}
 
+
+
+ @PostMapping("/books/createRequestToBorrow/{bookId}")
+    public String createRequestToBorrowBook(@PathVariable("bookId") long bookId,
+            @Valid User user, BindingResult result, Model model, 
+            RedirectAttributes attributes) {
+
+       Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        String mess =null;
+        User currUser = userService.getCurrentLoggedUser();
+        //add the book to his wishlist 
+       List<Book> requestToB =  bookService.createABorrowRequest(book);
+        
+       if(requestToB.size()!=currUser.getBorrowRequests().size()){
+           
+        mess =  "Book already is requested";
+       }
+       else{
+           
+         mess=  "Book requested successfully";
+       }
+       user.setBorrowRequests(requestToB);
+       
+        user.setWishlist(currUser.getWishlist());
+          user.setUser_id(currUser.getUser_id());
+          user.setUsername(currUser.getUsername());
+          user.setPassword(currUser.getPassword());
+        user.setEmail(currUser.getEmail());
+        user.setPhoneNumber(currUser.getPhoneNumber());
+        
+        user.setFirstName(currUser.getFirstName());
+        user.setLastName(currUser.getLastName());    
+         user.setCardNumber(currUser.getCardNumber());
+         
+         user.setRolee(currUser.getRolee());
+         user.setEnabled(currUser.isEnabled());
+                
+        user.setProfilePicture(currUser.getProfilePicture());
+        user.setPictureContent(currUser.getPictureContent());
+        user.setProfilePictureSize(currUser.getProfilePictureSize());
+        
+        user.setUserAddress(currUser.getUserAddress()); 
+        user.setBorrowedBooks(currUser.getBorrowedBooks());
+        
+        
+        
+            
+        userRepository.save(user);
+        model.addAttribute("user",user);
+        
+        model.addAttribute("mess",mess);
+               
+        return "redirect:/profile";
+    }
+
+}
