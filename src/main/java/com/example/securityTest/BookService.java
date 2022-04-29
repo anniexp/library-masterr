@@ -11,11 +11,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +172,7 @@ public class BookService {
 
     }
 
-    void addToWishList(Book book) {
+    void addToWishList(Book book, User user) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -293,8 +296,8 @@ final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
             Pageable paging
     ) {
         Page<Book> otherGenreBooks = bookRepository.findAll(paging);
-        List<Book> allBooks = otherGenreBooks.getContent();
-
+       // List<Book> allBooks = otherGenreBooks.getContent();
+        List<Book> allBooks = bookRepository.findAll();
       //  genresList = createGenresList(genresList);
         List<Book> genreBooks;
         List<Book> allGenreBooks = new ArrayList<>();
@@ -311,17 +314,32 @@ final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
 
         }
 
-        System.out.println("Size of books: " + allGenreBooks.size());
-
-        for (Book genreBook : allGenreBooks) {
-            for (Book book : allBooks) {
-                if (book.getGenres().equals(genreBook.getGenres()) == false) {
+        System.out.println("Size of genre books: " + allGenreBooks.size());
+        System.out.println("all books: " + allBooks);
+      //get records with other genres
+         /* for (Book book : allBooks) {
+              System.out.println("Book of all  : " + book);
+                 for (Book genreBook : allGenreBooks) {
+            System.out.println("Book of all genred books : " + genreBook);
+                if (book.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(book)) {
                     otheGenreBooks.add(book);
+                     System.out.println("Added book into other genre list  : " + book);
                 }
             }
-        }
-
-        //   System.out.println("Size of list of remaining books: " + otherGenreBooksList.size());
+        }*/
+         
+          for (Book genreBook : allGenreBooks) {
+              
+              
+              
+            for (Book book : allBooks) {
+                if (book.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(book)) {
+                    otheGenreBooks.add(book);
+                     System.out.println("Added book into other genre list  : " + book);
+                }
+          
+           System.out.println("Size of list of remaining books: " + otheGenreBooks.size());
+            }}
         return otheGenreBooks;
     }
     

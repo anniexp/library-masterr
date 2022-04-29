@@ -5,7 +5,9 @@
  */
 package com.example.securityTest;
 
+import java.security.Principal;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,15 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     LibraryCardService cardService;
+    @Autowired
+    private HttpServletRequest request;
+    
+   User getCurrentLoggedUser (){
+    Principal currentEmployee = UserController.getCurrentUser(request);
+        String currUserUsername = currentEmployee.getName();
+        User currUser = findByUsername(currUserUsername).get(0);
+        return currUser;
+   }
 
     public Boolean checkIfUserWithUsernameExists(List<User> users ,String inputUsername) {
         boolean isDublicate = false;

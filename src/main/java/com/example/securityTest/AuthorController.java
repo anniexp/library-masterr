@@ -77,7 +77,7 @@ public class AuthorController {
       @GetMapping("/authors/author-details/{authorId}")
     public String showBookDetails(@PathVariable("authorId") long authorId, Model model,
      @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
+        @RequestParam(defaultValue = "16") int size
     ) {
         List<Book> books = null;
         Author author = authorService.findById(authorId)

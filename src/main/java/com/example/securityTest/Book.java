@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -94,6 +95,12 @@ public class Book implements Serializable {
     @CreationTimestamp
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateAdded;
+ 
+ 
+ 
+ 
+ 
+ 
  /*
  @Column(name = "ratings",  nullable= true)
   private List<Integer> ratings;
@@ -112,6 +119,31 @@ public class Book implements Serializable {
  private long pictureSize;
  
  private byte [] pictureContent;
+ 
+ 
+ 
+ 
+ 
+ 
+   @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
+    private List<User> usersOfWishlist;
+
+    public List<User> getUsersOfWishlist() {
+        return usersOfWishlist;
+    }
+
+    public void setUsersOfWishlist(List<User> usersOfWishlist) {
+        this.usersOfWishlist = usersOfWishlist;
+    }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
     public String getDescription() {
         return description;

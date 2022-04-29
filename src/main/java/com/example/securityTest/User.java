@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.example.securityTest;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
@@ -110,9 +111,29 @@ public class User {
     }
 
    
+    
+    
+    
+     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "users_wishlist",
+            joinColumns = {
+                    @JoinColumn(name = "userId", referencedColumnName = "user_id",
+                            nullable = false, updatable = true)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "book_id", referencedColumnName = "id",
+                            nullable = false, updatable = true)})
+    private List<Book> wishlist ;
 
     public String getEmail() {
         return email;
+    }
+
+    public List<Book> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(List<Book> wishlist) {
+        this.wishlist = wishlist;
     }
 
     public void setEmail(String email) {

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -53,7 +54,8 @@ public class UserController {
      
     @Autowired
     private HttpServletRequest request;
-
+@Autowired
+    private BookRepository bookRepository;
     
     @GetMapping("/registration-part-1")
     public String showRegistrationFirstForm(Model model) {
@@ -170,9 +172,11 @@ public class UserController {
         Principal currentEmployee = UserController.getCurrentUser(request);
         String currUserUsername = currentEmployee.getName();
         User currUser = userService.findByUsername(currUserUsername).get(0);
+        List<Book> wishlist = currUser.getWishlist();
 
         System.out.println("Number of users : " + users.size());
         System.out.println("Current employeeee is : " + currentEmployee);
+         System.out.println("User wishlist : " + wishlist);
         
          List<Report> userBorrows = reportService.findByBorrower(currUser);
          List<Report> userCurrentBorrows = reportService.findByKeyword(currUser.getUser_id().toString());
@@ -181,6 +185,7 @@ public class UserController {
         System.out.println("Numver of borrowed book by user : " + userBorrows.size());
          model.addAttribute("userBorrows", userBorrows);
          model.addAttribute("userCurrentBorrows",userCurrentBorrows);
+         model.addAttribute("wishlist",wishlist);
         model.addAttribute("user", currUser);
 
         return "profilePage";
@@ -235,6 +240,12 @@ public class UserController {
             @ModelAttribute("password") String password,
             @ModelAttribute("newPass") String newPass,
             @ModelAttribute("newPass2") String newPass2,
+           // @RequestParam("newPass") String newPass,
+             //@RequestParam("newPass2") String newPass2,
+             
+           
+             
+             
             User user, BindingResult result
     ) {
         
@@ -248,30 +259,33 @@ public class UserController {
             System.out.println("Input New Password : " + newPass);
     System.out.println("Input New Password 2 : " + newPass2);
      
-        //get session user
-        Principal currentEmployee = UserController.getCurrentUser(request);
-        String currUserUsername = currentEmployee.getName();
-        User currUser = userService.findByUsername(currUserUsername).get(0);
+       
+      //get current session user
+        User currUser = userService.getCurrentLoggedUser();
         
           BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
        // String encodedPassword = passwordEncoder.encode(password);
         
-        //if input matches encoded password
+        //see if input matches encoded password
         boolean isPasswordMatch = passwordEncoder.matches(password, currUser.getPassword());
 		System.out.println("Password : " + password + "   isPasswordMatch    : " + isPasswordMatch);
-              // boolean isNewPasswordMatchOldPassword = passwordEncoder.matches(newPass, currUser.getPassword());    
+                //see if the new password equals old one
+               boolean isNewPasswordMatchOldPassword = passwordEncoder.matches(newPass, currUser.getPassword());    
                 
    System.out.println("Input Old Password : " + password);
     System.out.println(" Session User Old Password : " +  currUser.getPassword());
     System.out.println("Input New Password : " + newPass);
     System.out.println("Input New Password 2 : " + newPass2);
 		
-        
+        //see if input matches curr user encoded password
         if (isPasswordMatch == true) {
+       //if new pass is not null
             if (!"".equals(newPass)) {
-                //if (isNewPasswordMatchOldPassword == false) {
+                   //if new pass does not match old password
+                if (isNewPasswordMatchOldPassword == false) {
+                    //if new password and new password 2 match
                     if (newPass2.equals(newPass)) {
-
+                    //if all condidions are met, change user password
                         String encodedPassword = passwordEncoder.encode(newPass);
                         user.setPassword(encodedPassword);
                         user.setEmail(currUser.getEmail());
@@ -303,10 +317,10 @@ public class UserController {
                     return "change-user-password";
                 }
 
-           /* } else {
+            } else {
                 model.addAttribute("mess", "New password cannot be null!");
                 return "change-user-password";
-            }*/
+            }
         }
     else {
             model.addAttribute("mess", "Old Password does not match user password!");
@@ -315,7 +329,7 @@ public class UserController {
 
     }
 
-   
+   //update user info (email, addess, nickname, phone number)
     @PostMapping("/profile/update")
     public String updateUserProfileInfo(Model model, User user,    
               @ModelAttribute("inputCardNumber") String inputCardNumber,
@@ -325,10 +339,9 @@ public class UserController {
               BindingResult result
     ) {
 
-        Principal currentEmployee = UserController.getCurrentUser(request);
-        String currUserUsername = currentEmployee.getName();
-         User curruser = userService.findByUsername(currUserUsername).get(0);
-         
+        
+       //get current session user
+          User curruser =  userService.getCurrentLoggedUser();
 
         System.out.println("Current employeeee is : " + user);
        
@@ -361,18 +374,17 @@ public class UserController {
     
     
     
-    
+    //update user info (profile picture)
     @PostMapping("/profile/edit/upload")
  public String profilePictureUpload(@RequestParam("file") MultipartFile file,  Model model,
         
          User user) throws IOException {
 
-       List<User> users = userRepository.findAll();
-        Principal currentEmployee = UserController.getCurrentUser(request);
-        String currUserUsername = currentEmployee.getName();
-         user = userService.findByUsername(currUserUsername).get(0);
+   
+       //get current session user
+         user = userService.getCurrentLoggedUser();
 
-        System.out.println("Current employeeee is : " + currentEmployee);
+        System.out.println("Current employeeee is : " + user);
      
    
 //picture attributes
@@ -401,8 +413,8 @@ public class UserController {
   user.setEmail(user.getEmail());
   
   user.setUsername(user.getUsername());
-    user.setUserAddress(user.getUserAddress());
-      user.setPhoneNumber(user.getPhoneNumber());
+  user.setUserAddress(user.getUserAddress());
+  user.setPhoneNumber(user.getPhoneNumber());
 
     
   user.setCardNumber(user.getCardNumber());
@@ -421,14 +433,12 @@ public class UserController {
   
  }
  
- 
+ //loads profile picture, o
     @GetMapping("/profile/image")
     public void showIImage(@Param("username")String username, HttpServletResponse response,User user)
             throws ServletException, IOException {
 
-        
-        //Principal currentEmployee = UserController.getCurrentUser(request);
-      //  String currUserUsername = currentEmployee.getName();
+    
          user = userService.findByUsername(username).get(0);
 
         System.out.println("Current employeeee is : " + user);
@@ -480,7 +490,7 @@ public class UserController {
         if (result.hasErrors()) {
              return "redirect:/";
         }
-        
+        //make user not enabled to log into account
         user.setEnabled(false);
         
         user.setFirstName(user.getFirstName());
@@ -504,4 +514,52 @@ public class UserController {
        
         return "redirect:/";
     }
+    
+    
+    
+      @GetMapping("/user/wishlist")
+    public String showWishList(Model model,
+               User user,
+                @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "16") int size
+       ) {
+        
+        //get session user
+         
+        User currUser = userService.getCurrentLoggedUser();
+        
+        //get his wishlist
+         List<Book> wishlist = currUser.getWishlist();
+         
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Book> pageTuts;
+         
+   
+         
+        //create a pageable obj of the list of books in the wishlist of the user and get the content after that
+        pageTuts = new PageImpl<>(wishlist);
+        wishlist = pageTuts.getContent(); 
+  
+        
+        System.out.println("User wishlist : " + wishlist);
+                
+                
+        
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+          model.addAttribute("books", wishlist);
+           model.addAttribute("user", currUser);
+           model.addAttribute("subtitle", currUser.getFirstName() + "'s Wishlist");
+      
+       
+        return "books";
+    }
+    
+   
 }
+

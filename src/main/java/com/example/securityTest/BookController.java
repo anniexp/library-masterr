@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import org.hibernate.annotations.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -66,7 +67,7 @@ public class BookController {
     @GetMapping("/books")
     public String showBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "16") int size
     // @RequestParam(name ="sort-field", defaultValue = "title") String sortField,
     // @RequestParam(name ="sort-dir", defaultValue = "asc") String sortDir
 
@@ -238,17 +239,16 @@ public class BookController {
 
             return "update-book";
         }
-        //else if(book.getBookId()==result.)
+        
         if (bookService.checkIfIsbnDublicateEdit(book.getIsbn(), bookId) == true) {
 
             book.setBookId(bookId);
             return "redirect:/books/edit/{bookId}";
 
         }
-        //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        //  book.setPhotos(fileName);
+        
 
-        //picture attributes
+        //picture attributes, for multipartfile
         if (file == null && book.getBookPicture() != null) {
             book.setBookPicture(book.getBookPicture());
             book.setPictureContent(book.getPictureContent());
@@ -291,7 +291,7 @@ public class BookController {
         model.addAttribute("book", bookRepository.findByTitleStartingWith(title));
         return "redirect:/books";
     }
-
+//gets picture, pic is downloaded when link is loaded
     @GetMapping("/image")
     public void showImage(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
             throws ServletException, IOException {
@@ -299,31 +299,11 @@ public class BookController {
         book = bookService.findById(id);
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
         response.getOutputStream().write(book.get().getPictureContent());
+        response.addHeader("content-disposition", "inline;filename="+ book.get().getBookPicture());
         response.getOutputStream().close();
     }
 
-    /*
- @PostMapping("/upload")
- public String fileUpload(@RequestParam("file") MultipartFile file,  Model model,
-         Book book) throws IOException {
-
-   //picture attributes
-        String fileName = file.getOriginalFilename();
-  book.setProfilePicture(fileName);
-  book.setContent(file.getBytes());
-  book.setSize(file.getSize());
-
-  
-  model.addAttribute("success", "File Uploaded Successfully!!!");
-  model.addAttribute("profilePicture", book.getBookPicture());
-  model.addAttribute("content",book.get);
-  model.addAttribute("size",book.getSize() );
-
-  System.out.println("Image is uploaded");
-  model.addAttribute("success", "File Uploaded Successfully!!!");
-  return "add-book";
-  
- }*/
+    
     @GetMapping("/available-books")
     public String showAvailableBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,
@@ -392,7 +372,7 @@ public class BookController {
     public String loadGenresPage(Model model,
             @PathVariable("genreName") String genre,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "16") int size,
              @RequestParam(name = "searchBook", required = false) String bookName) {
         List<Book> books;
 
@@ -401,34 +381,26 @@ public class BookController {
          List<String> genresList = new ArrayList<>();
         //if there are no available searched titles, then return all search results
         if (bookName != null) {
-            //   books = bookService.findByKeyword(bookName);       
-            //pagination part      
-            // pageTuts = bookRepository.findByKeyword(genre, paging);
+            
             pageTuts = bookRepository.findByKeyword(bookName, paging);
             books = pageTuts.getContent();
 
-        } else {
-
-           
+        }
+        
+        else 
+        {
             if (genre.equalsIgnoreCase("other")) {
 
                             pageTuts = bookRepository.findAll( paging);
 
-                            
-                            
-                //  books = bookRepository.findAll();
-                //
-                 genresList = bookService.createGenresList(genresList);
-               
-                ////for (Genres genr : Genres.) { 
-            
-               // String genresList = Arrays.toString(Genres.values());
+                 genresList = bookService.createGenresList(genresList);        
             System.out.println(" elements: " +genresList );
-        
-               
-               
-              //  System.out.println("Number of genres : " +genresList.size());
+
+                System.out.println("Number of genres : " +genresList.size());
                 books= bookService.getOtherGenreTitles( genresList, pageTuts, paging);
+                System.out.println(" elements with other genres: " +books);
+                System.out.println("number of elements: " +books.size());
+                 pageTuts = new PageImpl<>(books);
             }
             else
             {
@@ -462,7 +434,9 @@ public class BookController {
     @PostMapping("/books/addToWishlist/{bookId}")
     public String addBookToWishlist(@Valid Book book, @Valid User user, BindingResult result, Model model, RedirectAttributes attributes) {
 
-        bookService.addToWishList(book);
+        
+        
+        bookService.addToWishList(book, user);
         return "wishlist";
     }
 
