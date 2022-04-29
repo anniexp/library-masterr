@@ -431,13 +431,6 @@ public class BookController {
         return "redirect:/user/borrow-requests";
     }
 
-    @PostMapping("/books/addToWishlist/{bookId}")
-    public String addBookToWishlist(@Valid Book book, @Valid User user, BindingResult result, Model model, RedirectAttributes attributes) {
-
-        
-        
-        bookService.addToWishList(book, user);
-        return "wishlist";
-    }
+  
 
 }

@@ -252,8 +252,17 @@
                         <!-- Button trigger modal -->
                        
 
-                        
-                        <a class="btn btn-primary px-3" th:case="true" th:href="@{/books/addToWishlist/{bookId}(bookId=${book.bookId})}" onclick="return confirm('Are you sure you want to add this book to wishlist?');"><i class="fa fa-shopping-cart mr-1"></i>Add to Wishlist</a>
+                  <form 
+                      th:case="true"
+                      style=" text-align: center; align-content: center" action="#" 
+                         th:action="@{/books/addToWishlist/{bookId}(bookId=${book.bookId})}"
+                         th:object="${user}" method="post" enctype="multipart/form-data" id="wishlist-form" >
+                        <input type="submit"  class="btn btn-primary px-3"   value="Add to Wishlist" form="wishlist-form" 
+                           onclick="return confirm('Are you sure you want to add this book to wishlist?');">
+                            <i class="fa fa-shopping-cart mr-1"></i>
+            
+                  </form>
+                    
                     </div>
                     <div class="d-flex pt-2">
                         <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>

@@ -29,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 /**
  *
@@ -39,6 +40,9 @@ public class BookService {
 
     @Autowired
     BookRepository bookRepository;
+    
+    @Autowired
+    UserService userService;
 
     List<Book> findByTitle(String title) {
         return bookRepository.findByTitle(title);
@@ -172,8 +176,20 @@ public class BookService {
 
     }
 
-    void addToWishList(Book book, User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    List <Book> addToWishList(Book book) {
+       
+       User currUser =  userService.getCurrentLoggedUser();
+       List<Book> wishlist= currUser.getWishlist();
+       System.out.println("Wishlist size before add :" + wishlist);
+       //if the title is not present yet, add it
+       if(!wishlist.contains(book)){
+       wishlist.add(book);
+       
+       }
+              System.out.println("Wishlist size after add :" + wishlist);
+              
+
+       return wishlist;
     }
 
     void createABorrowRequest(Book book) {

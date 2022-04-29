@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 /**
@@ -56,6 +57,8 @@ public class UserController {
     private HttpServletRequest request;
 @Autowired
     private BookRepository bookRepository;
+@Autowired
+    private BookService bookService;
     
     @GetMapping("/registration-part-1")
     public String showRegistrationFirstForm(Model model) {
@@ -521,7 +524,8 @@ public class UserController {
     public String showWishList(Model model,
                User user,
                 @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "16") int size
+            @RequestParam(defaultValue = "16") int size,
+            @RequestParam(defaultValue = "") String mess
        ) {
         
         //get session user
@@ -555,11 +559,59 @@ public class UserController {
           model.addAttribute("books", wishlist);
            model.addAttribute("user", currUser);
            model.addAttribute("subtitle", currUser.getFirstName() + "'s Wishlist");
-      
+        model.addAttribute("mess",mess);
        
         return "books";
     }
     
-   
+     @PostMapping("/books/addToWishlist/{bookId}")
+    public String addBookToWishlist(@PathVariable("bookId") long bookId,
+            @Valid User user, BindingResult result, Model model, 
+            RedirectAttributes attributes) {
+
+       Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        String mess =null;
+        User currUser = userService.getCurrentLoggedUser();
+        //add the book to his wishlist 
+       List<Book> newWishList =  bookService.addToWishList(book);
+        
+       if(newWishList.size()!=currUser.getWishlist().size()){
+           
+        mess =  "Book already exists in wishlist";
+       }
+       else{
+           
+         mess=  "Book added successfully into wishlist";
+       }
+       
+        user.setWishlist(newWishList);
+          user.setUser_id(currUser.getUser_id());
+          user.setUsername(currUser.getUsername());
+          user.setPassword(currUser.getPassword());
+        user.setEmail(currUser.getEmail());
+        user.setPhoneNumber(currUser.getPhoneNumber());
+        
+        user.setFirstName(currUser.getFirstName());
+        user.setLastName(currUser.getLastName());    
+         user.setCardNumber(currUser.getCardNumber());
+         
+         user.setRolee(currUser.getRolee());
+         user.setEnabled(currUser.isEnabled());
+                
+        user.setProfilePicture(currUser.getProfilePicture());
+        user.setPictureContent(currUser.getPictureContent());
+        user.setProfilePictureSize(currUser.getProfilePictureSize());
+        
+        user.setUserAddress(currUser.getUserAddress()); 
+        user.setBorrowedBooks(currUser.getBorrowedBooks());
+            
+        userRepository.save(user);
+        model.addAttribute("user",user);
+        
+        model.addAttribute("mess",mess);
+               
+        return "redirect:/user/wishlist";
+    }
 }
 

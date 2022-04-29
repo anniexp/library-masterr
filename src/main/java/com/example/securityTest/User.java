@@ -92,7 +92,7 @@ public class User {
     public User() {
     }
 
-    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, String firstName, String lastName, String cardNumber, String rolee, boolean enabled, Set<Report> borrowedBooks) {
+    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, String firstName, String lastName, String cardNumber, String rolee, boolean enabled, Set<Report> borrowedBooks, List<Book> wishlist) {
         this.user_id = user_id;
         this.password = password;
         this.username = username;
@@ -108,7 +108,10 @@ public class User {
         this.rolee = rolee;
         this.enabled = enabled;
         this.borrowedBooks = borrowedBooks;
+        this.wishlist = wishlist;
     }
+
+    
 
    
     
