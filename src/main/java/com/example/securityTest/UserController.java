@@ -613,5 +613,55 @@ public class UserController {
                
         return "redirect:/user/wishlist";
     }
+    
+     @PostMapping("/books/removeFromWishlist/{bookId}")
+    public String removeBookFromWishlist(@PathVariable("bookId") long bookId,
+            @Valid User user, BindingResult result, Model model, 
+            RedirectAttributes attributes) {
+
+       Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        String mess =null;
+        User currUser = userService.getCurrentLoggedUser();
+        //add the book to his wishlist 
+       List<Book> newWishList =  bookService.removeBookFromWishList(book);
+        
+       if(newWishList.size()!=currUser.getWishlist().size()){
+           
+        mess =  "Book removed successfully from wishlist";
+       }
+       else{
+           
+         mess=  "Book wasn't in wishlist";
+       }
+       
+        user.setWishlist(newWishList);
+          user.setUser_id(currUser.getUser_id());
+          user.setUsername(currUser.getUsername());
+          user.setPassword(currUser.getPassword());
+        user.setEmail(currUser.getEmail());
+        user.setPhoneNumber(currUser.getPhoneNumber());
+        
+        user.setFirstName(currUser.getFirstName());
+        user.setLastName(currUser.getLastName());    
+         user.setCardNumber(currUser.getCardNumber());
+         
+         user.setRolee(currUser.getRolee());
+         user.setEnabled(currUser.isEnabled());
+                
+        user.setProfilePicture(currUser.getProfilePicture());
+        user.setPictureContent(currUser.getPictureContent());
+        user.setProfilePictureSize(currUser.getProfilePictureSize());
+        
+        user.setUserAddress(currUser.getUserAddress()); 
+        user.setBorrowedBooks(currUser.getBorrowedBooks());
+            
+        userRepository.save(user);
+        model.addAttribute("user",user);
+        
+        model.addAttribute("mess",mess);
+               
+        return "redirect:/user/wishlist";
+    }
 }
 

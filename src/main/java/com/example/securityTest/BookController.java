@@ -58,7 +58,8 @@ public class BookController {
 
     @Autowired
     UserRepository userRepository;
-
+@Autowired
+UserService userService;
     @Autowired
     HomeService homeService;
 
@@ -115,8 +116,22 @@ public class BookController {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
 
+        boolean existInWishlist =false;
+        
+        //check if book is already into user's wishlist,
+        User currUser = userService.getCurrentLoggedUser();
+              List<Book> userWishlist = currUser.getWishlist();
+              for (Book bok:userWishlist )
+              {
+              if(bok.getTitle().equals(book.getTitle())){
+                  
+              existInWishlist= true;
+              }
+              }
+        
         model.addAttribute("book", book);
-
+         model.addAttribute("user", currUser);
+model.addAttribute("existInWishlist", existInWishlist);
         return "book-details";
     }
 

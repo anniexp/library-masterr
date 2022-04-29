@@ -191,6 +191,22 @@ public class BookService {
 
        return wishlist;
     }
+    
+     List <Book> removeBookFromWishList(Book book) {
+       
+       User currUser =  userService.getCurrentLoggedUser();
+       List<Book> wishlist= currUser.getWishlist();
+       System.out.println("Wishlist size before add :" + wishlist);
+       //if the title is not present yet, add it
+       if(wishlist.contains(book)){
+       wishlist.remove(book);
+       
+       }
+              System.out.println("Wishlist size after add :" + wishlist);
+              
+
+       return wishlist;
+    }
 
     void createABorrowRequest(Book book) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -219,36 +235,7 @@ public class BookService {
     }
 
     
-        /*
-    //split a list into 3lists, which will fill in a grid the views
-    public void splitListInto3Lists(List<Book> books) {
-        //genetare n lists
-  
-        
-
-        List<Book> firstList = null;
-        List<Book> secondList = null;
-        List<Book> thirdList = null;
-        
-        for (int j = 0; j < books.size (); j++) {
-            switch (j / 3) {
-                case 0:
-                    firstList.add(books.get(j));
-                    break;
-                case 1:
-                    secondList.add(books.get(j));
-                    break;
-                case 2:
-                    thirdList.add(books.get(j));
-                    break;
-                default:
-                    System.out.println("Null element!");
-                    break;
-            }
-
-        }
-
-    }*/
+       
     
     //split a list into 3lists, which will fill in a grid the views
     public void splitStringListIntoSeveralLists(List<String> strList,List<String> firstList, List<String> secondList,List<String> thirdList) {
@@ -349,9 +336,11 @@ final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
               
               
             for (Book book : allBooks) {
-                if (book.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(book)) {
-                    otheGenreBooks.add(book);
-                     System.out.println("Added book into other genre list  : " + book);
+             Book bok = bookRepository.findByTitle(book.getTitle()).get(0);     
+             
+                        if (bok.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(bok)) {
+                    otheGenreBooks.add(bok);
+                     System.out.println("Added book into other genre list  : " + bok);
                 }
           
            System.out.println("Size of list of remaining books: " + otheGenreBooks.size());

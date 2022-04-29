@@ -203,8 +203,9 @@ and open the template in the editor.
         <div class="container-fluid pt-5">
            
            
-
-            <div class="cBoxLarge">
+<div  th:switch="${mess}">
+             <div   th:case="null">  </div>
+            <div   th:case="*" class="cBoxLarge">
                 
              <span th:value="${mess}" class="alert alert-warning"  style="margin:10px;"></span>
                 </div>
@@ -227,9 +228,10 @@ and open the template in the editor.
                                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                                 <h6  th:text="${bok.title}" class="text-truncate mb-3">Title</h6>
                                                 <h6  th:text="${bok.bookId}" class="text-truncate mb-3">ID</h6>
+                                                <h6  th:text="${bok.genres}" class="text-truncate mb-3">ID</h6>
                                                 <div class="d-flex justify-content-center">
                                                     <h6 th:text="'by ' +${bok.author.authorName}">Author</h6>
-                                                  
+                                                  <br>
                                                      <div class="  border-white"  th:switch="${bok.isRented}">
                         <h6 class="text-primary font-weight-bold border px-3 mr-1" th:case="true">Book is currently not available</h6>
                         <h6 class="text-primary font-weight-bold border  px-3 mr-1" th:case="false">Book is available</h6>
