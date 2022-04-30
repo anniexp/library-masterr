@@ -8,6 +8,7 @@ package com.example.securityTest;
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -494,19 +495,28 @@ public class UserController {
         return "users";
     }
     
-  
-    @PostMapping("/users/ban/{user_id}")
-    public String banUser(@PathVariable("user_id") long user_id, @Valid User user,
+    
+//ban-unban user
+    @PostMapping("/users/ban/{userCard}")
+    public String banUser(@PathVariable("userCard") String userCard, @Valid User user,
             BindingResult result, Model model) {
         
-          user = userRepository.findById(user_id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + user_id));
-        if (result.hasErrors()) {
-             return "redirect:/";
-        }
-        //make user not enabled to log into account
-        user.setEnabled(false);
+         System.out.println(" user card:" + userCard);
+         
+          user = userRepository.findByCardNumber(userCard).get(0);
+             
         
+        //make user not enabled to log into account
+        //if user is banned, unban and if he is not banned, ban him
+        System.out.println("user is : " + user.getUsername());
+        System.out.println("user is enabled : " + user.isEnabled());
+        if (user.isEnabled() ==true){
+        user.setEnabled(false);}
+        else {
+         user.setEnabled(true);
+        }
+                System.out.println("user is enabled : " + user.isEnabled());
+
         user.setFirstName(user.getFirstName());
         user.setLastName(user.getLastName());       
         user.setCardNumber(user.getCardNumber());
@@ -529,10 +539,10 @@ public class UserController {
         
         userRepository.save(user);
        
-        return "redirect:/";
+        return "redirect:/users";
     }
     
-    
+   
     
       @GetMapping("/user/wishlist")
     public String showWishList(Model model,
@@ -737,5 +747,59 @@ public class UserController {
                
         return "redirect:/profile";
     }
+    
+    
+    
+    
+    
+    //show to the staff what are the current pending requests, so he can create a report and lend the book to the user
+    @GetMapping("/pending-borrow-requests")
+    public String showPendingRequests(Model model, @RequestParam(name = "searchUser", required = false) String searchUser,
+               @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+        
+         List<User> users = null;
+         Pageable paging = (Pageable) PageRequest.of(page, size);  
+         Page<Book> pageTuts;
+        List<Book> allBorrowRequests = new ArrayList<>();
+        
+        
+        
+           
+            users = userRepository.findAll();
+                        System.out.println("Number of all users " + users.size());
+
+            for(User user : users){
+            List <Book> userBorrowRequests = user.getBorrowRequests();
+            System.out.println("Number of borrow requests before add = " + allBorrowRequests.size());
+            allBorrowRequests.addAll(userBorrowRequests);
+            System.out.println("Number of borrow requests after add = " + allBorrowRequests.size());
+            }
+            pageTuts =new PageImpl<>(allBorrowRequests);
+       
+         
+          allBorrowRequests = pageTuts.getContent();     
+        
+          
+ 
+        
+      
+                
+                
+        
+        model.addAttribute("currentPage", pageTuts.getNumber());
+        System.out.println("current page number is: " + pageTuts.getNumber());
+        System.out.println("number of elements: " + pageTuts.getTotalElements());
+        model.addAttribute("totalItems", pageTuts.getTotalElements());
+         System.out.println("number of pages: " + pageTuts.getTotalPages());
+        model.addAttribute("totalPages", pageTuts.getTotalPages());
+        
+          model.addAttribute("allBorrowRequests", allBorrowRequests);
+  
+          
+        model.addAttribute("users", users);
+        return "pending-borrow-requests";
+    }
+    
 
 }
