@@ -255,9 +255,9 @@
                             </div>-->
                             <div class="col-sm">
                    <img th:src="@{'/image?id='+ *{bookId!=null}? *{bookId} : '(no source)'}" th:alt="*{bookPicture!=null}? *{bookPicture} : '(alt)'" width="100px" height="50px">
-       <input type="text" th:field="*{bookPicture}" class="form-control required" id="bookPicture" placeholder="bookPicture" >
-       <input type="number" th:field="*{pictureSize}" class="form-control required" id="pictureSize" placeholder="pictureSize">
-       <input type="text" th:field="*{pictureContent}" class="form-control required" id="pictureContent" placeholder="pictureContent">
+       <input style="visibility: hidden;" type="text" th:field="*{bookPicture}" class="form-control required" id="bookPicture" placeholder="bookPicture" >
+       <input style="visibility: hidden;" type="number" th:field="*{pictureSize}" class="form-control required" id="pictureSize" placeholder="pictureSize">
+       <input  style="visibility: hidden;" type="text" th:field="*{pictureContent}" class="form-control required" id="pictureContent" placeholder="pictureContent">
        
                    <div class="card" style="width:18em" align="center">
                                         <div class="card-body" align="center">
