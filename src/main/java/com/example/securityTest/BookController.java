@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -128,10 +129,25 @@ UserService userService;
               existInWishlist= true;
               }
               }
+              
+              
+        //check if book is borrowed by current logged user and use it to show button
+        boolean isBookCurrBorrowedByLoggedUser  = false;
+        
+    Set<Report> userBorrows =   currUser.getBorrowedBooks();
+             for(Report rep :userBorrows){
+             if(rep.getBook().equals(book)&&book.isIsRented())
+             {
+                 //
+             isBookCurrBorrowedByLoggedUser  = true;
+             }
+             }
+               
         
         model.addAttribute("book", book);
-         model.addAttribute("user", currUser);
-model.addAttribute("existInWishlist", existInWishlist);
+        model.addAttribute("user", currUser);
+        model.addAttribute("existInWishlist", existInWishlist);
+        model.addAttribute("isBookCurrBorrowedByLoggedUser", isBookCurrBorrowedByLoggedUser);
         return "book-details";
     }
 
@@ -217,8 +233,6 @@ model.addAttribute("existInWishlist", existInWishlist);
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
 
-        // bookService.showImage(response, book);
-        // String uploadDir = "/image?id=" + book.getBookId();
         model.addAttribute("file", file);
 
         bookRepository.save(book);
@@ -344,12 +358,6 @@ model.addAttribute("existInWishlist", existInWishlist);
     }
     
  @GetMapping("books/b/files")
-  /*public ResponseEntity<byte[]> getFile(@Param("id") Long id) {
-        Optional<Book> book = bookService.findById(id);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
-        .body(book.get().getPictureContent())  ;
-  }*/
     public void showBookContentInBrowser(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
             throws ServletException, IOException {
 
