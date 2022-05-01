@@ -37,4 +37,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
      
    @Query(value = "select * from users s where s.rolee like %:rolee% ", nativeQuery = true)
     Page<User> findByKeywordRole(@Param("rolee") Rolee rolee, Pageable pageable);
+    
+     @Query(value = "select * from users_borrow_requests s", nativeQuery = true)
+    Page<Book> findAllBorrowRequests(Pageable pageable);
+    @Query(value = "select * from users_borrow_requests s", nativeQuery = true)
+    List<Book> findAllBorrowRequests();
+    
 }

@@ -101,6 +101,8 @@ public class Book implements Serializable {
  
  
  
+ 
+ 
  /*
  @Column(name = "ratings",  nullable= true)
   private List<Integer> ratings;
@@ -196,13 +198,14 @@ public class Book implements Serializable {
     public void setPictureContent(byte[] pictureContent) {
         this.pictureContent = pictureContent;
     }
+    
 
 
 public Book() {
 
     }
 
-    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String genres, String description, Date dateAdded, String bookPicture, long pictureSize, byte[] pictureContent) {
+    public Book(long bookId, int yearOfPublishing, boolean isRented, Author author, String title, String isbn, Report report, String publisher, int pages, int volume, String edition, String series, String genres, String description, Date dateAdded, boolean borrowApproved, String bookPicture, long pictureSize, byte[] pictureContent, List<User> usersOfWishlist, List<User> borrowRequests) {
         this.bookId = bookId;
         this.yearOfPublishing = yearOfPublishing;
         this.isRented = isRented;
@@ -218,10 +221,15 @@ public Book() {
         this.genres = genres;
         this.description = description;
         this.dateAdded = dateAdded;
+       
         this.bookPicture = bookPicture;
         this.pictureSize = pictureSize;
         this.pictureContent = pictureContent;
+        this.usersOfWishlist = usersOfWishlist;
+        this.borrowRequests = borrowRequests;
     }
+
+    
 
     public Date getDateAdded() {
         return dateAdded;

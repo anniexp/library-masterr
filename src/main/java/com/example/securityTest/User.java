@@ -70,15 +70,9 @@ public class User {
         
             
          
-         /*
-        //many to many
-         @Column(name = "wishlist", nullable = true)
-	private List<Book> wishlist;
+         
         
-        //many to many
-         @Column(name = "borrowRequests", nullable = true)
-	private List<BorrowRequests> requests;
-*/
+
         @Column(name = "role", nullable = false)
 	private String rolee;
         
@@ -113,6 +107,17 @@ public class User {
 
     
 
+    @Column(name = "borrowApproved", updatable = true)
+    private boolean borrowApproved;
+
+    public boolean isBorrowApproved() {
+        return borrowApproved;
+    }
+
+    public void setBorrowApproved(boolean borrowApproved) {
+        this.borrowApproved = borrowApproved;
+    }
+
    
     
     
@@ -126,6 +131,8 @@ public class User {
                     @JoinColumn(name = "book_id", referencedColumnName = "id",
                             nullable = false, updatable = true)})
     private List<Book> wishlist ;
+
+    
      
      
      
@@ -134,11 +141,23 @@ public class User {
     @JoinTable(name = "users_borrow_requests",
             joinColumns = {
                     @JoinColumn(name = "userId", referencedColumnName = "user_id",
-                            nullable = false, updatable = true)},
+                            nullable = false, updatable = true),
+                 /*  @JoinColumn(name = "approved", referencedColumnName = "borrowApproved",
+                        nullable = true, updatable = true) */  
+            },
+            
             inverseJoinColumns = {
                     @JoinColumn(name = "book_id", referencedColumnName = "id",
-                            nullable = false, updatable = true)})
+                            nullable = false, updatable = true),
+                    
+            })
     private List<Book> borrowRequests ;
+
+    
+    
+      
+      
+      
 
     public String getEmail() {
         return email;
@@ -280,6 +299,26 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+    public User(Long user_id, String password, String username, String email, String phoneNumber, String profilePicture, long profilePictureSize, byte[] pictureContent, String userAddress, String firstName, String lastName, String cardNumber, String rolee, boolean enabled, Set<Report> borrowedBooks, List<Book> wishlist, List<Book> borrowRequests) {
+        this.user_id = user_id;
+        this.password = password;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+        this.profilePictureSize = profilePictureSize;
+        this.pictureContent = pictureContent;
+        this.userAddress = userAddress;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cardNumber = cardNumber;
+        this.rolee = rolee;
+        this.enabled = enabled;
+        this.borrowedBooks = borrowedBooks;
+        this.wishlist = wishlist;
+        this.borrowRequests = borrowRequests;
+    }
         
         
         

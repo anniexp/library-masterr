@@ -9,6 +9,7 @@ import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -703,6 +704,8 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         String mess =null;
         User currUser = userService.getCurrentLoggedUser();
+        
+       boolean isApproved = false;
         //add the book to his wishlist 
        List<Book> requestToB =  bookService.createABorrowRequest(book);
         
@@ -714,6 +717,19 @@ public class UserController {
            
          mess=  "Book requested successfully";
        }
+       /*
+        boolean[] appArray = user.getBorrowApproved();
+        int size = appArray.length;
+         boolean[] newAppArray = new boolean[size];
+         newAppArray[size] = isApproved;
+         */
+        
+        /* List arrList = new ArrayList( Arrays.asList(appArray));
+         arrList.add(isApproved);
+         appArray = arrList.toArray(appArray);*/
+        
+      
+      
        user.setBorrowRequests(requestToB);
        
         user.setWishlist(currUser.getWishlist());
@@ -736,7 +752,7 @@ public class UserController {
         
         user.setUserAddress(currUser.getUserAddress()); 
         user.setBorrowedBooks(currUser.getBorrowedBooks());
-        
+        user.setBorrowApproved(false);
         
         
             
@@ -763,11 +779,29 @@ public class UserController {
          Page<Book> pageTuts;
         List<Book> allBorrowRequests = new ArrayList<>();
         
+       
         
-        
+       List<User> usersToList = new ArrayList<>();
            
             users = userRepository.findAll();
                         System.out.println("Number of all users " + users.size());
+                        
+                         users = userRepository.findAll();
+                        System.out.println("Number of all users " + users.size());
+
+            for(User user : users){
+            List <Book> userBorrowRequests = user.getBorrowRequests();
+            if(!userBorrowRequests.isEmpty()){
+                
+                usersToList.add(user);
+            }}
+            
+            
+            
+            
+         
+                        
+                        
 
             for(User user : users){
             List <Book> userBorrowRequests = user.getBorrowRequests();
@@ -775,29 +809,31 @@ public class UserController {
             allBorrowRequests.addAll(userBorrowRequests);
             System.out.println("Number of borrow requests after add = " + allBorrowRequests.size());
             }
-            pageTuts =new PageImpl<>(allBorrowRequests);
-       
-         
-          allBorrowRequests = pageTuts.getContent();     
+          //  pageTuts =new PageImpl<>(allBorrowRequests);
+        // Page<Book>alllBorrowRequests = userRepository.findAllBorrowRequests(paging);
+        // pageTuts = alllBorrowRequests;
+        //allBorrowRequests = pageTuts.getContent();
+      /*  List<Book> allllBorrowRequests = userRepository.findAllBorrowRequests();
         
-          
- 
+        for(Book req:allllBorrowRequests ){
+            
+        System.out.println(" borrow request= " + req.toString());
+        }
+      //  System.out.println(" borrow requests= " + allllBorrowRequests);
         
-      
-                
-                
+              */  
         
-        model.addAttribute("currentPage", pageTuts.getNumber());
-        System.out.println("current page number is: " + pageTuts.getNumber());
-        System.out.println("number of elements: " + pageTuts.getTotalElements());
-        model.addAttribute("totalItems", pageTuts.getTotalElements());
-         System.out.println("number of pages: " + pageTuts.getTotalPages());
-        model.addAttribute("totalPages", pageTuts.getTotalPages());
+       // model.addAttribute("currentPage", pageTuts.getNumber());
+        //System.out.println("current page number is: " + pageTuts.getNumber());
+       // System.out.println("number of elements: " + pageTuts.getTotalElements());
+       // model.addAttribute("totalItems", pageTuts.getTotalElements());
+       //  System.out.println("number of pages: " + pageTuts.getTotalPages());
+       // model.addAttribute("totalPages", pageTuts.getTotalPages());
         
-          model.addAttribute("allBorrowRequests", allBorrowRequests);
+         // model.addAttribute("allBorrowRequests", allllBorrowRequests);
   
           
-        model.addAttribute("users", users);
+        model.addAttribute("users", usersToList);
         return "pending-borrow-requests";
     }
     
