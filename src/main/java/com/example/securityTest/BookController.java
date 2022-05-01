@@ -8,6 +8,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.sort;
+import static java.util.Arrays.stream;
 import java.util.Collections;
 import static java.util.Collections.sort;
 import java.util.Comparator;
@@ -16,17 +17,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collector;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.hibernate.annotations.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.springframework.mock.web.MockMultipartFile;
 @Controller
 public class BookController {
 //zadeistva proccess if depebdanty injection
@@ -164,6 +164,7 @@ model.addAttribute("existInWishlist", existInWishlist);
     @PostMapping("/books/addbook")
     public String addBook(@Valid Book book, BindingResult result, Model model,
             @ModelAttribute("authors") ArrayList<Author> authors, @RequestParam("file") MultipartFile file,
+            @RequestParam("file2") MultipartFile file2,
             RedirectAttributes attributes, HttpServletResponse response) throws IOException, ServletException {
         //current date
         Date dateAdded = new Date();
@@ -200,6 +201,8 @@ model.addAttribute("existInWishlist", existInWishlist);
         book.setPictureContent(file.getBytes());
         book.setPictureSize(file.getSize());
 
+        book.setFileContent(file2.getBytes());
+        
         if(book.getPictureSize() >= 1048576)
         {
           model.addAttribute("success", "Picture is too big!!!");
@@ -231,16 +234,28 @@ model.addAttribute("existInWishlist", existInWishlist);
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
         List<Author> authors = authorRepository.findAll();
-
+        
+        
+      MultipartFile multipartFile =new MockMultipartFile(book.getBookPicture(),book.getPictureContent());
+          
+        
+        model.addAttribute("file1",multipartFile);
         model.addAttribute("bok", book);
         model.addAttribute("authors", authors);
         return "update-book";
     }
 
+    
     @PostMapping("/books/update/{bookId}")
     public String updateBook(@PathVariable("bookId") long bookId, @Valid Book book,
-            BindingResult result, Model model, @RequestParam("file") MultipartFile file
-    ) {
+            BindingResult result, Model model, @RequestParam("file") MultipartFile file,
+            @RequestParam("file2") MultipartFile file2
+            // @RequestParam("bookPicture") String inputPicture,
+             //  @RequestParam("pictureSize") long inputPictureSize,
+             //  @RequestParam("pictureContent") byte[] inputPictureContent
+            
+            
+    ) throws IOException {
 
         if (result.hasErrors()) {
             System.out.println("Id of boook to be edited : " + book.getBookId());
@@ -268,17 +283,27 @@ model.addAttribute("existInWishlist", existInWishlist);
             book.setBookPicture(book.getBookPicture());
             book.setPictureContent(book.getPictureContent());
             book.setPictureSize(book.getPictureSize());
+            
+            book.setFileContent(book.getFileContent());
+            
 
         } else {
-            String fileName = file.getOriginalFilename();
-            book.setBookPicture(fileName);
+          
+          /*  book.setBookPicture(inputPicture);
+           
+                book.setPictureContent(inputPictureContent);
+           
+            book.setPictureSize(inputPictureSize);*/
+           book.setBookPicture(file.getOriginalFilename());
+           
             try {
                 book.setPictureContent(file.getBytes());
             } catch (IOException ex) {
                 Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+           
             book.setPictureSize(file.getSize());
+           book.setFileContent(file2.getBytes());
         }
         System.out.println("Image is uploaded");
         model.addAttribute("success", "File Uploaded Successfully!!!");
@@ -312,13 +337,29 @@ model.addAttribute("existInWishlist", existInWishlist);
             throws ServletException, IOException {
 
         book = bookService.findById(id);
-        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf");
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf, application/pdf");
         response.getOutputStream().write(book.get().getPictureContent());
-        response.addHeader("content-disposition", "inline;filename="+ book.get().getBookPicture());
+        response.addHeader("content-disposition", "inline; filename=\"" + book.get().getBookPicture());
         response.getOutputStream().close();
     }
-
     
+ @GetMapping("books/b/files")
+  /*public ResponseEntity<byte[]> getFile(@Param("id") Long id) {
+        Optional<Book> book = bookService.findById(id);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+        .body(book.get().getPictureContent())  ;
+  }*/
+    public void showBookContentInBrowser(@Param("id") Long id, HttpServletResponse response, Optional<Book> book)
+            throws ServletException, IOException {
+
+        book = bookService.findById(id);
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif, image/pdf, application/pdf");
+        response.getOutputStream().write(book.get().getFileContent());
+        response.addHeader("content-disposition", "inline");
+        response.getOutputStream().close();
+    }
+  
     @GetMapping("/available-books")
     public String showAvailableBooksList(Model model, @RequestParam(name = "searchBook", required = false) String bookName,
             @RequestParam(defaultValue = "0") int page,

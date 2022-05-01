@@ -128,7 +128,7 @@ public class Book implements Serializable {
  
  
  
- 
+  private byte [] fileContent;
  
  
    @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
@@ -152,6 +152,14 @@ public class Book implements Serializable {
 
     public void setBorrowRequests(List<User> borrowRequests) {
         this.borrowRequests = borrowRequests;
+    }
+
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
     }
  
  

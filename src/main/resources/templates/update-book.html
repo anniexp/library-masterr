@@ -258,7 +258,8 @@
        <input style="visibility: hidden;" type="text" th:field="*{bookPicture}" class="form-control required" id="bookPicture" placeholder="bookPicture" >
        <input style="visibility: hidden;" type="number" th:field="*{pictureSize}" class="form-control required" id="pictureSize" placeholder="pictureSize">
        <input  style="visibility: hidden;" type="text" th:field="*{pictureContent}" class="form-control required" id="pictureContent" placeholder="pictureContent">
-       
+     <!---  <input  type="file" th:text="*{file1}" class="form-control required" id="pictureFile" placeholder="file1">-->
+      
                    <div class="card" style="width:18em" align="center">
                                         <div class="card-body" align="center">
                                             <h2 class="card-title">File Upload</h2>
@@ -270,6 +271,22 @@
 
                                             </div>
                                          
+                                        </div>
+                        <div class="card-body" align="center">
+                                            <h2 class="card-title">Book Source PDF File Upload</h2>
+                                            <h6 class="text-success">[[${success}]]</h6>
+                                         <d    <div class="mb-3">
+                                                <div>
+                                                    <img th:src="@{file2}" 
+                                                         th:alt="pdfFile" width="100px" height="50px">
+                                                  
+                                                    
+                                                </div>
+                                                <input
+                                                    class="form-control" name="file2" type="file" id="formFile2"><br />
+                                                <span>Supported file type is pdf</span>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 

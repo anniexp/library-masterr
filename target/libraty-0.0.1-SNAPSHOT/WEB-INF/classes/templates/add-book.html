@@ -257,7 +257,7 @@
 
                <div class="card" style="width:18em" align="center">
                                         <div class="card-body" align="center">
-                                            <h2 class="card-title">File Upload</h2>
+                                            <h2 class="card-title">Book Picture Upload</h2>
                                             <h6 class="text-success">[[${success}]]</h6>
                                             <div class="mb-3">
                                                 <div>
@@ -272,6 +272,24 @@
                                             </div>
                                             
                                         </div>
+                   
+                    <div class="card-body" align="center">
+                                            <h2 class="card-title">Book Source PDF File Upload</h2>
+                                            <h6 class="text-success">[[${success}]]</h6>
+                                         <d    <div class="mb-3">
+                                                <div>
+                                                    <img th:src="@{file2}" 
+                                                         th:alt="pdfFile" width="100px" height="50px">
+                                                  
+                                                    
+                                                </div>
+                                                <input
+                                                    class="form-control" name="file2" type="file" id="formFile2"><br />
+                                                <span>Supported file type is pdf</span>
+                                            </div>
+                                            
+                                        </div>
+                   
                                     </div>
                                
                             </div>
