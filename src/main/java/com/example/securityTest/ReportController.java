@@ -193,7 +193,10 @@ public class ReportController {
         }
       
     
-   
+   Book bookToUpdate = report.getBook();
+        bookToUpdate.setIsRented(false);
+        
+        bookService.save(bookToUpdate);
         reportService.save(report);
         
         model.addAttribute("reports", reportRepository.findAll());

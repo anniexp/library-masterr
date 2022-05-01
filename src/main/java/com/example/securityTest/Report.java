@@ -39,11 +39,13 @@ public class Report
     private long reportId;
     
    // @OnDelete(action = OnDeleteAction.CASCADE)
-   @OneToOne(targetEntity = Book.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = false)
+  /* @OneToOne(targetEntity = Book.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = false)
    @JoinColumn(name = "book_id" , referencedColumnName = "id")
-    private Book book;
+    private Book book;*/
 
-    
+    @ManyToOne
+    @JoinColumn(name="book_id", nullable=false)
+    private Book book;
 
 @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
