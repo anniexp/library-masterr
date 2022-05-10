@@ -86,24 +86,21 @@ and open the template in the editor.
                 <div class="col-lg-3 col-6 text-right">
                     <a href="/user/wishlist" class="btn border">
                         <i class="fas fa-heart text-primary"></i>
-                        <span class="badge">0</span>
+                       
                     </a>
-                    <a href="" class="btn border">
-                        <i class="fas fa-shopping-cart text-primary"></i>
-                        <span class="badge">0</span>
-                    </a>
+                  
                 </div>
             </div>
         </div>
         <!-- Topbar End -->
 
 
-        <!-- Navbar Start -->
+    <!-- Navbar Start -->
         <div class="container-fluid mb-5">
             <div class="row border-top px-xl-5 bg-light navbar-light py-3 py-lg-0 px-0 border-bottom ">
                 <div class="col-lg-3 d-none d-lg-block">
-
-
+                    
+                   
                 </div>
                 <div class="col-lg-9">
                     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
@@ -119,8 +116,23 @@ and open the template in the editor.
                                 <a href="/books" class="nav-item nav-link" role="button">Books</a>
                                 <a href="/authors" class="nav-item nav-link" role="button">Authors</a>
 
-                                <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">  
-                                    <a href="/reports" class="nav-item nav-link" role="button">Rented Books Reports</a>
+                               <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Reports</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        <a href="/reports" class="dropdown-item  nav-link">Rented Books Reports</a>
+                                          <a href="/pending-borrow-requests" class="dropdown-item  nav-link" role="button">Pending Borrow Requests</a>
+                
+                                        
+                                    </div>
+                                </div>
+                                 <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Users</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                       
+                                        <a href="/library_cards/new-card" class="dropdown-item  nav-link" role="button">Create Library Card</a>
+                                        <a href="/users" class="dropdown-item  nav-link" role="button">Users</a>
+                                      
+                                    </div>
                                 </div>
 
                                 <div class="nav-item dropdown">
@@ -137,11 +149,11 @@ and open the template in the editor.
                             </div>
                         </div>
                     </nav>
-
+                    
                 </div>
             </div>
         </div>
-
+        <!-- Navbar End -->
         <!-- Page Header Start -->
         <div class="container-fluid bg-secondary mb-5">
             <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">

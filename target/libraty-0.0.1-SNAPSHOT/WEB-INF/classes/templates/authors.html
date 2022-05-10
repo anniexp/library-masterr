@@ -90,12 +90,9 @@ and open the template in the editor.
                 <div class="col-lg-3 col-6 text-right">
                     <a href="/user/wishlist" class="btn border">
                         <i class="fas fa-heart text-primary"></i>
-                        <span class="badge">0</span>
+                        
                     </a>
-                    <a href="" class="btn border">
-                        <i class="fas fa-shopping-cart text-primary"></i>
-                        <span class="badge">0</span>
-                    </a>
+                    
                 </div>
             </div>
         </div>
@@ -123,8 +120,23 @@ and open the template in the editor.
                                 <a href="/books" class="nav-item nav-link" role="button">Books</a>
                                 <a href="/authors" class="nav-item nav-link" role="button">Authors</a>
 
-                                <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">  
-                                    <a href="/reports" class="nav-item nav-link" role="button">Rented Books Reports</a>
+                               <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Reports</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        <a href="/reports" class="dropdown-item  nav-link">Rented Books Reports</a>
+                                          <a href="/pending-borrow-requests" class="dropdown-item  nav-link" role="button">Pending Borrow Requests</a>
+                
+                                        
+                                    </div>
+                                </div>
+                                 <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Users</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                       
+                                        <a href="/library_cards/new-card" class="dropdown-item  nav-link" role="button">Create Library Card</a>
+                                        <a href="/users" class="dropdown-item  nav-link" role="button">Users</a>
+                                      
+                                    </div>
                                 </div>
 
                                 <div class="nav-item dropdown">
@@ -162,43 +174,49 @@ and open the template in the editor.
        
         <!-- Page Content Start -->
        
-        <div th:switch="${authors}" class="container my-5" sec:authorize="isAuthenticated()">
-            <div class="row">
-                <div class="col-md-6">
+        <div th:switch="${authors}" class="container-fluid py-5" sec:authorize="isAuthenticated()">
+            <div class="row px-xl-5">
+                <div class="col-lg-8 table-responsive mb-5 align-middle">
                     <h2 th:case="null">No authors yet!</h2>
 
                     <div th:case="*">
                         <h2 class="my-5">Authors</h2>
-                        <table class="table table-striped table-responsive-md">
-                            <thead>
+                       <div class="table-responsive align-items-center">
+                            <table class="table table-striped table-responsive-md table-bordered text-center mb-0">
+                            <thead class="bg-secondary text-dark">
                                 <tr>
-                                    <th>Author</th>
+                                    <th  scope="col">Author</th>
                                    <!-- <th>Books</th>-->  
-                                    <th>Nationality</th>
-                                    <th sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">Edit</th>
-                                    <th sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">Delete</th>
-                                     <th>Details</th>
+                                    <th  scope="col">Nationality</th>
+                                     <th  scope="col" >Details</th>
+                                     <th  scope="col" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">Edit</th>
+                                    <th  scope="col" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">Delete</th>
+                                    
                                      
+ 
+
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="align-middle">
                                 <tr th:each="author : ${authors}">
                                     <td th:text="${author.authorName}"></td>
                                     <!-- <td><ul th:each="bok : ${author.books}" >
                                             <li th:text="${bok.title}"></li></ul></td>-->  
                                    
                                     <td th:text="${author.nationality}"></td>
-
-
-                                    <td > <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" th:href="@{/authors/edit/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-edit ml-2"></i>Edit</a></td> 
-
-                                    <td><a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" th:href="@{/authors/delete/{authorId}(authorId=${author.authorId})}" onclick="return confirm('Are you sure you want to delete this author?');"><i class="fas fa-user-times ml-2"></i>Delete</a></td>
                                     <td><a  th:href="@{/authors/author-details/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-times ml-2"></i>Details</a></td>
 
+
+
+                                    <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" > <a  th:href="@{/authors/edit/{authorId}(authorId=${author.authorId})}"><i class="fas fa-user-edit ml-2"></i>Edit</a></td> 
+
+                                    <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')"><a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" th:href="@{/authors/delete/{authorId}(authorId=${author.authorId})}" onclick="return confirm('Are you sure you want to delete this author?');"><i class="fas fa-user-times ml-2"></i>Delete</a></td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
+                       </div>
                           <nav aria-label="Page navigation example">
     Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
     

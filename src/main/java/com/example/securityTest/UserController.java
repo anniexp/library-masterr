@@ -246,6 +246,7 @@ public class UserController {
             @ModelAttribute("password") String password,
             @ModelAttribute("newPass") String newPass,
             @ModelAttribute("newPass2") String newPass2,
+            HttpServletRequest request,
            // @RequestParam("newPass") String newPass,
              //@RequestParam("newPass2") String newPass2,
              
@@ -259,9 +260,10 @@ public class UserController {
         return "/profile/edit/pass";
     }
         
-        
-         newPass = (String) model.getAttribute(newPass);
-          newPass2 = (String) model.getAttribute(newPass2);
+        newPass= request.getParameter(newPass);
+        newPass2= request.getParameter(newPass2);
+        // newPass = (String) model.getAttribute(newPass);
+        //  newPass2 = (String) model.getAttribute(newPass2);
             System.out.println("Input New Password : " + newPass);
     System.out.println("Input New Password 2 : " + newPass2);
      

@@ -102,19 +102,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="col-lg-3 col-6 text-right">
                     <a href="/user/wishlist" class="btn border">
                         <i class="fas fa-heart text-primary"></i>
-                        <span class="badge">0</span>
+                        
                     </a>
-                    <a href="" class="btn border">
-                        <i class="fas fa-shopping-cart text-primary"></i>
-                        <span class="badge">0</span>
-                    </a>
+                    
                 </div>
             </div>
         </div>
         <!-- Topbar End -->
 
 
-        <!-- Navbar Start -->
+         <!-- Navbar Start -->
         <div class="container-fluid mb-5">
             <div class="row border-top px-xl-5 bg-light navbar-light py-3 py-lg-0 px-0 border-bottom ">
                 <div class="col-lg-3 d-none d-lg-block">
@@ -135,8 +132,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 <a href="/books" class="nav-item nav-link" role="button">Books</a>
                                 <a href="/authors" class="nav-item nav-link" role="button">Authors</a>
 
-                                <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">  
-                                    <a href="/reports" class="nav-item nav-link" role="button">Rented Books Reports</a>
+                               <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Reports</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        <a href="/reports" class="dropdown-item  nav-link">Rented Books Reports</a>
+                                          <a href="/pending-borrow-requests" class="dropdown-item  nav-link" role="button">Pending Borrow Requests</a>
+                
+                                        
+                                    </div>
+                                </div>
+                                 <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" data-toggle="dropdown">Manage Users</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                       
+                                        <a href="/library_cards/new-card" class="dropdown-item  nav-link" role="button">Create Library Card</a>
+                                        <a href="/users" class="dropdown-item  nav-link" role="button">Users</a>
+                                      
+                                    </div>
                                 </div>
 
                                 <div class="nav-item dropdown">
@@ -175,10 +187,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         </div>
         <!-- Page Header End -->
         
-       <div class="container-fluid py-5" th:object="${author}" method="get" >
-            <div class="row">
-            <div class="col-lg-7 pb-5"> 
-                    <div class="row">
+       <div class="container-fluid py-5 align-middle" th:object="${author}" method="get" >
+         <center>   <div class="row align-items-center">
+                 <div class="col-lg-5 pb-5 align-middle align-items-center"> </div>
+            <div class="col-lg-7 pb-5 align-middle align-items-center"> 
+                    <div class="row align-middle">
                         
                     <ul class="list-group list-group-flush center-block col-lg-7 text-center">
 
@@ -194,9 +207,100 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                        
                     </ul>     
                     </div></div>
-            </div></div>
+             </div></center></div>
         <!-- Page Content Start -->
-        <div th:switch="${books}" class="container my-5">
+        
+         <div th:switch="${books}">
+                       
+                    <div class="col-lg-12 col-md-12">
+                       
+                            <h2 th:case="null">No books yet!</h2>
+
+                            <div th:case="*">
+                              <div class="row pb-3" >   
+                                                      
+                                    <div class="col-lg-3 col-md-6 col-sm-12 pb-1" th:each="bok : ${author.books}">
+                                        
+                                        <div class="card product-item border-0 mb-4">
+                                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                                <img class="img-fluid" th:src="@{'/image?id='+ ${bok.bookId}}"  th:alt="*{bok.bookPicture!=null}? *{bok.bookPicture} : '(alt)'" style="width:100%; height: 600px;"/>
+
+                                            </div>
+                                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                                <h6  th:text="${bok.title}" class="text-truncate mb-3">Title</h6>
+                                                <h6  th:text="${bok.bookId}" class="text-truncate mb-3">ID</h6>
+                                                <h6  th:text="${bok.genres}" class="text-truncate mb-3">ID</h6>
+                                                <div class="d-flex justify-content-center">
+                                                    <h6 th:text="'by ' +${bok.author.authorName}">Author</h6>
+                                                  <br>
+                                                     <div class="  border-white"  th:switch="${bok.isRented}">
+                        <h6 class="text-primary font-weight-bold border px-3 mr-1" th:case="true">Book is currently not available</h6>
+                        <h6 class="text-primary font-weight-bold border  px-3 mr-1" th:case="false">Book is available</h6>
+                        <h6 class="text-primary font-weight-bold border px-3 mr-1" th:case="*">No information</h6>
+                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                                <a th:href="@{/books/book-details/{bookId}(bookId=${bok.bookId})}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                                <a  sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" th:href="@{/books/edit/{bookId}(bookId=${bok.bookId})}" class="btn btn-sm text-dark p-0"><i class="fas fa-user-edit text-primary mr-1"></i>Edit</a>
+                                                <a  sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" th:href="@{/books/delete/{bookId}(bookId=${bok.bookId})}"  onclick="return confirm('Are you sure you want to delete this book?');" class="btn btn-sm text-dark p-0"><i class="fas fa-user-times text-primary mr-1"></i>Delete</a>
+
+                                            </div>
+                                        </div>
+                                    </div>          
+                                </div>
+                            
+                            </div>
+
+
+                            <nav aria-label="Page navigation example">
+                                Total Items [[${totalItems}]] : Page [[${currentPage+1}]] of [[${totalPages}]]
+
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a  class="page-link" th:if="${currentPage > 0}" th:href="@{http://localhost:8080/books?page=0}">First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a  class="page-link" th:unless="${currentPage > 0}">First</a>
+                                    </li>
+
+                                    <li class="page-item">
+                                        <a  class="page-link" th:if="${currentPage > 0}" th:href="@{'http://localhost:8080/books?page=' + ${currentPage - 1}}">Previous</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a  class="page-link" th:unless="${currentPage > 0}">Previous</a>
+                                    </li>
+
+                                    <a   th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                        <li class="page-item">
+                                            <a class="page-link" th:if="${i != currentPage + 1}" th:href="@{'http://localhost:8080/books?page=' + ${i-1}}">[[${i}]]</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link"  th:unless="${i != currentPage + 1}">[[${i}]]</a>
+                                        </li>
+                                    </a>
+                                    <li class="page-item">
+                                        <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/books?page=' + ${currentPage + 1}}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a  class="page-link" th:unless="${currentPage < totalPages-1}">Next</a>
+                                    </li>
+                                    <li class="page-item">   
+                                        <a  class="page-link" th:if="${currentPage < totalPages-1}" th:href="@{'http://localhost:8080/books?page=' + ${totalPages - 1}}">Last</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a  class="page-link" th:unless="${currentPage < totalPages-1}">Last</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+
+                        </div>      
+                        <p class="my-5"><a  sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')" href="/books/signup" class="btn btn-primary"><i class="fas fa-user-plus ml-2">Add a book</i></a></p>
+                        <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
+                    </div>
+        
+        <!--   <div th:switch="${books}" class="container my-5">
             <div class="row">
                 <div class="col-md-6">
                     <h2 th:case="null">No books yet!</h2>
@@ -215,6 +319,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 </tr>
                             </thead>
 
+                            
                             <tr th:each="bok : ${author.books}">
                                 <td th:text="${bok.bookId}"></td>
 
@@ -277,7 +382,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
                 </div>
             </div>
-        </div>
+        </div>comment -->
             <!-- Footer Start -->
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
@@ -310,19 +415,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
-                        <form action="">
-                            <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
-                                    required="required" />
-                            </div>
-                            <div>
-                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
-                            </div>
-                        </form>
+                        <h5 class="font-weight-bold text-dark mb-4">Logo</h5>
+                          <a href="https://ibb.co/Wg5kY6p"><img src="https://i.ibb.co/jgfy1TZ/Untitled-pngsavs.png" alt="Untitled-pngsavs" style="width: 100%; height: auto" border="0"></a>
+
+                        
                     </div>
                 </div>
             </div>
