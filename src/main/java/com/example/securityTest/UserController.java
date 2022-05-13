@@ -260,10 +260,10 @@ public class UserController {
         return "/profile/edit/pass";
     }
         
-        newPass= request.getParameter(newPass);
-        newPass2= request.getParameter(newPass2);
-        // newPass = (String) model.getAttribute(newPass);
-        //  newPass2 = (String) model.getAttribute(newPass2);
+      //  newPass= request.getParameter(newPass);
+      //  newPass2= request.getParameter(newPass2);
+       //  newPass = (String) model.getAttribute(newPass);
+       //   newPass2 = (String) model.getAttribute(newPass2);
             System.out.println("Input New Password : " + newPass);
     System.out.println("Input New Password 2 : " + newPass2);
      
@@ -308,6 +308,10 @@ public class UserController {
                         user.setProfilePicture(currUser.getProfilePicture());
                         user.setPictureContent(currUser.getPictureContent());
                         user.setProfilePictureSize(currUser.getProfilePictureSize());
+                        user.setFirstName(currUser.getFirstName());
+                        user.setLastName(currUser.getLastName());
+                        user.setCardNumber(currUser.getCardNumber());
+                        
                         
         user.setBorrowRequests(currUser.getBorrowRequests());
         user.setWishlist(currUser.getWishlist());

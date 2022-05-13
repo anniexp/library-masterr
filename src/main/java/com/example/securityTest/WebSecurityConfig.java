@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebSecurity(debug = false)
-@EnableWebMvc
+//@EnableWebMvc
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Autowired
@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests()
+        http.authorizeRequests()
                         .antMatchers("/register","/registration-part-1", "/registration-part-2","/resources/**", "/static/**","*/css/**","/css/**","/webjars/**","/post_register", "/css/**","/javascript/**").permitAll()
 
             .anyRequest().authenticated()
@@ -54,9 +54,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().accessDeniedPage("/accessDenied.html").and().httpBasic();  
     }
     
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
     
    
 

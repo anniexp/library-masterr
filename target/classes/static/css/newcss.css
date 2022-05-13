@@ -1,9 +1,3 @@
-/*!
- * Bootstrap v4.5.3 (https://getbootstrap.com/)
- * Copyright 2011-2020 The Bootstrap Authors
- * Copyright 2011-2020 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
 /******* Bootstrap Theming ********/
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
@@ -22,11 +16,11 @@
   --green: #28a745;
   --teal: #20c997;
   --cyan: #17a2b8;
-  --white: #fff;
+  --white: #cce6e8;
   --gray: #6c757d;
   --gray-dark: #343a40;
-  --primary: #D19C97;
-  --secondary: #EDF1FF;
+  --primary: #e8cecc;
+  --secondary: #dccce8;
   --success: #28a745;
   --info: #17a2b8;
   --warning: #ffc107;
@@ -67,7 +61,7 @@ body {
   line-height: 1.5;
   color: #6F6F6F;
   text-align: left;
-  background-color: #fff;
+  background-color: #cce6e8;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -6110,7 +6104,7 @@ button.bg-primary:focus {
 }
 
 .bg-secondary {
-  background-color: #EDF1FF !important;
+  background-color: #ccd8e8 !important;
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
