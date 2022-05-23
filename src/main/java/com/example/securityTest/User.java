@@ -58,13 +58,13 @@ public class User {
         @Column(name = "address", nullable = true, length = 255)
 	private String userAddress;
        
-        @Column(name = "first_name", nullable = false, length = 200,  updatable = false)
+        @Column(name = "first_name", nullable = false, length = 200)
 	private String firstName; 
         
-        @Column(name = "last_name", nullable = false, length = 200,  updatable = false)
+        @Column(name = "last_name", nullable = false, length = 200)
 	private String lastName; 
         
-        @Column(name = "card_number", nullable = false, length = 255,  updatable = false)
+        @Column(name = "card_number", nullable = false, length = 255)
 	private String cardNumber; 
         
         

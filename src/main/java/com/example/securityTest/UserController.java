@@ -81,11 +81,20 @@ public class UserController {
        Boolean areValidCredentials = userService.validateCardInfoInput( users,inputFirstName,  inputLastName, inputCardNumber);
       
       if (areValidCredentials == true){
+          user.setFirstName(inputFirstName);
+          user.setLastName(inputLastName);
+          user.setCardNumber(inputCardNumber);
           model.addAttribute("inputFirstName",inputFirstName);
            model.addAttribute("inputLastName",inputLastName);
-            model.addAttribute("inputCardNumber",inputCardNumber);
+           model.addAttribute("inputCardNumber",inputCardNumber);
+           model.addAttribute("user",user);
             
-       return "redirect:/registration-part-2";
+            System.out.println(inputFirstName);
+         System.out.println(inputLastName);
+         System.out.println(inputCardNumber);
+           System.out.println(user.getFirstName());
+      // return "redirect:/registration-part-2";
+       return "registration";
       }
       else{
           model.addAttribute("message","Input data is not valid!");
@@ -95,31 +104,51 @@ public class UserController {
         
 
     }
-    @GetMapping("/registration-part-2")
-    public String showRegistrationForm(Model model,@ModelAttribute("inputFirstName") String inputFirstName,@ModelAttribute("inputLastName") String inputLastName,
-            @ModelAttribute("inputCardNumber") String inputCardNumber ,@ModelAttribute("user") User user) {
+    
+   /* @GetMapping("/registration-part-2")
+    public String showRegistrationForm(Model model,
+            @ModelAttribute("inputFirstName") String inputFirstName,
+           @ModelAttribute("inputLastName") String inputLastName,
+           @ModelAttribute("inputCardNumber") String inputCardNumber ,
+            @ModelAttribute("user") User user) {
+        
         user.setCardNumber(inputCardNumber);
         user.setFirstName(inputFirstName);
         user.setLastName(inputLastName);
+       
+        model.addAttribute("inputFirstName",inputFirstName);
+        model.addAttribute("inputLastName", inputLastName);
+        model.addAttribute("inputCardNumber",   inputCardNumber);
+         model.addAttribute("user",user);
         return "registration";
 
-    }
+    }*/
 
     @PostMapping("/post_register")
-    public String postRegister(User user, Model model , @ModelAttribute("inputFirstName") String inputFirstName,@ModelAttribute("inputLastName") String inputLastName,
-            @ModelAttribute("inputCardNumber") String inputCardNumber ) {
+    public String postRegister( Model model , @ModelAttribute("user") User user, BindingResult result
+         /*  @ModelAttribute("inputFirstName") String inputFirstName,
+            @ModelAttribute("inputLastName") String inputLastName,
+            @ModelAttribute("inputCardNumber") String inputCardNumber*/
+           /* @RequestParam(name="inputFirstName", required = true) String inputFirstName,
+             @RequestParam(name="inputLastName", required = true) String inputLastName,
+              @RequestParam(name="inputCardNumber", required = true) String inputCardNumber*/
+            ) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         String userRole = Rolee.getROLE_USER().name();
         
+        String inputFirstName=user.getFirstName();
+        String inputLastName= user.getLastName();
+         String inputCardNumber= user.getCardNumber();
+
         List<User> users = userRepository.findAll();
 
         //if there exists an user with the input username, return the view
         if (userService.checkIfUserWithUsernameExists(users,user.getUsername()) == true) {
             model.addAttribute("message","Username already taken!");
-            model.addAttribute("inputFirstName",inputFirstName);
-            model.addAttribute("inputLastName",inputLastName);
-            model.addAttribute("inputCardNumber",inputCardNumber);
+          model.addAttribute("inputFirstName",inputFirstName);
+           model.addAttribute("inputLastName",inputLastName);
+           model.addAttribute("inputCardNumber",inputCardNumber);
             
             return "registration";
         }
@@ -133,6 +162,13 @@ public class UserController {
             model.addAttribute("inputCardNumber",inputCardNumber);
             
             return "registration";
+        }
+          System.out.println("User first name is : " + inputFirstName);
+         System.out.println(inputLastName);
+         System.out.println(inputCardNumber);
+        if("".equals(inputFirstName))
+        {
+             return "registration";
         }
         // String userRoleString = Rolee.valueOf("ROLE_USER");
         Boolean isEnabled = true;
@@ -178,16 +214,16 @@ public class UserController {
         String currUserUsername = currentEmployee.getName();
         User currUser = userService.findByUsername(currUserUsername).get(0);
         List<Book> wishlist = currUser.getWishlist();
-
-        System.out.println("Number of users : " + users.size());
-        System.out.println("Current employeeee is : " + currentEmployee);
-         System.out.println("User wishlist : " + wishlist);
-        
          List<Report> userBorrows = reportService.findByBorrower(currUser);
          List<Report> userCurrentBorrows = reportService.findByKeyword(currUser.getUser_id().toString());
          List<Book> borrowRequests = currUser.getBorrowRequests();
          
         System.out.println("Numver of borrowed book by user : " + userBorrows.size());
+        System.out.println("Number of users : " + users.size());
+        System.out.println("Current employeeee is : " + currentEmployee);
+         System.out.println("User wishlist : " + wishlist);
+        
+         
          model.addAttribute("userBorrows", userBorrows);
          model.addAttribute("userCurrentBorrows",userCurrentBorrows);
          model.addAttribute("wishlist",wishlist);
@@ -503,8 +539,9 @@ public class UserController {
     }
     
     
+    
 //ban-unban user
-    @PostMapping("/users/ban/{userCard}")
+    @GetMapping("/users/ban/{userCard}")
     public String banUser(@PathVariable("userCard") String userCard, @Valid User user,
             BindingResult result, Model model) {
         

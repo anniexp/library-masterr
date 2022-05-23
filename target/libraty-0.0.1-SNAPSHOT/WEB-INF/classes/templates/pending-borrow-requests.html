@@ -160,7 +160,7 @@ and open the template in the editor.
                 <div class="d-inline-flex">
                     <p class="m-0"><a href="/">Home</a></p>
                     <p class="m-0 px-2">-</p>
-                    <p class="m-0">Reports</p>
+                    <p class="m-0">Pending Borrow Requests</p>
                     
                 </div>
             </div>
@@ -266,16 +266,12 @@ and open the template in the editor.
                                           <td th:text="${user.borrowApproved}"></td>
                               <td> 
                                  
-                                      <form 
-                                            
-                                            style=" text-align: center; align-content: center"
-                                            th:action="@{/users/ban/{userCard}(userCard=${user.cardNumber})}"
-                                             method="post" enctype="multipart/form-data" id="ban-form" >
-                                            <input type="submit"  class="btn btn-danger px-3"   th:value="'Ban/Unban User'+ ${user.cardNumber}" form="ban-form" 
-                                                   onclick="return confirm('Are you sure you want to ban/unban this user?');">
-                                            <i class="fa fa-shopping-cart mr-1"></i>
+                                      <a  sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')"
+                                               class="btn btn-danger px-3"
+                                              th:value="'Ban/Unban User : '+ ${user.cardNumber}"
+                                              th:href="@{/users/ban/{userCard}(userCard=${user.cardNumber})}" 
+                                              onclick="return confirm('Are you sure you want to ban/unban this user?');" >Ban/Unban User</a>
 
-                                        </form>
                                                                      
                               </td>
                    
