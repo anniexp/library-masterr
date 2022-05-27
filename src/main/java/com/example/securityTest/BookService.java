@@ -330,31 +330,17 @@ final Pageable pageable = PageRequest.of(pageNumber -1, pageSize, sort);
 
         System.out.println("Size of genre books: " + allGenreBooks.size());
         System.out.println("all books: " + allBooks);
-      //get records with other genres
-         /* for (Book book : allBooks) {
-              System.out.println("Book of all  : " + book);
-                 for (Book genreBook : allGenreBooks) {
-            System.out.println("Book of all genred books : " + genreBook);
-                if (book.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(book)) {
-                    otheGenreBooks.add(book);
-                     System.out.println("Added book into other genre list  : " + book);
-                }
-            }
-        }*/
-         
-          for (Book genreBook : allGenreBooks) {
-              
+      
               
               
             for (Book book : allBooks) {
-             Book bok = bookRepository.findByTitle(book.getTitle()).get(0);     
-             
-                        if (bok.getGenres().equals(genreBook.getGenres()) == false && !otheGenreBooks.contains(bok)) {
-                    otheGenreBooks.add(bok);
-                     System.out.println("Added book into other genre list  : " + bok);
-                }
+           
+                       if (allGenreBooks.contains(book)==false){
+                    otheGenreBooks.add(book);
+                     System.out.println("Added book into other genre list  : " + book);
+              
           
-           System.out.println("Size of list of remaining books: " + otheGenreBooks.size());
+           System.out.println("Size of list of other genre books: " + otheGenreBooks.size());
             }}
         return otheGenreBooks;
     }

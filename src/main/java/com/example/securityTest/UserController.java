@@ -125,14 +125,7 @@ public class UserController {
     }*/
 
     @PostMapping("/post_register")
-    public String postRegister( Model model , @ModelAttribute("user") User user, BindingResult result
-         /*  @ModelAttribute("inputFirstName") String inputFirstName,
-            @ModelAttribute("inputLastName") String inputLastName,
-            @ModelAttribute("inputCardNumber") String inputCardNumber*/
-           /* @RequestParam(name="inputFirstName", required = true) String inputFirstName,
-             @RequestParam(name="inputLastName", required = true) String inputLastName,
-              @RequestParam(name="inputCardNumber", required = true) String inputCardNumber*/
-            ) {
+    public String postRegister( Model model , @ModelAttribute("user") User user, BindingResult result) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         String userRole = Rolee.getROLE_USER().name();
