@@ -2,6 +2,7 @@ package com.example.securityTest;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import java.util.Date;
 import javax.validation.Valid;
@@ -40,6 +41,8 @@ public class ReportController {
     private HttpServletRequest request;
     @Autowired
     ReportService reportService;
+    
+  
     
     @GetMapping("/reports")
     public String index(Model model) {
@@ -130,8 +133,30 @@ public class ReportController {
         bookToUpdate.setIsRented(true);
         
         bookService.save(bookToUpdate);
-        reportService.save(rep);
+       
         
+        User us = rep.getBorrower();
+      List<Book> usBorrwReq  = us.getBorrowRequests();
+      
+      List<Book> newBorrList = new ArrayList<>();
+      for ( Book obj: usBorrwReq){
+       if (obj.equals(bookToUpdate)){
+         //  usBorrwReq.remove(obj);         
+          newBorrList.add(obj);
+          System.out.println(newBorrList.size());
+       }
+      }
+       System.out.println(usBorrwReq.size());
+      usBorrwReq.removeAll(newBorrList);
+       System.out.println(usBorrwReq.size());
+       
+       us.setBorrowRequests(usBorrwReq);
+      
+      
+       
+       
+       userRepository.save(us);
+        reportService.save(rep);
         model.addAttribute("reports", reportRepository.findAll());
         
         return "redirect:/reports";
@@ -208,8 +233,13 @@ public class ReportController {
         
        Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + reportId));
-
+       
+        Book bookToUpdate = report.getBook();
+        bookToUpdate.setIsRented(false);
+        
+        bookService.save(bookToUpdate);
         reportRepository.delete(report);
+        
         model.addAttribute("reports", reportRepository.findAll());
         return "redirect:/reports";
     }

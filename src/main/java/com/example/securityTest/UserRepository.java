@@ -43,4 +43,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from users_borrow_requests s", nativeQuery = true)
     List<Book> findAllBorrowRequests();
     
+      @Query(value = "select * from users p where p.username like %:keyword%"
+            + " or p.card_number like %:keyword%"
+            + " or p.user_id like %:keyword%",  nativeQuery = true
+           )
+    public Page<User> findUserByIdOrUsernameOrCardNumber(@Param("keyword") String keyword, Pageable pageable );
+    
 }

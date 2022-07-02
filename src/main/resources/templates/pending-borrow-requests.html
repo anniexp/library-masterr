@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Reports</title>
+        <title>Pending Borrow Requests</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
@@ -156,7 +156,7 @@ and open the template in the editor.
           <!-- Page Header Start -->
         <div class="container-fluid bg-secondary mb-5">
             <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-                <h1 class="font-weight-semi-bold text-uppercase mb-3">Reports</h1>
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Pending Borrow Requests</h1>
                 <div class="d-inline-flex">
                     <p class="m-0"><a href="/">Home</a></p>
                     <p class="m-0 px-2">-</p>
@@ -165,55 +165,10 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-        <!-- Page Header End -->
         
-        <!-- Page Content Start -->
-       <!-- <div class="container" sec:authorize="hasRole('ROLE_ADMIN')" >
-            <h2>Search for reports</h2>
-            <form action="#" th:action="@{/reports}" method="get">
-                <input type="text" name="search" id="searchReport"/>
-                <input type="submit" value="Search"/>
-            </form>
-        </div>-->
-        
-       <!--    <div th:switch="${allBorrowRequests}" class="container-fluid py-5" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
-            <div class="row px-xl-5">
-                <div class="col-lg-8 table-responsive mb-5 align-middle">
-                    <h2 th:case="null">No borrowed books yet!</h2>
-
-                    <div th:case="*">
-                        <h2 class="my-5"> Pending Borrow Requests</h2>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-responsive-md table-bordered text-center mb-0">
-                                <thead class="bg-secondary text-dark">
-                                    <tr>
-                                        <th scope="col">report id</th>
-                                        <th scope="col">book id</th>
-                                          <th scope="col">approved</th>
-                                        <th scope="col"></th>
-                                      
-
-                                    </tr>
-                                </thead>
-                                <tbody class="align-middle">
-                                    <tr th:each="repor : ${allBorrowRequests}">
-                                        <td th:text="${repor.user_id}"></td>
-                                         <td th:text="${repor.book_id}"></td>
-                                       <td th:text="${repor.book_id}"></td>
-                                         <td><i class="fas fa-user-times ml-2"></i>Delete</a></td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>      
-                          <p class="my-5"><a href="/" class="btn btn-primary">Home</a></p>
-                </div>
-            </div>
-        </div>-->
         <div th:switch="${users}" class="container-fluid py-5" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYEE')">
             <div class="row px-xl-5">
-                <div class="col-lg-8 table-responsive mb-5 align-middle">
+                <div class="col-lg-12 table-responsive mb-5 align-middle">
                     <h2 th:case="null">No users</h2>
 
                     <div th:case="*">
@@ -223,6 +178,8 @@ and open the template in the editor.
                                 <thead class="bg-secondary text-dark">
                                     <tr>
                                         <th scope="col">User id</th>
+                                        <th scope="col">Username</th>
+
                                         <th scope="col">Card Number</th>
                                         <th scope="col">First Name</th> 
                                         <th scope="col"> Last Name</th>
@@ -240,6 +197,7 @@ and open the template in the editor.
                                 <tbody class="align-middle">
                                     <tr th:each="user : ${users}">
                                         <td th:text="${user.user_id}"></td>
+                                        <td th:text="${user.username}"></td>
                                         <td th:text="${user.cardNumber}"></td>
                                         <td th:text="${user.firstName}"></td>
                                         <td th:text="${user.lastName}"></td>           
@@ -285,7 +243,8 @@ and open the template in the editor.
             </div>
         </div>
     </div>
-       
+          
+      
        
         <div class="container" sec:authorize="hasRole('ROLE_USER')" >
             <h2>Error 403 Forbidden!</h2>

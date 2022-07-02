@@ -375,10 +375,11 @@ public class UserController {
 
    //update user info (email, addess, nickname, phone number)
     @PostMapping("/profile/update")
-    public String updateUserProfileInfo(Model model, User user,    
-              @ModelAttribute("inputCardNumber") String inputCardNumber,
-               @ModelAttribute("inputFirstName") String inputFirstName,
-               @ModelAttribute("inputLastName") String inputLastName,
+    public String updateUserProfileInfo(Model model, User user
+           ,    
+            //  @ModelAttribute("inputCardNumber") String inputCardNumber,
+              // @ModelAttribute("inputFirstName") String inputFirstName,
+              // @ModelAttribute("inputLastName") String inputLastName,
 
               BindingResult result
     ) {
@@ -393,10 +394,10 @@ public class UserController {
             
             return "redirect:/profile/edit";
         }
-         user.setFirstName(inputFirstName);
-         user.setLastName(inputLastName);
+         user.setFirstName(curruser.getFirstName());
+         user.setLastName(curruser.getLastName());
          
-  user.setCardNumber(inputCardNumber);
+  user.setCardNumber(curruser.getCardNumber());
   user.setEnabled(curruser.isEnabled());
   user.setUser_id(curruser.getUser_id());
  // user.setBorrowedBooks(user.getBorrowedBooks());
@@ -511,7 +512,8 @@ public class UserController {
         
         
          if (searchUser != null) {
-               pageTuts = userService.findByUsername(searchUser, paging);
+              // pageTuts = userService.findByUsername(searchUser, paging);
+                pageTuts = userService.findUserByIdOrUsernameOrCardNumber(searchUser, paging);
            // authors = authorRepository.findByKeyword(authorName);
         } else {
            // pageTuts = userRepository.findAll(paging);
@@ -585,8 +587,8 @@ public class UserController {
     public String showWishList(Model model,
                User user,
                 @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "16") int size,
-            @RequestParam(defaultValue = "") String mess
+            @RequestParam(defaultValue = "16") int size
+           // ,@RequestParam(defaultValue = "") String mess
        ) {
         
         //get session user
@@ -620,7 +622,7 @@ public class UserController {
           model.addAttribute("books", wishlist);
            model.addAttribute("user", currUser);
            model.addAttribute("subtitle", currUser.getFirstName() + "'s Wishlist");
-        model.addAttribute("mess",mess);
+        //model.addAttribute("mess",mess);
        
         return "books";
     }
@@ -822,7 +824,7 @@ public class UserController {
             users = userRepository.findAll();
                         System.out.println("Number of all users " + users.size());
                         
-                         users = userRepository.findAll();
+                       //  users = userRepository.findAll();
                         System.out.println("Number of all users " + users.size());
 
             for(User user : users){
@@ -830,14 +832,9 @@ public class UserController {
             if(!userBorrowRequests.isEmpty()){
                 
                 usersToList.add(user);
+                   System.out.println("Number of users with borrow requests after add = " + usersToList.size());
             }}
-            
-            
-            
-            
-         
-                        
-                        
+                            
 
             for(User user : users){
             List <Book> userBorrowRequests = user.getBorrowRequests();
@@ -868,7 +865,7 @@ public class UserController {
         
          // model.addAttribute("allBorrowRequests", allllBorrowRequests);
   
-          
+       model.addAttribute("borrowRequests", allBorrowRequests);
         model.addAttribute("users", usersToList);
         return "pending-borrow-requests";
     }

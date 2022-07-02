@@ -108,6 +108,11 @@ System.out.println("Are credentials valid and not used : "+ validCredentials);
 
         return userRepository.findByUsername(username, pageable);
     }
+      
+       Page<User> findUserByIdOrUsernameOrCardNumber(String keyword, Pageable pageable) {
+
+        return userRepository.findUserByIdOrUsernameOrCardNumber(keyword, pageable);
+    }
      
     //check if the registration input  user names and card do exists
 
