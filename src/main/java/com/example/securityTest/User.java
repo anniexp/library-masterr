@@ -1,21 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.securityTest;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -30,7 +18,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long user_id;
 
-
 	@Column(nullable = false, length = 64, name = "password")
 	private String password;
 
@@ -44,12 +31,10 @@ public class User {
         
          @Column(name = "phoneNumber", nullable = true, length = 20)
 	private String phoneNumber;       
-         
-         
+
         @Column(name = "profilePicture", nullable= true)
         private String profilePicture;
-        
-        
+
         private long profilePictureSize;
  
         @Column(name = "pictureContent", nullable= true)
@@ -66,12 +51,7 @@ public class User {
         
         @Column(name = "card_number", nullable = false, length = 255)
 	private String cardNumber; 
-        
-        
-            
-         
-         
-        
+
 
         @Column(name = "role", nullable = false)
 	private String rolee;
@@ -81,7 +61,6 @@ public class User {
         
           @OneToMany(targetEntity = Report.class, mappedBy = "borrower", cascade = CascadeType.ALL)
     private Set<Report> borrowedBooks;
-
 
     public User() {
     }
@@ -105,8 +84,6 @@ public class User {
         this.wishlist = wishlist;
     }
 
-    
-
     @Column(name = "borrowApproved", updatable = true)
     private boolean borrowApproved;
 
@@ -118,10 +95,6 @@ public class User {
         this.borrowApproved = borrowApproved;
     }
 
-   
-    
-    
-    
      @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_wishlist",
             joinColumns = {
@@ -132,32 +105,18 @@ public class User {
                             nullable = false, updatable = true)})
     private List<Book> wishlist ;
 
-    
-     
-     
-     
-     
       @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_borrow_requests",
             joinColumns = {
                     @JoinColumn(name = "userId", referencedColumnName = "user_id",
-                            nullable = false, updatable = true),
-                 /*  @JoinColumn(name = "approved", referencedColumnName = "borrowApproved",
-                        nullable = true, updatable = true) */  
+                            nullable = false),
             },
-            
             inverseJoinColumns = {
                     @JoinColumn(name = "book_id", referencedColumnName = "id",
-                            nullable = false, updatable = true),
+                            nullable = false),
                     
             })
     private List<Book> borrowRequests ;
-
-    
-    
-      
-      
-      
 
     public String getEmail() {
         return email;
@@ -247,11 +206,6 @@ public class User {
         this.borrowRequests = borrowRequests;
     }
 
-   
-   
-    
-    
-    
     public String getRolee() {
         return rolee;
     }
@@ -260,10 +214,6 @@ public class User {
         this.rolee = rolee;
     }
 
-    
-        
-        
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -271,7 +221,6 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-        
 
     public Long getUser_id() {
         return user_id;
@@ -280,9 +229,6 @@ public class User {
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
-
-    
- 	
 
 	public String getPassword() {
 		return password;
@@ -319,10 +265,7 @@ public class User {
         this.wishlist = wishlist;
         this.borrowRequests = borrowRequests;
     }
-        
-        
-        
-       
+
     public Set<Report> getBorrowedBooks() {
         return borrowedBooks;
     }
@@ -330,34 +273,5 @@ public class User {
     public void setBorrowedBooks(Set<Report> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
-
-     /*@GetMapping("/users")
-    public String index(Model model, @RequestParam(name = "searchAuthor", required = false) String authorName,
-               @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        
-        List<User> users = null;
-         Pageable paging = (Pageable) PageRequest.of(page, size);  
-         Page<Author> pageTuts;
-        
-         if (authorName != null) {
-               pageTuts = authorRepository.findByKeyword(authorName, paging);
-           // authors = authorRepository.findByKeyword(authorName);
-        } else {
-            pageTuts = userRepository.findAll(paging);
-        }
-         
-          users = pageTuts.getContent();     
-        model.addAttribute("currentPage", pageTuts.getNumber());
-        System.out.println("current page number is: " + pageTuts.getNumber());
-        System.out.println("number of elements: " + pageTuts.getTotalElements());
-        model.addAttribute("totalItems", pageTuts.getTotalElements());
-         System.out.println("number of pages: " + pageTuts.getTotalPages());
-        model.addAttribute("totalPages", pageTuts.getTotalPages());
-        
-        model.addAttribute("users", users);
-        return "users";
-    }*/
-    
 }
 

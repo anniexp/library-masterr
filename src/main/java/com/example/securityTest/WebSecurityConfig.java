@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.securityTest;
 
-/**
- *
- * @author Todor
- */
 import javax.sql.DataSource;
  
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +9,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
- 
+
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebSecurity(debug = false)
-//@EnableWebMvc
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
- 
     @Autowired
     private DataSource dataSource;
      
@@ -45,7 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .anyRequest().authenticated()
             .and()
-           // .formLogin().permitAll()
                 .formLogin().loginPage("/login").permitAll()
 
             .and()
@@ -53,8 +39,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .exceptionHandling().accessDeniedPage("/accessDenied.html").and().httpBasic();  
     }
-    
-    
-   
-
 }

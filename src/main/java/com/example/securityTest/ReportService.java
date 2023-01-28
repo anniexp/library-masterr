@@ -1,42 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.securityTest;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 /**
  *
  * @author Lenovo
  */
 @Service
 public class ReportService {
+    private final ReportRepository reportRepository;
 
     @Autowired
-    ReportRepository reportRepository;
-    @Autowired
-    BookService bookService;
-    @Autowired
-    BookRepository bookRepository;
-    @Autowired
-    UserService userService;
+    public ReportService(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
+    }
 
     List<Report> findByReportId(long reportId) {
         return reportRepository.findByReportId(reportId);
@@ -58,13 +42,9 @@ public class ReportService {
 
      List<Report> findByBorrower(User currUser) {
         return reportRepository.findByBorrower(currUser);
-        
-            }
+    }
       
     List<Report> findByKeyword(String id) {
-      
         return reportRepository.findByKeyword(id);
-        
-            }
-    
+    }
 }

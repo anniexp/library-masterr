@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.securityTest;
 
 import java.io.Serializable;
@@ -25,7 +20,6 @@ import javax.validation.constraints.NotBlank;
 
 @Table(name = "authors")
 public class Author implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "author_id")

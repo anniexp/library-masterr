@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.securityTest;
 
 import java.util.ArrayList;
@@ -16,25 +12,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LibraryCardService {
-    
-     @Autowired
-    LibraryCardRepository cardRepository;
+    private final LibraryCardRepository cardRepository;
 
+    @Autowired
+    public LibraryCardService(LibraryCardRepository cardRepository) {
+        this.cardRepository = cardRepository;
+    }
 
     List<LibraryCard> findAll() {
         return cardRepository.findAll();
     }
     
-      List<LibraryCard> findByCardNumber(String cardNumber) {
+    List<LibraryCard> findByCardNumber(String cardNumber) {
         return cardRepository.findByCardNumber(cardNumber);
     }
-    
-     
-     
-     
+
     //check if there are any any cards to expire and return list of them
     List<LibraryCard> getListOfCardsAboutToExpire() {
-
         List<LibraryCard> cards = findAll();
         List<LibraryCard> expiringCards = new ArrayList<>();
 
@@ -52,15 +46,13 @@ public class LibraryCardService {
 
      //when expiration date comes, disable user
      Boolean checkIfCardExpires(LibraryCard card){
-        
-         
          Date currentDate = new Date();        
-   // LibraryCard card = findByCardNumber( cardNumber).get(0);       
+   // LibraryCard card = findByCardNumber( cardNumber).get(0);
     //chech if current date is before card expiration date, if it is, then make the card expired
             boolean alo = card.getCardExpirationDate().before(currentDate );
              if (alo) {
-               
-               
+
+
             } 
              return alo;
     
@@ -71,10 +63,6 @@ public class LibraryCardService {
                 //put in a method which sends an email to the user later
                 card.setIsExpired(true);
                 cardRepository.save(card);
-               
-            } 
-      
+            }
       }
-      
-      
 }

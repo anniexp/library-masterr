@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 
 /**
@@ -23,9 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @Table(name = "library_cards")
-
 public class LibraryCard implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_id")
@@ -40,11 +36,6 @@ public class LibraryCard implements Serializable {
     @Column(name = "last_name", nullable = false, length = 200)
     private String lastName;
 
-    /*@Column(name = "email", unique = true, nullable = false, length = 100)
-    @Email
-    @NotBlank
-    private String email;*/
-    
     @Column(name = "date_created", updatable = false)
     @CreationTimestamp
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -104,17 +95,12 @@ public class LibraryCard implements Serializable {
         this.cardNumber = cardNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-     
         this.dateCreated = dateCreated;
         this.cardExpirationDate = cardExpirationDate;
         this.isExpired = isExpired;
     }
 
-   
-   
-
-    public LibraryCard() {
-    }
+    public LibraryCard() {}
 
     public Date getDateCreated() {
         return dateCreated;

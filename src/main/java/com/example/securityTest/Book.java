@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.Max;
@@ -27,28 +26,20 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "book")
 public class Book implements Serializable {
-
-    //@Null(groups = OnCreate.class)
-   // @NotNull(groups = OnUpdate.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long bookId;
 
-    // @NotBlank(message = "Author name is mandatory")
-    //private String author;
     @Column(name = "year_of_publishing")
     @Max(2030)
     private int yearOfPublishing;
-    @Column(name = "is_rented", updatable = true)
+    @Column(name = "is_rented")
     private boolean isRented;
 
     @ManyToOne
     @JoinColumn(name="author_id", nullable=false)
     private Author author;
-    //private Integer authorId;
-    //@NotBlank(message = "Author id is mandatory") @Max(255)@Min(1)
-    // private long authorId;
 
     @NotBlank(message = "Title is mandatory")
     @Column(name = "title")
@@ -59,10 +50,7 @@ public class Book implements Serializable {
     @Column(unique = true, name="isbn", length = 13)
     private String isbn;
 
- 
-      /*  @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "book")
-    private Report report;*/
-     @OneToMany(targetEntity = Report.class, mappedBy = "book",  cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Report.class, mappedBy = "book",  cascade = CascadeType.ALL)
     private Set<Report> report;
       
     @Column(name = "publisher")
@@ -70,32 +58,32 @@ public class Book implements Serializable {
     private String publisher;
          
     @Column(name = "pages")
-   @Min(value=0, message="must be equal or greater than 0")  
+    @Min(value=0, message="must be equal or greater than 0")
     @Max(value=20000, message="must be equal or less than 20000") 
     private int pages;
     
     @Column(name = "volume")
-  @Min(value=1, message="must be equal or greater than 1")  
+    @Min(value=1, message="must be equal or greater than 1")
     @Max(value=2000, message="must be equal or less than 2000") 
     private int volume;
 
-     @Column(name = "edition",  nullable= true)
+    @Column(name = "edition")
     @Size(min = 0, max = 255,  message="must be between 0 and 255 characters long")
     private String edition;
      
- @Column(name = "series", nullable= true)
+    @Column(name = "series")
     @Size(min = 2, max = 255, message="must be between 2 and 255 characters long")
     private String series;
  
- @Column(name = "genres", nullable= true)
+    @Column(name = "genres")
     @Size(min = 0, max = 255, message="must be between 2 and 255 characters long")
     private String genres;
  
- @Column(name = "description", nullable= true)
+    @Column(name = "description" )
     @Size(min = 2, max = 255, message="must be between 2 and 1000 characters long")
     private String description;
  
- @Column(name = "date_added", updatable = false)
+    @Column(name = "date_added", updatable = false)
     @CreationTimestamp
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateAdded;
